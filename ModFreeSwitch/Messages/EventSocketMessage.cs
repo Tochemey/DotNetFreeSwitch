@@ -7,7 +7,7 @@ namespace ModFreeSwitch.Messages {
     /// <summary>
     ///     FreeSwitch decoded message.
     /// </summary>
-    public class EslMessage {
+    public class EventSocketMessage {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace ModFreeSwitch.Messages {
         ///     Checks whether the freeSwitch message has a content length or not.
         /// </summary>
         /// <returns>true or false</returns>
-        public bool HasContentLength() { return Headers.ContainsKey(EslHeaders.ContentLength); }
+        public bool HasContentLength() { return Headers.ContainsKey(EventSocketHeaders.ContentLength); }
 
         /// <summary>
         ///     Return the message content length when the message has content length or 0 in case of none.
@@ -46,7 +46,7 @@ namespace ModFreeSwitch.Messages {
         /// <returns>integer the content length</returns>
         public int ContentLength() {
             if (!HasContentLength()) return 0;
-            var len = Headers[EslHeaders.ContentLength];
+            var len = Headers[EventSocketHeaders.ContentLength];
             int contentLength;
             return int.TryParse(len, out contentLength) ? contentLength : 0;
         }
@@ -55,7 +55,7 @@ namespace ModFreeSwitch.Messages {
         ///     Returns the message content type
         /// </summary>
         /// <returns>string the content type</returns>
-        public string ContentType() { return Headers[EslHeaders.ContentType]; }
+        public string ContentType() { return Headers[EventSocketHeaders.ContentType]; }
 
         public override string ToString() {
             StringBuilder sb = new StringBuilder("FreeSwitchMessage: contentType=[");

@@ -10,13 +10,13 @@ namespace ModFreeSwitch.Codecs {
     /// <summary>
     ///     FreeSwitch message decoder.
     /// </summary>
-    public class EslDecoder : ReplayingDecoder<State> {
+    public class EventSocketMessageDecoder : ReplayingDecoder<State> {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Line feed character
         /// </summary>
-        private static readonly byte _lineFeed = 10;
+        private const byte lineFeed = 10;
 
         /// <summary>
         ///     Maximum header size to read.
@@ -32,11 +32,11 @@ namespace ModFreeSwitch.Codecs {
         /// <summary>
         ///     Decoded freeSwitch message
         /// </summary>
-        private EslMessage _currentMessage;
+        private EventSocketMessage _currentMessage;
 
-        public EslDecoder(int maxHeaderSize) : base(new State(true, false)) { _maxHeaderSize = maxHeaderSize; }
+        public EventSocketMessageDecoder(int maxHeaderSize) : base(new State(true, false)) { _maxHeaderSize = maxHeaderSize; }
 
-        public EslDecoder(int maxHeaderSize, bool treatUnknownHeadersAsBody) : base(new State(true, false)) {
+        public EventSocketMessageDecoder(int maxHeaderSize, bool treatUnknownHeadersAsBody) : base(new State(true, false)) {
             _maxHeaderSize = maxHeaderSize;
             _treatUnknownHeadersAsBody = treatUnknownHeadersAsBody;
         }
@@ -45,7 +45,7 @@ namespace ModFreeSwitch.Codecs {
             if (logger.IsDebugEnabled) logger.Debug("Decode(): State[{0}] ", State);
 
             if (State.ReadHeader) {
-                if (_currentMessage == null) _currentMessage = new EslMessage();
+                if (_currentMessage == null) _currentMessage = new EventSocketMessage();
 
                 //  read '\n' terminated lines until reach a single '\n'
                 bool reachedDoubleLF = false;
@@ -107,7 +107,7 @@ namespace ModFreeSwitch.Codecs {
             while (true) {
                 // this read might fail
                 byte nextByte = buffer.ReadByte();
-                if (nextByte == _lineFeed) return sb.ToString();
+                if (nextByte == lineFeed) return sb.ToString();
                 // Abort decoding if the decoded line is too large.
                 if (sb.Length >= maxLineLength) throw new TooLongFrameException("ESL header line is longer than " + maxLineLength + " bytes.");
                 sb.Append((char) nextByte);
@@ -119,7 +119,7 @@ namespace ModFreeSwitch.Codecs {
             while (buffer.IsReadable()) {
                 // this read should always succeed
                 byte nextByte = buffer.ReadByte();
-                if (nextByte == _lineFeed) return sb.ToString();
+                if (nextByte == lineFeed) return sb.ToString();
                 // Abort decoding if the decoded line is too large.
                 if (sb.Length >= maxLineLength) throw new TooLongFrameException("ESL message line is longer than " + maxLineLength + " bytes.");
                 sb.Append((char) nextByte);

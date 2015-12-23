@@ -2,7 +2,7 @@
     /// <summary>
     ///     FreeSwitch Message Headers
     /// </summary>
-    public static class EslHeaders {
+    public static class EventSocketHeaders {
         /// <summary>
         ///     FreeSwitch message Content-Type header
         /// </summary>

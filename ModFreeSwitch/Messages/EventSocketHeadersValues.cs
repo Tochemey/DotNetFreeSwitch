@@ -2,7 +2,7 @@
     /// <summary>
     ///     FreeSwitch message header values
     /// </summary>
-    public static class EslHeadersValues {
+    public static class EventSocketHeadersValues {
         /// <summary>
         ///     Often informs about the status of a command response
         /// </summary>
