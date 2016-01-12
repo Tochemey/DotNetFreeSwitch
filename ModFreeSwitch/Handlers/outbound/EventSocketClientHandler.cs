@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using DotNetty.Transport.Channels;
 using ModFreeSwitch.Common;
 using ModFreeSwitch.Messages;
@@ -90,5 +91,12 @@ namespace ModFreeSwitch.Handlers.outbound {
         ///     Fired whenever a api/response is received
         /// </summary>
         protected event EventHandler<EventSocketArgs> ApiResponse = delegate { };
+
+        /// <summary>
+        ///     Very useful to send
+        /// </summary>
+        /// <param name="context">the channel context</param>
+        /// <param name="command">the command to send.</param>
+        public async Task SendCommand(IChannelHandlerContext context, string command) { await context.WriteAndFlushAsync(command).ConfigureAwait(false); }
     }
 }
