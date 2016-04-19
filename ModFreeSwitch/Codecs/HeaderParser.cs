@@ -10,15 +10,14 @@
         /// <param name="sb">the string header to parse</param>
         /// <returns>a string[] array with header name at 0 and header value at 1</returns>
         public static string[] SplitHeader(string sb) {
-            int len = sb.Length;
+            var len = sb.Length;
             int nameEnd;
             int colonEnd;
 
             var nameStart = FindNonWhitespace(sb, 0);
             for (nameEnd = nameStart; nameEnd < len; nameEnd++) {
-                char ch = sb[nameEnd];
-                if (ch == ':'
-                    || char.IsWhiteSpace(ch)) break;
+                var ch = sb[nameEnd];
+                if (ch == ':' || char.IsWhiteSpace(ch)) break;
             }
 
             for (colonEnd = nameEnd; colonEnd < len; colonEnd++) {
@@ -29,21 +28,31 @@
             }
 
             var valueStart = FindNonWhitespace(sb, colonEnd);
-            if (valueStart == len) return new[] {sb.Substring(nameStart, nameEnd), ""};
+            if (valueStart == len)
+                return new[] {
+                    sb.Substring(nameStart, nameEnd),
+                    ""
+                };
 
             var valueEnd = FindEndOfString(sb);
-            return new[] {sb.Substring(nameStart, nameEnd), sb.Substring(valueStart, valueEnd)};
+            return new[] {
+                sb.Substring(nameStart, nameEnd),
+                sb.Substring(valueStart, valueEnd)
+            };
         }
 
-        private static int FindNonWhitespace(string sb, int offset) {
+        private static int FindNonWhitespace(string sb,
+            int offset) {
             int result;
-            for (result = offset; result < sb.Length; result++) if (!char.IsWhiteSpace(sb[result])) break;
+            for (result = offset; result < sb.Length; result++)
+                if (!char.IsWhiteSpace(sb[result])) break;
             return result;
         }
 
         private static int FindEndOfString(string sb) {
             int result;
-            for (result = sb.Length; result > 0; result--) if (!char.IsWhiteSpace(sb[result - 1])) break;
+            for (result = sb.Length; result > 0; result--)
+                if (!char.IsWhiteSpace(sb[result - 1])) break;
             return result;
         }
     }

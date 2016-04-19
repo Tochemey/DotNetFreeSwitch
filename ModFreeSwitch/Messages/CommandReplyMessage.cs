@@ -3,16 +3,19 @@
     /// Command/Reply message
     /// </summary>
     public sealed class CommandReplyMessage {
-        public CommandReplyMessage(EventSocketMessage response) {
+        public CommandReplyMessage(string command, EslMessage response) {
+            Command = command;
             Response = response;
-            ReplyText = response != null ? response.HeaderValue(EventSocketHeaders.ReplyText) : string.Empty;
-            IsOk = !string.IsNullOrEmpty(ReplyText) && ReplyText.StartsWith(EventSocketHeadersValues.Ok);
+            ReplyText = response != null ? response.HeaderValue(EslHeaders.ReplyText) : string.Empty;
+            IsOk = !string.IsNullOrEmpty(ReplyText) && ReplyText.StartsWith(EslHeadersValues.Ok);
         }
 
         /// <summary>
         ///     CommandReply response
         /// </summary>
-        public EventSocketMessage Response { get; private set; }
+        public EslMessage Response { get; private set; }
+
+        public string Command { get; private set; }
 
         /// <summary>
         ///     Actual reply text

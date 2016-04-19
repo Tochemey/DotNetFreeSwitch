@@ -10,16 +10,16 @@ namespace ModFreeSwitch.Commands {
     public sealed class PlaybackCommand : BaseCommand {
         private readonly string _audioFile;
         private readonly long _loop;
-        private readonly IList<EventSocketChannelVariable> _variables;
+        private readonly IList<EslChannelVariable> _variables;
 
-        public PlaybackCommand(string audioFile, IList<EventSocketChannelVariable> variables, long loop) {
+        public PlaybackCommand(string audioFile, IList<EslChannelVariable> variables, long loop) {
             if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException("audioFile");
             _audioFile = audioFile;
             _variables = variables;
             _loop = loop;
         }
 
-        public PlaybackCommand(string audioFile, IList<EventSocketChannelVariable> variables) {
+        public PlaybackCommand(string audioFile, IList<EslChannelVariable> variables) {
             if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException("audioFile");
             _audioFile = audioFile;
             _variables = variables;
@@ -29,7 +29,7 @@ namespace ModFreeSwitch.Commands {
         public PlaybackCommand(string audioFile) {
             if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException("audioFile");
             _audioFile = audioFile;
-            _variables = new List<EventSocketChannelVariable>();
+            _variables = new List<EslChannelVariable>();
             _loop = 1;
         }
 
@@ -47,7 +47,7 @@ namespace ModFreeSwitch.Commands {
         /// <summary>
         ///     Playback additional variables to add to the channel while playing the audio file
         /// </summary>
-        public IList<EventSocketChannelVariable> Variables { get { return _variables; } }
+        public IList<EslChannelVariable> Variables { get { return _variables; } }
 
         public override string Command { get { return "playback"; } }
 

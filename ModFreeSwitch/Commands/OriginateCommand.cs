@@ -9,7 +9,7 @@ namespace ModFreeSwitch.Commands {
     /// </summary>
     public sealed class OriginateCommand : BaseCommand {
         public Guid Id { get; set; }
-        private readonly IList<EventSocketChannelVariable> _channelVariables;
+        private readonly IList<EslChannelVariable> _channelVariables;
         private readonly IEndPointAddress _caller;
         private readonly IEndPointAddress _destination;
         private readonly string _dialplan;
@@ -26,7 +26,7 @@ namespace ModFreeSwitch.Commands {
             _callerIdName = callerIdName;
             _callerIdNumber = callerIdNumber;
             _timeout = timeout;
-            _channelVariables = new List<EventSocketChannelVariable>();
+            _channelVariables = new List<EslChannelVariable>();
         }
 
         public OriginateCommand(IEndPointAddress caller, IEndPointAddress destination) {
@@ -50,7 +50,7 @@ namespace ModFreeSwitch.Commands {
         public int Heartbeat { set; get; }
 
         public void SetChannelVariable(string variable, string value) {
-            EventSocketChannelVariable var = new EventSocketChannelVariable(variable, value);
+            EslChannelVariable var = new EslChannelVariable(variable, value);
             _channelVariables.Add(var);
         }
 

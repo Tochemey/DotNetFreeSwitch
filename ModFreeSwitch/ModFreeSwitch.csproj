@@ -30,28 +30,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetty.Buffers, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetty.Buffers.0.2.1\lib\net45\DotNetty.Buffers.dll</HintPath>
+    <Reference Include="DotNetty.Buffers, Version=0.2.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Buffers.0.2.5\lib\net45\DotNetty.Buffers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DotNetty.Codecs, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetty.Codecs.0.2.1\lib\net45\DotNetty.Codecs.dll</HintPath>
+    <Reference Include="DotNetty.Codecs, Version=0.2.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Codecs.0.2.5\lib\net45\DotNetty.Codecs.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DotNetty.Common, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetty.Common.0.2.1\lib\net45\DotNetty.Common.dll</HintPath>
+    <Reference Include="DotNetty.Common, Version=0.2.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Common.0.2.5\lib\net45\DotNetty.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DotNetty.Handlers, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetty.Handlers.0.2.1\lib\net45\DotNetty.Handlers.dll</HintPath>
+    <Reference Include="DotNetty.Handlers, Version=0.2.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Handlers.0.2.5\lib\net45\DotNetty.Handlers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DotNetty.Transport, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetty.Transport.0.2.1\lib\net45\DotNetty.Transport.dll</HintPath>
+    <Reference Include="DotNetty.Transport, Version=0.2.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Transport.0.2.5\lib\net45\DotNetty.Transport.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.3.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -64,8 +64,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Codecs\EventSocketMessageDecoder.cs" />
-    <Compile Include="Codecs\EventSocketMessageEncoder.cs" />
+    <Compile Include="Codecs\EslDecoder.cs" />
+    <Compile Include="Codecs\EslEncoder.cs" />
     <Compile Include="Codecs\HeaderParser.cs" />
     <Compile Include="Commands\ApiCommand.cs" />
     <Compile Include="Commands\AuthCommand.cs" />
@@ -92,35 +92,40 @@
     <Compile Include="Commands\SetVarCommand.cs" />
     <Compile Include="Commands\SleepCommand.cs" />
     <Compile Include="Commands\SpeakCommand.cs" />
+    <Compile Include="Common\AsyncAutoResetEvent .cs" />
+    <Compile Include="Common\AsyncCountdownEvent.cs" />
+    <Compile Include="Common\AsyncManualResetEvent .cs" />
     <Compile Include="Common\CommandAsyncEvent.cs" />
-    <Compile Include="Common\EventSocketChannelVariable.cs" />
+    <Compile Include="Common\EslChannelVariable.cs" />
     <Compile Include="Common\EventSocketLogLevels.cs" />
     <Compile Include="Common\SayGenders.cs" />
     <Compile Include="Common\SayMethods.cs" />
     <Compile Include="Common\SayTypes.cs" />
-    <Compile Include="Common\EventSocketArgs.cs" />
+    <Compile Include="Common\EslEventArgs.cs" />
     <Compile Include="Common\GuidFactory.cs" />
     <Compile Include="Common\IEndPointAddress.cs" />
     <Compile Include="EventSocketClient.cs" />
-    <Compile Include="Handlers\outbound\EventSocketClientHandler.cs" />
-    <Compile Include="Handlers\outbound\EventSocketClientInitializer.cs" />
+    <Compile Include="Handlers\outbound\EslClientHandler.cs" />
+    <Compile Include="Handlers\outbound\EslClientInitializer.cs" />
     <Compile Include="Messages\CommandReplyMessage.cs" />
-    <Compile Include="Messages\EventSocketMessage.cs" />
-    <Compile Include="Messages\EventSocketHeaders.cs" />
-    <Compile Include="Messages\EventSocketHeadersValues.cs" />
+    <Compile Include="Messages\EslMessage.cs" />
+    <Compile Include="Messages\EslHeaders.cs" />
+    <Compile Include="Messages\EslHeadersValues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Handlers\inbound\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Handlers\inbound\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

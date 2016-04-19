@@ -24,7 +24,7 @@ namespace ModFreeSwitch.Commands {
         /// <summary>
         ///     Command Reply Message. Some command needs reply
         /// </summary>
-        public EventSocketMessage CommandReply { set; get; }
+        public EslMessage CommandReply { set; get; }
 
         /// <summary>
         ///     Command sequence number
@@ -38,6 +38,6 @@ namespace ModFreeSwitch.Commands {
             return false;
         }
 
-        public override string ToString() { return string.Format("{0} {1}", Command, Argument); }
+        public override string ToString() { return $"{Command} {Argument}"; }
     }
 }
