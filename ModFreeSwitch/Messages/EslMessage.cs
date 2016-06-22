@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Text;
+using ModFreeSwitch.Codecs;
 using NLog;
 
 namespace ModFreeSwitch.Messages {
@@ -8,7 +10,12 @@ namespace ModFreeSwitch.Messages {
     ///     FreeSwitch decoded message.
     /// </summary>
     public class EslMessage {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+
+        public EslMessage() {
+            Headers = new StringDictionary();
+            BodyLines = new List<string>();
+        }
 
         /// <summary>
         ///     FreeSwitch decoded message headers.
@@ -63,6 +70,29 @@ namespace ModFreeSwitch.Messages {
         /// <returns>string the content type</returns>
         public string ContentType() {
             return Headers[EslHeaders.ContentType];
+        }
+
+        /// <summary>
+        ///     Checks whether the message we are decoding has a third part. This is very useful for BackgroundJob event
+        /// </summary>
+        /// <returns></returns>
+        public bool HasThirdPart() {
+            return BodyLines.Select(EslHeaderParser.SplitHeader)
+                .Any(bodyParts => bodyParts[0].Equals(EslHeaders.ContentLength));
+        }
+
+        /// <summary>
+        ///     Returns the third part content length
+        /// </summary>
+        /// <returns></returns>
+        public int ThirdPartContentLength() {
+            foreach (var bodyParts in BodyLines.Select(EslHeaderParser.SplitHeader)
+                .Where(bodyParts => bodyParts[0].Equals(EslHeaders.ContentLength))) {
+                int len;
+
+                return int.TryParse(bodyParts[1], out len) ? len : 0;
+            }
+            return 0;
         }
 
         public override string ToString() {

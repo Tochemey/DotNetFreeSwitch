@@ -6,24 +6,24 @@ namespace ModFreeSwitch.Common {
     /// <summary>
     /// </summary>
     public class CommandAsyncEvent {
-        private readonly object _command;
-        private readonly TaskCompletionSource<CommandReplyMessage> _source;
+        private readonly BaseCommand _command;
+        private readonly TaskCompletionSource<CommandReply> _source;
 
         public CommandAsyncEvent(BaseCommand command) {
             _command = command;
-            _source = new TaskCompletionSource<CommandReplyMessage>();
+            _source = new TaskCompletionSource<CommandReply>();
         }
 
         /// <summary>
         ///     The FreeSwitch command to  send
         /// </summary>
-        public object Command { get { return _command; } }
+        public BaseCommand Command { get { return _command; } }
 
         /// <summary>
         ///     The response
         /// </summary>
-        public Task<CommandReplyMessage> Task { get { return _source.Task; } }
+        public Task<CommandReply> Task { get { return _source.Task; } }
 
-        public void Complete(CommandReplyMessage response) { _source.TrySetResult(response); }
+        public void Complete(CommandReply response) { _source.TrySetResult(response); }
     }
 }

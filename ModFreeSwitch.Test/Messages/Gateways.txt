@@ -1,0 +1,6 @@
+Content-Type: api/response
+Content-Length: 25
+
+example.com smsghlocalsip
+
+

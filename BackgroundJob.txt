@@ -1,0 +1,22 @@
+Content-Length: 1513
+Content-Type: text/event-plain
+
+Event-Name: BACKGROUND_JOB
+Core-UUID: cbc2b231-b3f0-4997-bf37-b1f65baa8725
+FreeSWITCH-Hostname: freeswitch-1
+FreeSWITCH-Switchname: freeswitch-1
+FreeSWITCH-IPv4: 192.168.74.128
+FreeSWITCH-IPv6: %3A%3A1
+Event-Date-Local: 2016-06-21%2009%3A55%3A34
+Event-Date-GMT: Tue,%2021%20Jun%202016%2009%3A55%3A34%20GMT
+Event-Date-Timestamp: 1466502934362674
+Event-Calling-File: mod_event_socket.c
+Event-Calling-Function: api_exec
+Event-Calling-Line-Number: 1525
+Event-Sequence: 656
+Job-UUID: 2792068e-3cbc-4afa-bf97-49d20cce3467
+Job-Command: originate
+Job-Command-Arg: %7Bpid,unityvoip_request_uuid%3Db317e530-1991-43d3-a03d-79a460a048c1,origination_uuid%3Db317e530-1991-43d3-a03d-79a460a048c1,unityvoip_accountid%3Dvoice_expert,unityvoip_accountnumber%3D10925,unityvoip_account_countrycode%3Dgh,unityvoip_account_timezone%3DUTC,unityvoip_account_appid%3Dbaqsfgrd,unityvoip_networkid%3D62001,unityvoip_serviceid%3D13505,unityvoip_clientid%3DUnity.Voice.Http.Api,unityvoip_billflag%3DTrue,ignore_early_media%3Dtrue,enable_heartbeat_events%3D60,unityvoip_app%3Dtrue,unityvoip_clientreference%3D,unityvoip_messsage_type%3Dvoice,originate_timeout%3D120,origination_caller_id_number%3D0283020505,execute_on_media_1%3D'sched_hangup%20%2B600%20ORIGINATOR_CANCEL',execute_on_ring%3D'sched_hangup%20%2B600%20ORIGINATOR_CANCEL',unityvoip_from%3D0283020505,unityvoip_to%3D233247063817%7Dsofia/gateway/smsghlocalsip/233247063817%20%26socket(192.168.74.1%3A8084%20async%20full)
+Content-Length: 41
+
++OK b317e530-1991-43d3-a03d-79a460a048c1
