@@ -29,8 +29,15 @@
         /// </summary>
         public string TimerName { set; get; }
 
-        public override string Command { get { return "speak"; } }
+        public override string Command {
+            get { return "speak"; }
+        }
 
-        public override string Argument { get { return Engine + "|" + Voice + "|" + Text + (!string.IsNullOrEmpty(TimerName) ? "|" + TimerName : ""); } }
+        public override string Argument {
+            get {
+                return Engine + "|" + Voice + "|" + Text +
+                       (!string.IsNullOrEmpty(TimerName) ? "|" + TimerName : "");
+            }
+        }
     }
 }

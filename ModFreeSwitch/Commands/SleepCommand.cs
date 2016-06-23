@@ -6,14 +6,21 @@
     ///     in situations where audio becomes backlogged.
     /// </summary>
     public sealed class SleepCommand : BaseCommand {
-        public SleepCommand(long duration) { Duration = duration; }
+        public SleepCommand(long duration) {
+            Duration = duration;
+        }
 
         /// <summary>
         ///     How long to pause the channel
         /// </summary>
-        public long Duration { private set; get; }
+        public long Duration { get; }
 
-        public override string Command { get { return "sleep"; } }
-        public override string Argument { get { return Duration.ToString(); } }
+        public override string Command {
+            get { return "sleep"; }
+        }
+
+        public override string Argument {
+            get { return Duration.ToString(); }
+        }
     }
 }

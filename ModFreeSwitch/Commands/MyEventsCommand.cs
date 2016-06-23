@@ -10,9 +10,16 @@ namespace ModFreeSwitch.Commands {
         /// </summary>
         private readonly Guid _uuid;
 
-        public MyEventsCommand(Guid uuid) { _uuid = uuid; }
-        public override string Command { get { return "myevents"; } }
+        public MyEventsCommand(Guid uuid) {
+            _uuid = uuid;
+        }
 
-        public override string Argument { get { return _uuid.ToString(); } }
+        public override string Command {
+            get { return "myevents"; }
+        }
+
+        public override string Argument {
+            get { return _uuid.ToString(); }
+        }
     }
 }

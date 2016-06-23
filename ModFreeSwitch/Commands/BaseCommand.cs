@@ -4,7 +4,10 @@ using ModFreeSwitch.Messages;
 
 namespace ModFreeSwitch.Commands {
     public abstract class BaseCommand : IEquatable<BaseCommand> {
-        protected BaseCommand() { Sequence = GuidFactory.Create().ToString(); }
+        protected BaseCommand() {
+            Sequence = GuidFactory.Create()
+                .ToString();
+        }
 
         /// <summary>
         ///     The command name
@@ -29,15 +32,17 @@ namespace ModFreeSwitch.Commands {
         /// <summary>
         ///     Command sequence number
         /// </summary>
-        public string Sequence { private set; get; }
+        public string Sequence { get; }
 
         public bool Equals(BaseCommand other) {
             if (other == null) return false;
-            if (ToString().Equals(other.ToString())
-                && Sequence == other.Sequence) return true;
+            if (ToString()
+                .Equals(other.ToString()) && Sequence == other.Sequence) return true;
             return false;
         }
 
-        public override string ToString() { return $"{Command} {Argument}"; }
+        public override string ToString() {
+            return $"{Command} {Argument}";
+        }
     }
 }

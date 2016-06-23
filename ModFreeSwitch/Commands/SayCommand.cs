@@ -41,10 +41,17 @@ namespace ModFreeSwitch.Commands {
         /// <summary>
         ///     The actual text to read.
         /// </summary>
-        public string Text { private set; get; }
+        public string Text { get; }
 
-        public override string Command { get { return "say"; } }
+        public override string Command {
+            get { return "say"; }
+        }
 
-        public override string Argument { get { return Language + " " + SayType + " " + SayMethod.ToString().Replace("_", "/") + " " + Gender + " " + Text; } }
+        public override string Argument {
+            get {
+                return Language + " " + SayType + " " + SayMethod.ToString()
+                    .Replace("_", "/") + " " + Gender + " " + Text;
+            }
+        }
     }
 }

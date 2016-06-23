@@ -24,7 +24,7 @@ namespace ModFreeSwitch.Common {
         public void Reset() {
             while (true) {
                 var tcs = _mTcs;
-                TaskCompletionSource<bool> taskCompletionSource = _mTcs;
+                var taskCompletionSource = _mTcs;
                 if (!tcs.Task.IsCompleted ||
                     Interlocked.CompareExchange(ref taskCompletionSource,
                         new TaskCompletionSource<bool>(),

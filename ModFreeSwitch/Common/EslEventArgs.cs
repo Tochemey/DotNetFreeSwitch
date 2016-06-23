@@ -6,7 +6,8 @@ namespace ModFreeSwitch.Common {
     /// <summary>
     /// </summary>
     public class EslEventArgs : EventArgs {
-        public EslEventArgs(IChannelHandlerContext context, EslMessage message) {
+        public EslEventArgs(IChannelHandlerContext context,
+            EslMessage message) {
             Context = context;
             Message = message;
         }

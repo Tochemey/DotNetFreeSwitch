@@ -30,24 +30,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetty.Buffers, Version=0.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetty.Buffers.0.3.1\lib\net45\DotNetty.Buffers.dll</HintPath>
+    <Reference Include="DotNetty.Buffers, Version=0.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Buffers.0.3.2\lib\net45\DotNetty.Buffers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DotNetty.Codecs, Version=0.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetty.Codecs.0.3.1\lib\net45\DotNetty.Codecs.dll</HintPath>
+    <Reference Include="DotNetty.Codecs, Version=0.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Codecs.0.3.2\lib\net45\DotNetty.Codecs.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DotNetty.Common, Version=0.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetty.Common.0.3.1\lib\net45\DotNetty.Common.dll</HintPath>
+    <Reference Include="DotNetty.Common, Version=0.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Common.0.3.2\lib\net45\DotNetty.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DotNetty.Handlers, Version=0.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetty.Handlers.0.3.1\lib\net45\DotNetty.Handlers.dll</HintPath>
+    <Reference Include="DotNetty.Handlers, Version=0.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Handlers.0.3.2\lib\net45\DotNetty.Handlers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DotNetty.Transport, Version=0.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetty.Transport.0.3.1\lib\net45\DotNetty.Transport.dll</HintPath>
+    <Reference Include="DotNetty.Transport, Version=0.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetty.Transport.0.3.2\lib\net45\DotNetty.Transport.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -94,19 +94,48 @@
     <Compile Include="Commands\SpeakCommand.cs" />
     <Compile Include="Common\AsyncAutoResetEvent .cs" />
     <Compile Include="Common\AsyncCountdownEvent.cs" />
+    <Compile Include="Common\AsyncEventHandler.cs" />
     <Compile Include="Common\AsyncManualResetEvent .cs" />
+    <Compile Include="Common\CallState.cs" />
+    <Compile Include="Common\ChannelDirection.cs" />
+    <Compile Include="Common\ChannelState.cs" />
     <Compile Include="Common\CommandAsyncEvent.cs" />
+    <Compile Include="Common\DateTimeExtensions.cs" />
+    <Compile Include="Common\DictionnaryExtension.cs" />
+    <Compile Include="Common\Enumm.cs" />
     <Compile Include="Common\EslChannelVariable.cs" />
     <Compile Include="Common\EventSocketLogLevels.cs" />
+    <Compile Include="Common\EventType.cs" />
+    <Compile Include="Common\HangupCause.cs" />
     <Compile Include="Common\SayGenders.cs" />
     <Compile Include="Common\SayMethods.cs" />
     <Compile Include="Common\SayTypes.cs" />
     <Compile Include="Common\EslEventArgs.cs" />
     <Compile Include="Common\GuidFactory.cs" />
     <Compile Include="Common\IEndPointAddress.cs" />
+    <Compile Include="Common\StringUtil.cs" />
     <Compile Include="EventSocketClient.cs" />
+    <Compile Include="Events\BackgroundJob.cs" />
+    <Compile Include="Events\CallUpdate.cs" />
+    <Compile Include="Events\ChannelBridge.cs" />
+    <Compile Include="Events\ChannelExecute.cs" />
+    <Compile Include="Events\ChannelExecuteComplete.cs" />
+    <Compile Include="Events\ChannelHangup.cs" />
+    <Compile Include="Events\ChannelPark.cs" />
+    <Compile Include="Events\ChannelProgress.cs" />
+    <Compile Include="Events\ChannelProgressMedia.cs" />
+    <Compile Include="Events\ChannelStateEvent.cs" />
+    <Compile Include="Events\ChannelUnbridge.cs" />
+    <Compile Include="Events\Custom.cs" />
+    <Compile Include="Events\Dtmf.cs" />
+    <Compile Include="Events\EslEvent.cs" />
+    <Compile Include="Events\RecordStop.cs" />
+    <Compile Include="Events\SessionHeartbeat.cs" />
+    <Compile Include="Handlers\outbound\EslClient.cs" />
     <Compile Include="Handlers\outbound\EslClientHandler.cs" />
     <Compile Include="Handlers\outbound\EslClientInitializer.cs" />
+    <Compile Include="IEventListener.cs" />
+    <Compile Include="Messages\ApiResponse.cs" />
     <Compile Include="Messages\CommandReply.cs" />
     <Compile Include="Messages\EslMessage.cs" />
     <Compile Include="Messages\EslHeaders.cs" />

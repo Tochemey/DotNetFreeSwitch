@@ -4,11 +4,23 @@
     ///     Record is used for recording messages, like in a voicemail system
     /// </summary>
     public sealed class RecordCommand : BaseCommand {
-        public RecordCommand() { SilenceHit = 3; }
+        public RecordCommand() {
+            SilenceHit = 3;
+        }
 
-        public override string Argument { get { return string.Format("{0} {1} {2} {3}", RecordFile, TimeLimit, SilenceTreshold, SilenceHit); } }
+        public override string Argument {
+            get {
+                return string.Format("{0} {1} {2} {3}",
+                    RecordFile,
+                    TimeLimit,
+                    SilenceTreshold,
+                    SilenceHit);
+            }
+        }
 
-        public override string Command { get { return "record"; } }
+        public override string Command {
+            get { return "record"; }
+        }
 
         /// <summary>
         ///     File to record

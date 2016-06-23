@@ -15,28 +15,37 @@ namespace ModFreeSwitch.Commands {
         /// </summary>
         private readonly string _commandName;
 
+        public BgApiCommand(string commandName,
+            string commandArgs) {
+            _commandName = commandName;
+            _commandArgs = commandArgs;
+        }
+
         /// <summary>
         ///     Each command send by BgApi will have a trackable Id that will helps identify which one has sent a response.
         /// </summary>
         public Guid CommandId { get; set; }
 
-        public BgApiCommand(string commandName, string commandArgs) {
-            _commandName = commandName;
-            _commandArgs = commandArgs;
+        public string CommandName {
+            get { return _commandName; }
         }
 
-        public string CommandName { get { return _commandName; } }
-
-        public string CommandArgs { get { return _commandArgs; } }
+        public string CommandArgs {
+            get { return _commandArgs; }
+        }
 
         /// <summary>
         ///     The BgApi command
         /// </summary>
-        public override string Command { get { return "bgapi"; } }
+        public override string Command {
+            get { return "bgapi"; }
+        }
 
         /// <summary>
         ///     The BgApi command argument
         /// </summary>
-        public override string Argument { get { return string.Format("{0} {1}", CommandName, CommandArgs); } }
+        public override string Argument {
+            get { return string.Format("{0} {1}", CommandName, CommandArgs); }
+        }
     }
 }

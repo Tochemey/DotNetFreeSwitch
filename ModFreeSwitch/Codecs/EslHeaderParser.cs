@@ -14,9 +14,11 @@ namespace ModFreeSwitch.Codecs {
         public static string[] SplitHeader(string sb) {
             if (string.IsNullOrEmpty(sb)) return null;
 
-            string header = sb.TrimEnd('\n');
-            return header.Split(':').Select(c => c.Trim('\n').Trim()).ToArray();
+            var header = sb.TrimEnd('\n');
+            return header.Split(':')
+                .Select(c => c.Trim('\n')
+                    .Trim())
+                .ToArray();
         }
-
     }
 }

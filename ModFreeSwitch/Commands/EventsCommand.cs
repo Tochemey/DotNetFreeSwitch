@@ -5,10 +5,16 @@ namespace ModFreeSwitch.Commands {
         /// </summary>
         private readonly string _events;
 
-        public EventsCommand(string events) { _events = events; }
+        public EventsCommand(string events) {
+            _events = events;
+        }
 
-        public override string Command { get { return "events"; } }
+        public override string Command {
+            get { return "events"; }
+        }
 
-        public override string Argument { get { return _events; } }
+        public override string Argument {
+            get { return _events; }
+        }
     }
 }

@@ -9,21 +9,31 @@ namespace ModFreeSwitch.Commands {
             Terminators = '#';
             Retries = 1;
             Regex = "1234567890*#";
-            DigitTimeout = (2*1000);
-            Timeout = (5*1000);
+            DigitTimeout = 2*1000;
+            Timeout = 5*1000;
             InvalidFile = "silence_stream://150";
         }
 
-        public override string Argument
-        {
-            get
-            {
-                var argv = string.Format("{0} {1} {2} {3} '{4}' '{5}' {6} {7} {8} {9}", MinNumberOfDigits, MaxNumberOfDigits, Retries, Timeout, Terminators, SoundFile, InvalidFile, VariableName, Regex, DigitTimeout);
+        public override string Argument {
+            get {
+                var argv = string.Format("{0} {1} {2} {3} '{4}' '{5}' {6} {7} {8} {9}",
+                    MinNumberOfDigits,
+                    MaxNumberOfDigits,
+                    Retries,
+                    Timeout,
+                    Terminators,
+                    SoundFile,
+                    InvalidFile,
+                    VariableName,
+                    Regex,
+                    DigitTimeout);
                 return argv;
             }
         }
 
-        public override string Command { get { return "play_and_get_digits"; } }
+        public override string Command {
+            get { return "play_and_get_digits"; }
+        }
 
         /// <summary>
         ///     Inter-digit timeout; number of milliseconds allowed between digits; once this number is reached, PAGD assumes that

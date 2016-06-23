@@ -3,10 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace ModFreeSwitch.Common {
-
     public class AsyncCountdownEvent {
         private readonly AsyncManualResetEvent _mAmre = new AsyncManualResetEvent();
         private int _mCount;
+
         /// <summary>
         ///     A countdown event is an event that will allow waiters to complete after receiving a particular number of signals.
         ///     The “countdown” comes from the common fork/join pattern in which it’s often utilized: a certain number of

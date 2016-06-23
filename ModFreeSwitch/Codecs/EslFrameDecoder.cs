@@ -81,10 +81,9 @@ namespace ModFreeSwitch.Codecs {
                                         headerParts[0] + ']');
                             }
 
-                            _actualMessage.Headers.Add(
-                                headerName.Trim(LINE_FEED_CHAR),
-                                Uri.UnescapeDataString(
-                                    headerParts[1]).Trim(LINE_FEED_CHAR));
+                            _actualMessage.Headers.Add(headerName.Trim(LINE_FEED_CHAR),
+                                Uri.UnescapeDataString(headerParts[1])
+                                    .Trim(LINE_FEED_CHAR));
                         }
                         else {
                             reachedDoubleLf = true;

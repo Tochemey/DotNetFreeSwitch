@@ -12,7 +12,5 @@ namespace ModFreeSwitch {
     public class EventSocketClient {
         private static MultithreadEventLoopGroup group;
         private static Bootstrap bootstrap;
-
-
     }
 }

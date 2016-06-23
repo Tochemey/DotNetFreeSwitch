@@ -17,12 +17,16 @@ namespace ModFreeSwitch.Common {
         ///     Generate a new GUID
         /// </summary>
         /// <returns>Guid of some sort.</returns>
-        public static Guid Create() { return _instance.CreateInternal(); }
+        public static Guid Create() {
+            return _instance.CreateInternal();
+        }
 
         /// <summary>
         ///     Generate a new GUID using the assign implementation
         /// </summary>
         /// <returns>Guid of some sort</returns>
-        protected virtual Guid CreateInternal() { return Guid.NewGuid(); }
+        protected virtual Guid CreateInternal() {
+            return Guid.NewGuid();
+        }
     }
 }

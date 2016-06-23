@@ -10,9 +10,16 @@ namespace ModFreeSwitch.Commands {
         /// </summary>
         private readonly EventSocketLogLevels _logLevel;
 
-        public LogCommand(EventSocketLogLevels logLevel) { _logLevel = logLevel; }
-        public override string Command { get { return "log"; } }
+        public LogCommand(EventSocketLogLevels logLevel) {
+            _logLevel = logLevel;
+        }
 
-        public override string Argument { get { return _logLevel.ToString(); } }
+        public override string Command {
+            get { return "log"; }
+        }
+
+        public override string Argument {
+            get { return _logLevel.ToString(); }
+        }
     }
 }

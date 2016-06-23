@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModFreeSwitch", "ModFreeSwi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModFreeSwitch.Test", "ModFreeSwitch.Test\ModFreeSwitch.Test.csproj", "{312240E4-6B88-49C6-9A36-EA9E092168DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModFreeSwitch.Console", "ModFreeSwitch.Console\ModFreeSwitch.Console.csproj", "{2AC65457-9318-486C-A0F3-3CB85AA690CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{312240E4-6B88-49C6-9A36-EA9E092168DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{312240E4-6B88-49C6-9A36-EA9E092168DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{312240E4-6B88-49C6-9A36-EA9E092168DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AC65457-9318-486C-A0F3-3CB85AA690CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AC65457-9318-486C-A0F3-3CB85AA690CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AC65457-9318-486C-A0F3-3CB85AA690CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AC65457-9318-486C-A0F3-3CB85AA690CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

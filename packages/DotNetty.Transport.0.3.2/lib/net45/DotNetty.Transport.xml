@@ -1,0 +1,1866 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DotNetty.Transport</name>
+    </assembly>
+    <members>
+        <member name="T:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2">
+            <summary>
+                {@link AbstractBootstrap} is a helper class that makes it easy to bootstrap a {@link Channel}. It support
+                method-chaining to provide an easy way to configure the {@link AbstractBootstrap}.
+                <p>
+                    When not used in a {@link ServerBootstrap} context, the {@link #bind()} methods are useful for connectionless
+                    transports such as datagram (UDP).
+                </p>
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.Group(DotNetty.Transport.Channels.IEventLoopGroup)">
+            <summary>
+                The {@link EventLoopGroup} which is used to handle all the events for the to-be-created
+                {@link Channel}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.Channel``1">
+            <summary>
+                The {@link Class} which is used to create {@link Channel} instances from.
+                You either use this or {@link #channelFactory(io.netty.channel.ChannelFactory)} if your
+                {@link Channel} implementation has no no-args constructor.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.LocalAddress(System.Net.EndPoint)">
+            <summary>
+                The {@link SocketAddress} which is used to bind the local "end" to.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.LocalAddress(System.Int32)">
+            <summary>
+                @see {@link #localAddress(SocketAddress)}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.LocalAddress(System.String,System.Int32)">
+            <summary>
+                @see {@link #localAddress(SocketAddress)}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.LocalAddress(System.Net.IPAddress,System.Int32)">
+            <summary>
+                @see {@link #localAddress(SocketAddress)}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.Option``1(DotNetty.Transport.Channels.ChannelOption{``0},``0)">
+            <summary>
+                Allow to specify a {@link ChannelOption} which is used for the {@link Channel} instances once they got
+                created. Use a value of {@code null} to remove a previous set {@link ChannelOption}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.Attribute``1(DotNetty.Common.Utilities.AttributeKey{``0},``0)">
+            <summary>
+                Allow to specify an initial attribute of the newly created <see cref="T:DotNetty.Transport.Channels.IChannel" /> . If the <c>value</c> is
+                <c>null</c>, the attribute of the specified <c>key</c> is removed.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.Validate">
+            <summary>
+                Allow to specify an initial attribute of the newly created {@link Channel}.  If the {@code value} is
+                {@code null}, the attribute of the specified {@code key} is removed.
+            </summary>
+            <summary>
+                Validate all the parameters. Sub-classes may override this, but should
+                call the super method in that case.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.Clone">
+            <summary>
+                Returns a deep clone of this bootstrap which has the identical configuration.  This method is useful when making
+                multiple {@link Channel}s with similar settings.  Please note that this method does not clone the
+                {@link EventLoopGroup} deeply but shallowly, making the group a shared resource.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.RegisterAsync">
+            <summary>
+                Create a new {@link Channel} and register it with an {@link EventLoop}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.BindAsync">
+            <summary>
+                Create a new {@link Channel} and bind it.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.BindAsync(System.Int32)">
+            <summary>
+                Create a new {@link Channel} and bind it.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.BindAsync(System.String,System.Int32)">
+            <summary>
+                Create a new {@link Channel} and bind it.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.BindAsync(System.Net.IPAddress,System.Int32)">
+            <summary>
+                Create a new {@link Channel} and bind it.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.BindAsync(System.Net.EndPoint)">
+            <summary>
+                Create a new {@link Channel} and bind it.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.Handler(DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                the {@link ChannelHandler} to use for serving the requests.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.AbstractBootstrap`2.Group">
+            <summary>
+                Return the configured {@link EventLoopGroup} or {@code null} if non is configured yet.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Bootstrapping.Bootstrap">
+            <summary>
+                A {@link Bootstrap} that makes it easy to bootstrap a {@link Channel} to use
+                for clients.
+                <p>
+                    The {@link #bind()} methods are useful in combination with connectionless transports such as datagram (UDP).
+                    For regular TCP connections, please use the provided {@link #connect()} methods.
+                </p>
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.Bootstrap.Resolver(DotNetty.Transport.Bootstrapping.INameResolver)">
+            <summary>
+                Sets the {@link NameResolver} which will resolve the address of the unresolved named address.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.Bootstrap.RemoteAddress(System.Net.EndPoint)">
+            <summary>
+                The {@link SocketAddress} to connect to once the {@link #connect()} method
+                is called.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.Bootstrap.RemoteAddress(System.String,System.Int32)">
+            <summary>
+                @see {@link #remoteAddress(SocketAddress)}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.Bootstrap.RemoteAddress(System.Net.IPAddress,System.Int32)">
+            <summary>
+                @see {@link #remoteAddress(SocketAddress)}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.Bootstrap.ConnectAsync">
+            <summary>
+                Connect a {@link Channel} to the remote peer.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.Bootstrap.ConnectAsync(System.String,System.Int32)">
+            <summary>
+                Connect a {@link Channel} to the remote peer.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.Bootstrap.ConnectAsync(System.Net.IPAddress,System.Int32)">
+            <summary>
+                Connect a {@link Channel} to the remote peer.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.Bootstrap.ConnectAsync(System.Net.EndPoint)">
+            <summary>
+                Connect a {@link Channel} to the remote peer.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.Bootstrap.ConnectAsync(System.Net.EndPoint,System.Net.EndPoint)">
+            <summary>
+                Connect a {@link Channel} to the remote peer.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.Bootstrap.DoResolveAndConnectAsync(System.Net.EndPoint,System.Net.EndPoint)">
+            <summary>
+                @see {@link #connect()}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.Bootstrap.Clone(DotNetty.Transport.Channels.IEventLoopGroup)">
+            <summary>
+                Returns a deep clone of this bootstrap which has the identical configuration except that it uses
+                the given {@link EventLoopGroup}. This method is useful when making multiple {@link Channel}s with similar
+                settings.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Bootstrapping.ServerBootstrap">
+            <summary>
+                {@link Bootstrap} sub-class which allows easy bootstrap of {@link ServerChannel}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.ServerBootstrap.Group(DotNetty.Transport.Channels.IEventLoopGroup)">
+            <summary>
+                Specify the {@link EventLoopGroup} which is used for the parent (acceptor) and the child (client).
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.ServerBootstrap.Group(DotNetty.Transport.Channels.IEventLoopGroup,DotNetty.Transport.Channels.IEventLoopGroup)">
+            <summary>
+                Set the {@link EventLoopGroup} for the parent (acceptor) and the child (client). These
+                {@link EventLoopGroup}'s are used to handle all the events and IO for {@link ServerChannel} and
+                {@link Channel}'s.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.ServerBootstrap.ChildOption``1(DotNetty.Transport.Channels.ChannelOption{``0},``0)">
+            <summary>
+                Allow to specify a {@link ChannelOption} which is used for the {@link Channel} instances once they get created
+                (after the acceptor accepted the {@link Channel}). Use a value of {@code null} to remove a previous set
+                {@link ChannelOption}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.ServerBootstrap.ChildAttribute``1(DotNetty.Common.Utilities.AttributeKey{``0},``0)">
+            <summary>
+                Set the specific {@link AttributeKey} with the given value on every child {@link Channel}. If the value is
+                {@code null} the {@link AttributeKey} is removed
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.ServerBootstrap.ChildHandler(DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Set the {@link ChannelHandler} which is used to serve the request for the {@link Channel}'s.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Bootstrapping.ServerBootstrap.ChildGroup">
+            <summary>
+                Return the configured {@link EventLoopGroup} which will be used for the child channels or {@code null}
+                if non is configured yet.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.AdaptiveRecvByteBufAllocator">
+            <summary>
+                The <see cref="T:DotNetty.Transport.Channels.IRecvByteBufAllocator" /> that automatically increases and
+                decreases the predicted buffer size on feed back.
+                <p />
+                It gradually increases the expected number of readable bytes if the previous
+                read fully filled the allocated buffer. It gradually decreases the expected
+                number of readable bytes if the read operation was not able to fill a certain
+                amount of the allocated buffer two times consecutively. Otherwise, it keeps
+                returning the same prediction.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AdaptiveRecvByteBufAllocator.#ctor">
+            <summary>
+                Creates a new predictor with the default parameters.  With the default
+                parameters, the expected buffer size starts from <c>1024</c>, does not
+                go down below <c>64</c>, and does not go up above <c>65536</c>.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AdaptiveRecvByteBufAllocator.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>Creates a new predictor with the specified parameters.</summary>
+            <param name="minimum">the inclusive lower bound of the expected buffer size</param>
+            <param name="initial">the initial buffer size when no feed back was received</param>
+            <param name="maximum">the inclusive upper bound of the expected buffer size</param>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.BatchingPendingWriteQueue">
+            <summary>
+                A queue of write operations which are pending for later execution. It also updates the
+                <see cref="P:DotNetty.Transport.Channels.IChannel.IsWritable">writability</see> of the associated <see cref="T:DotNetty.Transport.Channels.IChannel" />, so that
+                the pending write operations are also considered to determine the writability.
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.BatchingPendingWriteQueue.IsEmpty">
+            <summary>Returns <c>true</c> if there are no pending write operations left in this queue.</summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.BatchingPendingWriteQueue.Size">
+            <summary>Returns the number of pending write operations.</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.BatchingPendingWriteQueue.Add(System.Object)">
+            <summary>Add the given <c>msg</c> and returns <see cref="T:System.Threading.Tasks.Task" /> for completion of processing <c>msg</c>.</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.BatchingPendingWriteQueue.RemoveAndFailAll(System.Exception)">
+            <summary>
+                Remove all pending write operation and fail them with the given <see cref="T:System.Exception" />. The messages will be
+                released
+                via <see cref="M:DotNetty.Common.Utilities.ReferenceCountUtil.SafeRelease(System.Object)" />.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.BatchingPendingWriteQueue.RemoveAndFail(System.Exception)">
+            <summary>
+                Remove a pending write operation and fail it with the given <see cref="T:System.Exception" />. The message will be released
+                via
+                <see cref="M:DotNetty.Common.Utilities.ReferenceCountUtil.SafeRelease(System.Object)" />.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.BatchingPendingWriteQueue.RemoveAndWriteAllAsync">
+            <summary>
+                Remove all pending write operation and performs them via
+                <see cref="M:DotNetty.Transport.Channels.IChannelHandlerContext.WriteAsync(System.Object)" />.
+            </summary>
+            <returns>
+                <see cref="T:System.Threading.Tasks.Task" /> if something was written and <c>null</c> if the <see cref="T:DotNetty.Transport.Channels.BatchingPendingWriteQueue" />
+                is empty.
+            </returns>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.BatchingPendingWriteQueue.RemoveAndWriteAsync">
+            <summary>
+                Removes a pending write operation and performs it via
+                <see cref="M:DotNetty.Transport.Channels.IChannelHandlerContext.WriteAsync(System.Object)"/>.
+            </summary>
+            <returns>
+                <see cref="T:System.Threading.Tasks.Task" /> if something was written and <c>null</c> if the <see cref="T:DotNetty.Transport.Channels.BatchingPendingWriteQueue" />
+                is empty.
+            </returns>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.BatchingPendingWriteQueue.Remove">
+            <summary>
+                Removes a pending write operation and release it's message via <see cref="M:DotNetty.Common.Utilities.ReferenceCountUtil.SafeRelease(System.Object)"/>.
+            </summary>
+            <returns><see cref="T:DotNetty.Common.Concurrency.TaskCompletionSource" /> of the pending write or <c>null</c> if the queue is empty.</returns>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.BatchingPendingWriteQueue.Current">
+            <summary>
+                Return the current message or <c>null</c> if empty.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.BatchingPendingWriteQueue.PendingWrite">
+            <summary>Holds all meta-data and construct the linked-list structure.</summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.ChannelMetadata">
+            <summary>Represents the properties of a <see cref="T:DotNetty.Transport.Channels.IChannel" /> implementation.</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelMetadata.#ctor(System.Boolean)">
+            <summary>Create a new instance</summary>
+            <param name="hasDisconnect">
+                <c>true</c> if and only if the channel has the <c>DisconnectAsync()</c> operation
+                that allows a user to disconnect and then call <see cref="M:DotNetty.Transport.Channels.IChannel.ConnectAsync(System.Net.EndPoint)" />
+                again, such as UDP/IP.
+            </param>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelMetadata.#ctor(System.Boolean,System.Int32)">
+            <summary>Create a new instance</summary>
+            <param name="hasDisconnect">
+                <c>true</c> if and only if the channel has the <c>DisconnectAsync</c> operation
+                that allows a user to disconnect and then call <see cref="M:DotNetty.Transport.Channels.IChannel.ConnectAsync(System.Net.EndPoint)" />
+                again, such as UDP/IP.
+            </param>
+            <param name="defaultMaxMessagesPerRead">
+                If a <see cref="T:DotNetty.Transport.Channels.IMaxMessagesRecvByteBufAllocator" /> is in use, then this value will be
+                set for <see cref="P:DotNetty.Transport.Channels.IMaxMessagesRecvByteBufAllocator.MaxMessagesPerRead" />. Must be <c> &gt; 0</c>.
+            </param>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.ChannelMetadata.HasDisconnect">
+            <summary>
+                Returns <c>true</c> if and only if the channel has the <c>DisconnectAsync()</c> operation
+                that allows a user to disconnect and then call <see cref="M:DotNetty.Transport.Channels.IChannel.ConnectAsync(System.Net.EndPoint)" /> again,
+                such as UDP/IP.
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.ChannelMetadata.DefaultMaxMessagesPerRead">
+            <summary>
+                If a <see cref="T:DotNetty.Transport.Channels.IMaxMessagesRecvByteBufAllocator" /> is in use, then this is the default value for
+                <see cref="P:DotNetty.Transport.Channels.IMaxMessagesRecvByteBufAllocator.MaxMessagesPerRead" />.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.AddMessage(System.Object,System.Int32,DotNetty.Common.Concurrency.TaskCompletionSource)">
+            <summary>
+                Add given message to this {@link ChannelOutboundBuffer}. The given {@link ChannelPromise} will be notified once
+                the message was written.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.AddFlush">
+            <summary>
+                Add a flush to this {@link ChannelOutboundBuffer}. This means all previous added messages are marked as flushed
+                and so you will be able to handle them.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.IncrementPendingOutboundBytes(System.Int64)">
+            <summary>
+                Increment the pending bytes which will be written at some point.
+                This method is thread-safe!
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.DecrementPendingOutboundBytes(System.Int64)">
+            <summary>
+                Decrement the pending bytes which will be written at some point.
+                This method is thread-safe!
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.ChannelOutboundBuffer.Current">
+            <summary>
+                Return the current message to write or {@code null} if nothing was flushed before and so is ready to be written.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.Progress(System.Int64)">
+            <summary>
+                Notify the {@link ChannelPromise} of the current message about writing progress.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.Remove">
+            <summary>
+                Will remove the current message, mark its {@link ChannelPromise} as success and return {@code true}. If no
+                flushed message exists at the time this method is called it will return {@code false} to signal that no more
+                messages are ready to be handled.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.Remove(System.Exception)">
+            <summary>
+                Will remove the current message, mark its {@link ChannelPromise} as failure using the given {@link Exception}
+                and return {@code true}. If no   flushed message exists at the time this method is called it will return
+                {@code false} to signal that no more messages are ready to be handled.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.RemoveBytes(System.Int64)">
+            <summary>
+                Removes the fully written entries and update the reader index of the partially written entry.
+                This operation assumes all messages in this buffer is {@link ByteBuf}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.GetNioBuffers">
+            
+            Returns an array of direct NIO buffers if the currently pending messages are made of {@link ByteBuf} only.
+            {@link #nioBufferCount()} and {@link #nioBufferSize()} will return the number of NIO buffers in the returned
+            array and the total number of readable bytes of the NIO buffers respectively.
+            <p>
+            Note that the returned array is reused and thus should not escape
+            {@link AbstractChannel#doWrite(ChannelOutboundBuffer)}.
+            Refer to {@link NioSocketChannel#doWrite(ChannelOutboundBuffer)} for an example.
+            </p>
+            
+        </member>
+        <member name="P:DotNetty.Transport.Channels.ChannelOutboundBuffer.NioBufferSize">
+            Returns the number of bytes that can be written out of the {@link ByteBuffer} array that was
+            obtained via {@link #nioBuffers()}. This method <strong>MUST</strong> be called after {@link #nioBuffers()}
+            was called.
+        </member>
+        <member name="P:DotNetty.Transport.Channels.ChannelOutboundBuffer.IsWritable">
+            <summary>
+                Returns an array of direct NIO buffers if the currently pending messages are made of {@link ByteBuf} only.
+                {@link #IoBufferCount} and {@link #NioBufferSize} will return the number of NIO buffers in the returned
+                array and the total number of readable bytes of the NIO buffers respectively.
+                <p>
+                    Note that the returned array is reused and thus should not escape
+                    {@link AbstractChannel#doWrite(ChannelOutboundBuffer)}.
+                    Refer to {@link NioSocketChannel#doWrite(ChannelOutboundBuffer)} for an example.
+                </p>
+            </summary>
+            <summary>
+                Returns {@code true} if and only if {@linkplain #totalPendingWriteBytes() the total number of pending bytes} did
+                not exceed the write watermark of the {@link Channel} and
+                no {@linkplain #SetUserDefinedWritability(int, bool) user-defined writability flag} has been set to
+                {@code false}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.GetUserDefinedWritability(System.Int32)">
+            <summary>
+                Returns {@code true} if and only if the user-defined writability flag at the specified index is set to
+                {@code true}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.SetUserDefinedWritability(System.Int32,System.Boolean)">
+            <summary>
+                Sets a user-defined writability flag at the specified index.
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.ChannelOutboundBuffer.Count">
+            <summary>
+                Returns the number of flushed messages in this {@link ChannelOutboundBuffer}.
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.ChannelOutboundBuffer.IsEmpty">
+            <summary>
+                Returns {@code true} if there are flushed messages in this {@link ChannelOutboundBuffer} or {@code false}
+                otherwise.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOutboundBuffer.IsFlushedEntry(DotNetty.Transport.Channels.ChannelOutboundBuffer.Entry)">
+            <summary>
+                Call {@link IMessageProcessor#processMessage(Object)} for each flushed message
+                in this {@link ChannelOutboundBuffer} until {@link IMessageProcessor#processMessage(Object)}
+                returns {@code false} or there are no more flushed messages to process.
+            </summary>
+        </member>
+        <member name="F:DotNetty.Transport.Channels.AbstractChannel.strValActive">
+            <summary>Cache for the string representation of this channel</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.#ctor(DotNetty.Transport.Channels.IChannel)">
+            <summary>
+                Creates a new instance.
+            </summary>
+            <param name="parent">the parent of this channel. <c>null</c> if there's no parent.</param>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.#ctor(DotNetty.Transport.Channels.IChannel,DotNetty.Transport.Channels.IChannelId)">
+            <summary>
+                Creates a new instance.
+            </summary>
+            <param name="parent">the parent of this channel. <c>null</c> if there's no parent.</param>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.AbstractChannel.Registered">
+            <summary>
+                Reset the stored remoteAddress
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.NewId">
+            Returns a new <see cref="T:DotNetty.Transport.Channels.DefaultChannelId"/> instance. Subclasses may override this method to assign custom
+            <see cref="T:DotNetty.Transport.Channels.IChannelId"/>s to <see cref="T:DotNetty.Transport.Channels.IChannel"/>s that use the <see cref="T:DotNetty.Transport.Channels.AbstractChannel"/> constructor.
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.NewChannelPipeline">
+            <summary>Returns a new pipeline instance.</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.NewUnsafe">
+            <summary>
+                Create a new <see cref="T:DotNetty.Transport.Channels.AbstractChannel.AbstractUnsafe" /> instance which will be used for the life-time of the
+                <see cref="T:DotNetty.Transport.Channels.IChannel" />
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.GetHashCode">
+            <summary>
+                Returns the ID of this channel.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.Equals(System.Object)">
+            <summary>
+                Returns <c>true</c> if and only if the specified object is identical
+                with this channel (i.e. <c>this == o</c>).
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.ToString">
+            <summary>
+                Returns the string representation of this channel.  The returned
+                string contains the {@linkplain #hashCode()} ID}, {@linkplain #localAddress() local address},
+                and {@linkplain #remoteAddress() remote address} of this channel for
+                easier identification.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.AbstractChannel.AbstractUnsafe">
+            <summary>
+                <see cref="T:DotNetty.Transport.Channels.IChannelUnsafe" /> implementation which sub-classes must extend and use.
+            </summary>
+        </member>
+        <member name="F:DotNetty.Transport.Channels.AbstractChannel.AbstractUnsafe.neverRegistered">
+            <summary> true if the channel has never been registered, false otherwise /// </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.AbstractUnsafe.DeregisterAsync">
+            <summary>
+                This method must NEVER be called directly, but be executed as an
+                extra task with a clean call stack instead. The reason for this
+                is that this method calls {@link ChannelPipeline#fireChannelUnregistered()}
+                directly, which might lead to an unfortunate nesting of independent inbound/outbound
+                events. See the comments input {@link #invokeLater(Runnable)} for more details.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.AbstractUnsafe.PrepareToClose">
+            <summary>
+            Prepares to close the <see cref="T:DotNetty.Transport.Channels.IChannel"/>. If this method returns an <see cref="T:DotNetty.Common.Concurrency.IEventExecutor"/>, the
+            caller must call the <see cref="M:DotNetty.Common.Concurrency.IEventExecutor.Execute(DotNetty.Common.Concurrency.IRunnable)"/> method with a task that calls
+            <see cref="M:DotNetty.Transport.Channels.AbstractChannel.DoClose"/> on the returned <see cref="T:DotNetty.Common.Concurrency.IEventExecutor"/>. If this method returns <c>null</c>,
+            <see cref="M:DotNetty.Transport.Channels.AbstractChannel.DoClose"/> must be called from the caller thread. (i.e. <see cref="T:DotNetty.Transport.Channels.IEventLoop"/>)
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.IsCompatible(DotNetty.Transport.Channels.IEventLoop)">
+            <summary>
+                Return {@code true} if the given {@link EventLoop} is compatible with this instance.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.DoRegister">
+            <summary>
+                Is called after the {@link Channel} is registered with its {@link EventLoop} as part of the register process.
+                Sub-classes may override this method
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.DoBind(System.Net.EndPoint)">
+            <summary>
+                Bind the {@link Channel} to the {@link EndPoint}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.DoDisconnect">
+            <summary>
+                Disconnect this {@link Channel} from its remote peer
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.DoClose">
+            <summary>
+                Close the {@link Channel}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.DoDeregister">
+            <summary>
+                Deregister the {@link Channel} from its {@link EventLoop}.
+                Sub-classes may override this method
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.DoBeginRead">
+            <summary>
+                ScheduleAsync a read operation.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.DoWrite(DotNetty.Transport.Channels.ChannelOutboundBuffer)">
+            <summary>
+                Flush the content of the given buffer to the remote peer.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.AbstractChannel.FilterOutboundMessage(System.Object)">
+            <summary>
+                Invoked when a new message is added to a {@link ChannelOutboundBuffer} of this {@link AbstractChannel}, so that
+                the {@link Channel} implementation converts the message to another. (e.g. heap buffer -> direct buffer)
+            </summary>
+        </member>
+        <member name="F:DotNetty.Transport.Channels.AbstractChannelHandlerContext.HandlerState.Init">
+            <summary>Neither <see cref="M:DotNetty.Transport.Channels.IChannelHandler.HandlerAdded(DotNetty.Transport.Channels.IChannelHandlerContext)"/> nor <see cref="M:DotNetty.Transport.Channels.IChannelHandler.HandlerRemoved(DotNetty.Transport.Channels.IChannelHandlerContext)"/> was called.</summary>
+        </member>
+        <member name="F:DotNetty.Transport.Channels.AbstractChannelHandlerContext.HandlerState.Added">
+            <summary><see cref="M:DotNetty.Transport.Channels.IChannelHandler.HandlerAdded(DotNetty.Transport.Channels.IChannelHandlerContext)"/> was called.</summary>
+        </member>
+        <member name="F:DotNetty.Transport.Channels.AbstractChannelHandlerContext.HandlerState.Removed">
+            <summary><see cref="M:DotNetty.Transport.Channels.IChannelHandler.HandlerRemoved(DotNetty.Transport.Channels.IChannelHandlerContext)"/> was called.</summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.AbstractChannelHandlerContext.Added">
+            <summary>
+                Makes best possible effort to detect if <see cref="M:DotNetty.Transport.Channels.IChannelHandler.HandlerAdded(DotNetty.Transport.Channels.IChannelHandlerContext)" /> was
+                called
+                yet. If not return <c>false</c> and if called or could not detect return <c>true</c>.
+                If this method returns <c>true</c> we will not invoke the <see cref="T:DotNetty.Transport.Channels.IChannelHandler" /> but just forward the
+                event.
+                This is needed as <see cref="T:DotNetty.Transport.Channels.DefaultChannelPipeline" /> may already put the <see cref="T:DotNetty.Transport.Channels.IChannelHandler" /> in the
+                linked-list
+                but not called
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:DotNetty.Transport.Channels.ChannelInitializer`1" -->
+        <member name="M:DotNetty.Transport.Channels.ChannelInitializer`1.InitChannel(`0)">
+            <summary>
+                This method will be called once the {@link Channel} was registered. After the method returns this instance
+                will be removed from the {@link ChannelPipeline} of the {@link Channel}.
+                @param channel            the {@link Channel} which was registered.
+                @throws Exception    is thrown if an error occurs. In that case the {@link Channel} will be closed.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOption.ValueOf``1(System.String)">
+            <summary>Returns the {@link ChannelOption} of the specified name.</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOption.ValueOf``1(System.Type,System.String)">
+            <summary>Shortcut of {@link #valueOf(String) valueOf(firstNameComponent.getName() + "#" + secondNameComponent)}.</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOption.Exists(System.String)">
+            <summary>Returns {@code true} if a {@link ChannelOption} exists for the given {@code name}.</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.ChannelOption.NewInstance``1(System.String)">
+            <summary>Creates a new {@link ChannelOption} for the given {@code name} or fail with an
+            {@link IllegalArgumentException} if a {@link ChannelOption} for the given {@code name} exists.
+            </summary>
+        </member>
+        <member name="F:DotNetty.Transport.Channels.DefaultChannelPipeline.pendingHandlerCallbackHead">
+            <summary>
+                This is the head of a linked list that is processed by <see cref="M:DotNetty.Transport.Channels.DefaultChannelPipeline.CallHandlerAddedForAllHandlers" /> and so process
+                all the pending <see cref="M:DotNetty.Transport.Channels.DefaultChannelPipeline.CallHandlerAdded0(DotNetty.Transport.Channels.AbstractChannelHandlerContext)" />.
+                We only keep the head because it is expected that the list is used infrequently and its size is small.
+                Thus full iterations to do insertions is assumed to be a good compromised to saving memory and tail management
+                complexity.
+            </summary>
+        </member>
+        <member name="F:DotNetty.Transport.Channels.DefaultChannelPipeline.registered">
+            Set to
+            <c>true</c>
+            once the
+            <see cref="T:DotNetty.Transport.Channels.AbstractChannel" />
+            is registered.Once set to
+            <c>true</c>
+            the value will never
+            change.
+        </member>
+        <member name="M:DotNetty.Transport.Channels.DefaultChannelPipeline.First">
+            <summary>
+                Waits for a future to finish.  If the task is interrupted, then the current thread will be interrupted.
+                It is expected that the task performs any appropriate locking.
+                <p>
+                    If the internal call throws a {@link Throwable}, but it is not an instance of {@link LogError} or
+                    {@link RuntimeException}, then it is wrapped inside a {@link ChannelPipelineException} and that is
+                    thrown instead.
+                </p>
+                @param future wait for this future
+                @see Future#get()
+                @throws LogError if the task threw this.
+                @throws RuntimeException if the task threw this.
+                @throws ChannelPipelineException with a {@link Throwable} as a cause, if the task threw another type of
+                {@link Throwable}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.DefaultChannelPipeline.ToString">
+            <summary>
+                Returns the {@link String} representation of this pipeline.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.DefaultChannelPipeline.Destroy">
+            <summary>
+                Removes all handlers from the pipeline one by one from tail (exclusive) to head (exclusive) to trigger
+                handlerRemoved().
+                Note that we traverse up the pipeline <see cref="M:DotNetty.Transport.Channels.DefaultChannelPipeline.DestroyUp(DotNetty.Transport.Channels.AbstractChannelHandlerContext,System.Boolean)" />
+                before traversing down <see cref="M:DotNetty.Transport.Channels.DefaultChannelPipeline.DestroyDown(System.Threading.Thread,DotNetty.Transport.Channels.AbstractChannelHandlerContext,System.Boolean)" /> so that
+                the handlers are removed after all events are handled.
+                See: https://github.com/netty/netty/issues/3156
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.DefaultChannelPipeline.OnUnhandledInboundException(System.Exception)">
+            <summary>
+                Called once a <see cref="T:System.Exception" /> hit the end of the <see cref="T:DotNetty.Transport.Channels.IChannelPipeline" /> without been handled by
+                the user in <see cref="M:DotNetty.Transport.Channels.IChannelHandler.ExceptionCaught(DotNetty.Transport.Channels.IChannelHandlerContext,System.Exception)" />.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.DefaultChannelPipeline.OnUnhandledInboundMessage(System.Object)">
+            <summary>
+                Called once a message hit the end of the <see cref="T:DotNetty.Transport.Channels.IChannelPipeline" /> without been handled by the user
+                in <see cref="M:DotNetty.Transport.Channels.IChannelHandler.ChannelRead(DotNetty.Transport.Channels.IChannelHandlerContext,System.Object)" />. This method is responsible
+                to call <see cref="M:DotNetty.Common.Utilities.ReferenceCountUtil.Release(System.Object)" /> on the given msg at some point.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.DefaultMaxMessagesRecvByteBufAllocator">
+            <summary>
+                Default implementation of <see cref="T:DotNetty.Transport.Channels.IMaxMessagesRecvByteBufAllocator" /> which respects
+                <see cref="P:DotNetty.Transport.Channels.IChannelConfiguration.AutoRead" />
+                and also prevents overflow.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.DefaultMaxMessagesRecvByteBufAllocator.MaxMessageHandle`1">
+            <summary>Focuses on enforcing the maximum messages per read condition for <see cref="M:DotNetty.Transport.Channels.DefaultMaxMessagesRecvByteBufAllocator.MaxMessageHandle`1.ContinueReading" />.</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.DefaultMaxMessagesRecvByteBufAllocator.MaxMessageHandle`1.Reset(DotNetty.Transport.Channels.IChannelConfiguration)">
+            <summary>Only <see cref="!:IChannelConfiguration.MaxMessagesPerRead" /> is used.</summary>
+        </member>
+        <member name="F:DotNetty.Transport.Channels.DefaultMessageSizeEstimator.Default">
+            <summary>
+                Return the default implementation which returns {@code -1} for unknown messages.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.DefaultMessageSizeEstimator.#ctor(System.Int32)">
+            <summary>
+                Create a new instance
+                @param unknownSize       The size which is returned for unknown messages.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.#ctor">
+            <summary>
+                Create a new instance with an empty pipeline.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.#ctor(DotNetty.Transport.Channels.IChannelId)">
+            <summary>
+                Create a new instance with an empty pipeline with the specified <see cref="T:DotNetty.Transport.Channels.IChannelId" />.
+            </summary>
+            <param name="channelId">The <see cref="T:DotNetty.Transport.Channels.IChannelId" /> of this channel. </param>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.#ctor(DotNetty.Transport.Channels.IChannelHandler[])">
+            <summary>
+                Create a new instance with the pipeline initialized with the specified handlers.
+            </summary>
+            <param name="handlers">
+                The <see cref="T:DotNetty.Transport.Channels.IChannelHandler" />s that will be added to the <see cref="T:DotNetty.Transport.Channels.IChannelPipeline" />
+            </param>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.#ctor(DotNetty.Transport.Channels.IChannelId,System.Boolean,DotNetty.Transport.Channels.IChannelHandler[])">
+            <summary>Create a new instance with the pipeline initialized with the specified handlers.</summary>
+            <param name="id">The <see cref="T:DotNetty.Transport.Channels.IChannelId" /> of this channel.</param>
+            <param name="hasDisconnect">
+                <c>false</c> if this <see cref="T:DotNetty.Transport.Channels.IChannel" /> will delegate <see cref="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.DisconnectAsync" />
+                to <see cref="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.CloseAsync" />, <c>true</c> otherwise.
+            </param>
+            <param name="handlers">
+                The <see cref="T:DotNetty.Transport.Channels.IChannelHandler" />s that will be added to the <see cref="T:DotNetty.Transport.Channels.IChannelPipeline" />
+            </param>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.InboundMessages">
+            <summary>
+                Returns the <see cref="T:System.Collections.Generic.Queue`1" /> which holds all of the <see cref="T:System.Object" />s that
+                were received by this <see cref="T:DotNetty.Transport.Channels.IChannel" />.
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.OutboundMessages">
+            <summary>
+                Returns the <see cref="T:System.Collections.Generic.Queue`1" /> which holds all of the <see cref="T:System.Object" />s that
+                were written by this <see cref="T:DotNetty.Transport.Channels.IChannel" />.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.ReadInbound``1">
+            <summary>
+            Return received data from this <see cref="T:DotNetty.Transport.Channels.IChannel"/>.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.ReadOutbound``1">
+            <summary>
+            Read data from the outbound. This may return <c>null</c> if nothing is readable.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.RunPendingTasks">
+            <summary>
+                Run all tasks (which also includes scheduled tasks) that are pending in the <see cref="T:DotNetty.Transport.Channels.IEventLoop" />
+                for this <see cref="T:DotNetty.Transport.Channels.IChannel" />.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.RunScheduledPendingTasks">
+            <summary>
+                Run all pending scheduled tasks in the <see cref="T:DotNetty.Transport.Channels.IEventLoop" /> for this <see cref="T:DotNetty.Transport.Channels.IChannel" />.
+            </summary>
+            <returns>
+                The <see cref="T:DotNetty.Common.PreciseTimeSpan" /> when the next scheduled task is ready to run. If no other task is
+                scheduled then it will return <see cref="F:DotNetty.Common.PreciseTimeSpan.Zero" />.
+            </returns>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.WriteInbound(System.Object[])">
+            <summary>
+                Write messages to the inbound of this <see cref="T:DotNetty.Transport.Channels.IChannel" />
+            </summary>
+            <param name="msgs">The messages to be written.</param>
+            <returns><c>true</c> if the write operation did add something to the inbound buffer</returns>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.WriteOutbound(System.Object[])">
+            <summary>
+                Write messages to the outbound of this <see cref="T:DotNetty.Transport.Channels.IChannel" />.
+            </summary>
+            <param name="msgs">The messages to be written.</param>
+            <returns><c>true</c> if the write operation did add something to the inbound buffer</returns>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.Finish">
+            <summary>
+                Mark this <see cref="T:DotNetty.Transport.Channels.IChannel" /> as finished. Any further try to write data to it will fail.
+            </summary>
+            <returns>bufferReadable returns <c>true</c></returns>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.FinishAndReleaseAll">
+             Mark this {@link Channel} as finished and release all pending message in the inbound and outbound buffer.
+             Any futher try to write data to it will fail.
+            
+             @return bufferReadable returns {@code true} if any of the used buffers has something left to read
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.Finish(System.Boolean)">
+             Mark this {@link Channel} as finished. Any futher try to write data to it will fail.
+            
+             @param releaseAll if {@code true} all pending message in the inbound and outbound buffer are released.
+             @return bufferReadable returns {@code true} if any of the used buffers has something left to read
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.ReleaseInbound">
+            Release all buffered inbound messages and return {@code true} if any were in the inbound buffer, {@code false}
+            otherwise.
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.ReleaseOutbound">
+            Release all buffered outbound messages and return {@code true} if any were in the outbound buffer, {@code false}
+            otherwise.
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.CheckException">
+            <summary>
+                Check to see if there was any <see cref="T:System.Exception" /> and rethrow if so.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Embedded.EmbeddedChannel.EnsureOpen">
+            <summary>
+                Ensure the <see cref="T:DotNetty.Transport.Channels.IChannel" /> is open and if not throw an exception.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.Embedded.EmbeddedChannelId">
+            <summary>
+                A dummy <see cref="T:DotNetty.Transport.Channels.IChannelId" /> implementation
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.FixedRecvByteBufAllocator">
+            <summary>
+                The <see cref="T:DotNetty.Transport.Channels.IRecvByteBufAllocator" /> that always yields the same buffer
+                size prediction. This predictor ignores the feedback from the I/O thread.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.FixedRecvByteBufAllocator.#ctor(System.Int32)">
+            <summary>
+                Creates a new predictor that always returns the same prediction of
+                the specified buffer size.
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.Groups.IChannelGroup.Name">
+            <summary>
+                Returns the name of this group.  A group name is purely for helping
+                you to distinguish one group from others.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.IMaxMessagesRecvByteBufAllocator">
+            <summary>
+                <see cref="T:DotNetty.Transport.Channels.IRecvByteBufAllocator" /> that limits the number of read operations that will be attempted when a read
+                operation
+                is attempted by the event loop.
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.IMaxMessagesRecvByteBufAllocator.MaxMessagesPerRead">
+            <summary>
+                Gets or sets the maximum number of messages to read per read loop.
+                If this value is greater than 1, an event loop might attempt to read multiple times to procure multiple messages.
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.IChannel.Metadata">
+            <summary>
+                Return the <see cref="T:DotNetty.Transport.Channels.ChannelMetadata" /> of the <see cref="T:DotNetty.Transport.Channels.IChannel" /> which describe the nature of the
+                <see cref="T:DotNetty.Transport.Channels.IChannel" />.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandler.ChannelRegistered(DotNetty.Transport.Channels.IChannelHandlerContext)">
+            <summary>
+                The {@link Channel} of the {@link ChannelHandlerContext} was registered with its {@link EventLoop}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandler.ChannelUnregistered(DotNetty.Transport.Channels.IChannelHandlerContext)">
+            <summary>
+                The {@link Channel} of the {@link ChannelHandlerContext} was unregistered from its {@link EventLoop}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandler.ChannelWritabilityChanged(DotNetty.Transport.Channels.IChannelHandlerContext)">
+            <summary>
+                Gets called once the writable state of a {@link Channel} changed. You can check the state with
+                {@link Channel#isWritable()}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandler.BindAsync(DotNetty.Transport.Channels.IChannelHandlerContext,System.Net.EndPoint)">
+            <summary>
+                Called once a bind operation is made.
+                @param context           the {@link ChannelHandlerContext} for which the bind operation is made
+                @param localAddress  the {@link java.net.SocketAddress} to which it should bound
+                @param promise       the {@link ChannelPromise} to notify once the operation completes
+                @throws Exception    thrown if an error accour
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandler.ConnectAsync(DotNetty.Transport.Channels.IChannelHandlerContext,System.Net.EndPoint,System.Net.EndPoint)">
+            <summary>
+                Called once a connect operation is made.
+                @param context               the {@link ChannelHandlerContext} for which the connect operation is made
+                @param remoteAddress     the {@link SocketAddress} to which it should connect
+                @param localAddress      the {@link SocketAddress} which is used as source on connect
+                @param promise           the {@link ChannelPromise} to notify once the operation completes
+                @throws Exception        thrown if an error accour
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandler.DisconnectAsync(DotNetty.Transport.Channels.IChannelHandlerContext)">
+            <summary>
+                Called once a disconnect operation is made.
+                @param context               the {@link ChannelHandlerContext} for which the disconnect operation is made
+                @param promise           the {@link ChannelPromise} to notify once the operation completes
+                @throws Exception        thrown if an error accour
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.IChannelHandlerContext.Executor">
+            <summary>
+                Returns the {@link EventExecutor} which is used to execute an arbitrary task.
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.IChannelHandlerContext.Name">
+            <summary>
+                The unique name of the {@link IChannelHandlerContext}.
+            </summary>
+            <remarks>
+                The name was used when the {@link IChannelHandler}
+                was added to the {@link IChannelPipeline}. This name can also be used to access the registered
+                {@link IChannelHandler} from the {@link IChannelPipeline}.
+            </remarks>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandlerContext.FireChannelRegistered">
+            <summary>
+                A {@link Channel} was registered to its {@link EventLoop}.
+                This will result in having the {@link ChannelHandler#channelRegistered(ChannelHandlerContext)} method
+                called of the next {@link ChannelHandler} contained in the {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandlerContext.FireChannelUnregistered">
+            <summary>
+                A {@link Channel} was unregistered from its {@link EventLoop}.
+                This will result in having the {@link ChannelHandler#channelUnregistered(ChannelHandlerContext)} method
+                called of the next {@link ChannelHandler} contained in the {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandlerContext.BindAsync(System.Net.EndPoint)">
+            <summary>
+                Request to bind to the given {@link SocketAddress} and notify the {@link ChannelFuture} once the operation
+                completes, either because the operation was successful or because of an error.
+                <p />
+                This will result in having the
+                {@link ChannelHandler#bind(ChannelHandlerContext, SocketAddress, ChannelPromise)} method
+                called of the next {@link ChannelHandler} contained in the {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandlerContext.ConnectAsync(System.Net.EndPoint)">
+            <summary>
+                Request to connect to the given {@link SocketAddress} and notify the {@link ChannelFuture} once the operation
+                completes, either because the operation was successful or because of an error.
+                <p />
+                If the connection fails because of a connection timeout, the {@link ChannelFuture} will get failed with
+                a {@link ConnectTimeoutException}. If it fails because of connection refused a {@link ConnectException}
+                will be used.
+                <p />
+                This will result in having the
+                {@link ChannelHandler#connect(ChannelHandlerContext, SocketAddress, SocketAddress, ChannelPromise)}
+                method called of the next {@link ChannelHandler} contained in the {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandlerContext.ConnectAsync(System.Net.EndPoint,System.Net.EndPoint)">
+            <summary>
+                Request to connect to the given {@link SocketAddress} while bind to the localAddress and notify the
+                {@link ChannelFuture} once the operation completes, either because the operation was successful or because of
+                an error.
+                <p />
+                This will result in having the
+                {@link ChannelHandler#connect(ChannelHandlerContext, SocketAddress, SocketAddress, ChannelPromise)}
+                method called of the next {@link ChannelHandler} contained in the {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandlerContext.DisconnectAsync">
+            <summary>
+                Request to disconnect from the remote peer and notify the {@link ChannelFuture} once the operation completes,
+                either because the operation was successful or because of an error.
+                <p />
+                This will result in having the
+                {@link ChannelHandler#disconnect(ChannelHandlerContext, ChannelPromise)}
+                method called of the next {@link ChannelHandler} contained in the {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelHandlerContext.DeregisterAsync">
+            <summary>
+                Request to deregister from the previous assigned {@link EventExecutor} and notify the
+                {@link ChannelFuture} once the operation completes, either because the operation was successful or because of
+                an error.
+                The given {@link ChannelPromise} will be notified.
+                <p />
+                This will result in having the
+                {@link ChannelHandler#deregister(ChannelHandlerContext, ChannelPromise)}
+                method called of the next {@link ChannelHandler} contained in the {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.IChannelPipeline">
+            <summary>
+                A list of {@link ChannelHandler}s which handles or intercepts inbound events and outbound operations of a
+                {@link Channel}.  {@link ChannelPipeline} implements an advanced form of the
+                <a href="http://www.oracle.com/technetwork/java/interceptingfilter-142169.html">Intercepting Filter</a> pattern
+                to give a user full control over how an event is handled and how the {@link ChannelHandler}s in a pipeline
+                interact with each other.
+                <h3>Creation of a pipeline</h3>
+                Each channel has its own pipeline and it is created automatically when a new channel is created.
+                <h3>How an event flows in a pipeline</h3>
+                The following diagram describes how I/O events are processed by {@link ChannelHandler}s in a {@link
+                ChannelPipeline}
+                typically. An I/O event is handled by a {@link ChannelHandler} and is forwarded by the {@link ChannelHandler} which
+                handled the event to the {@link ChannelHandler} which is placed right next to it. A {@link ChannelHandler} can also
+                trigger an arbitrary I/O event if necessary.  To forward or trigger an event, a {@link ChannelHandler} calls the
+                event propagation methods defined in {@link ChannelHandlerContext}, such as
+                {@link ChannelHandlerContext#fireChannelRead(Object)} and {@link ChannelHandlerContext#write(Object)}.
+                <pre>
+                    I/O Request
+                    via {@link Channel} or
+                    {@link ChannelHandlerContext} 
+                    |
+                    +---------------------------------------------------+---------------+
+                    |                           ChannelPipeline         |               |
+                    |                                                  \|/              |
+                    |    +----------------------------------------------+----------+    |
+                    |    |                   ChannelHandler  N                     |    |
+                    |    +----------+-----------------------------------+----------+    |
+                    |              /|\                                  |               |
+                    |               |                                  \|/              |
+                    |    +----------+-----------------------------------+----------+    |
+                    |    |                   ChannelHandler N-1                    |    |
+                    |    +----------+-----------------------------------+----------+    |
+                    |              /|\                                  .               |
+                    |               .                                   .               |
+                    | ChannelHandlerContext.fireIN_EVT() ChannelHandlerContext.OUT_EVT()|
+                    |          [method call]                      [method call]         |
+                    |               .                                   .               |
+                    |               .                                  \|/              |
+                    |    +----------+-----------------------------------+----------+    |
+                    |    |                   ChannelHandler  2                     |    |
+                    |    +----------+-----------------------------------+----------+    |
+                    |              /|\                                  |               |
+                    |               |                                  \|/              |
+                    |    +----------+-----------------------------------+----------+    |
+                    |    |                   ChannelHandler  1                     |    |
+                    |    +----------+-----------------------------------+----------+    |
+                    |              /|\                                  |               |
+                    +---------------+-----------------------------------+---------------+
+                    |                                  \|/
+                    +---------------+-----------------------------------+---------------+
+                    |               |                                   |               |
+                    |       [ Socket.read() ]                    [ Socket.write() ]     |
+                    |                                                                   |
+                    |  Netty Internal I/O Threads (Transport Implementation)            |
+                    +-------------------------------------------------------------------+
+                </pre>
+                An inbound event is handled by the {@link ChannelHandler}s in the bottom-up direction as shown on the left side of
+                the diagram.  An inbound event is usually triggered by the I/O thread on the bottom of the diagram so that the
+                {@link ChannelHandler}s are notified when the state of a {@link Channel} changes (e.g. newly established
+                connections
+                and closed connections) or the inbound data was read from a remote peer.  If an inbound event goes beyond the
+                {@link ChannelHandler} at the top of the diagram, it is discarded and logged, depending on your loglevel.
+                <p />
+                An outbound event is handled by the {@link ChannelHandler}s in the top-down direction as shown on the right
+                side of
+                the diagram.  An outbound event is usually triggered by your code that requests an outbound I/O operation, such
+                as
+                a write request and a connection attempt.  If an outbound event goes beyond the {@link ChannelHandler} at the
+                bottom of the diagram, it is handled by an I/O thread associated with the {@link Channel}. The I/O thread often
+                performs the actual output operation such as {@link SocketChannel#write(ByteBuffer)}.
+                <p />
+                <h3>Forwarding an event to the next handler</h3>
+                As explained briefly above, a {@link ChannelHandler} has to invoke the event propagation methods in
+                {@link ChannelHandlerContext} to forward an event to its next handler.  Those methods include:
+                <ul>
+                    <li>
+                        Inbound event propagation methods:
+                        <ul>
+                            <li>{@link ChannelHandlerContext#fireChannelRegistered()}</li>
+                            <li>{@link ChannelHandlerContext#fireChannelActive()}</li>
+                            <li>{@link ChannelHandlerContext#fireChannelRead(Object)}</li>
+                            <li>{@link ChannelHandlerContext#fireChannelReadComplete()}</li>
+                            <li>{@link ChannelHandlerContext#fireExceptionCaught(Throwable)}</li>
+                            <li>{@link ChannelHandlerContext#fireUserEventTriggered(Object)}</li>
+                            <li>{@link ChannelHandlerContext#fireChannelWritabilityChanged()}</li>
+                            <li>{@link ChannelHandlerContext#fireChannelInactive()}</li>
+                        </ul>
+                    </li>
+                    <li>
+                        Outbound event propagation methods:
+                        <ul>
+                            <li>{@link ChannelHandlerContext#bind(SocketAddress, ChannelPromise)}</li>
+                            <li>{@link ChannelHandlerContext#connect(SocketAddress, SocketAddress, ChannelPromise)}</li>
+                            <li>{@link ChannelHandlerContext#write(Object, ChannelPromise)}</li>
+                            <li>{@link ChannelHandlerContext#flush()}</li>
+                            <li>{@link ChannelHandlerContext#read()}</li>
+                            <li>{@link ChannelHandlerContext#disconnect(ChannelPromise)}</li>
+                            <li>{@link ChannelHandlerContext#close(ChannelPromise)}</li>
+                        </ul>
+                    </li>
+                </ul>
+                and the following example shows how the event propagation is usually done:
+                <pre>
+                    public class MyInboundHandler extends {@link ChannelHandlerAdapter} {
+                    {@code }
+                    public void channelActive({@link ChannelHandlerContext} ctx) {
+                    System.out.println("Connected!");
+                    ctx.fireChannelActive();
+                    }
+                    }
+                    public clas MyOutboundHandler extends {@link ChannelHandlerAdapter} {
+                    {@code }
+                    public void close({@link ChannelHandlerContext} ctx, {@link ChannelPromise} promise) {
+                    System.out.println("Closing ..");
+                    ctx.close(promise);
+                    }
+                    }
+                </pre>
+                <h3>Building a pipeline</h3>
+                <p />
+                A user is supposed to have one or more {@link ChannelHandler}s in a pipeline to receive I/O events
+                (e.g. read) and
+                to request I/O operations (e.g. write and close).  For example, a typical server will have the
+                following handlers
+                in each channel's pipeline, but your mileage may vary depending on the complexity and characteristics
+                of the
+                protocol and business logic:
+                <ol>
+                    <li>Protocol Decoder - translates binary data (e.g. {@link ByteBuf}) into a Java object.</li>
+                    <li>Protocol Encoder - translates a Java object into binary data.</li>
+                    <li>Business Logic Handler - performs the actual business logic (e.g. database access).</li>
+                </ol>
+                and it could be represented as shown in the following example:
+                <pre>
+                    static final {@link EventExecutorGroup} group = new {@link DefaultEventExecutorGroup}(16);
+                    ...
+                    {@link ChannelPipeline} pipeline = ch.pipeline();
+                    pipeline.addLast("decoder", new MyProtocolDecoder());
+                    pipeline.addLast("encoder", new MyProtocolEncoder());
+                    // Tell the pipeline to run MyBusinessLogicHandler's event handler methods
+                    // in a different thread than an I/O thread so that the I/O thread is not blocked by
+                    // a time-consuming task.
+                    // If your business logic is fully asynchronous or finished very quickly, you don't
+                    // need to specify a group.
+                    pipeline.addLast(group, "handler", new MyBusinessLogicHandler());
+                </pre>
+                <h3>Thread safety</h3>
+                <p />
+                A {@link ChannelHandler} can be added or removed at any time because a {@link ChannelPipeline} is
+                thread safe.
+                For example, you can insert an encryption handler when sensitive information is about to be
+                exchanged, and remove it
+                after the exchange.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddFirst(System.String,DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Inserts a {@link ChannelHandler} at the first position of this pipeline.
+            </summary>
+            @param name     the name of the handler to insert first. {@code null} to let the name auto-generated.
+            @param handler  the handler to insert first
+            
+            @throws IllegalArgumentException
+            if there's an entry with the same name already in the pipeline
+            @throws NullPointerException
+            if the specified handler is {@code null}
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddFirst(DotNetty.Common.Concurrency.IEventExecutorGroup,System.String,DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Inserts a {@link ChannelHandler} at the first position of this pipeline.
+            </summary>
+            <param name="invoker">the {@link ChannelHandlerInvoker} which invokes the {@code handler}s event handler methods</param>
+            <param name="name">the name of the handler to insert first. <code>null</code> to let the name auto-generated.</param>
+            <param name="handler">the handler to insert first</param>
+            <exception cref="T:System.ArgumentException">if there's an entry with the same name already in the pipeline</exception>
+            <exception cref="T:System.ArgumentNullException">if the specified handler is <code>null</code></exception>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddLast(System.String,DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Appends a {@link ChannelHandler} at the last position of this pipeline.
+                @param name     the name of the handler to append. {@code null} to let the name auto-generated.
+                @param handler  the handler to append
+                @throws IllegalArgumentException
+                if there's an entry with the same name already in the pipeline
+                @throws NullPointerException
+                if the specified handler is {@code null}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddLast(DotNetty.Common.Concurrency.IEventExecutorGroup,System.String,DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Appends a {@link ChannelHandler} at the last position of this pipeline.
+            </summary>
+            <param name="invoker">the {@link ChannelHandlerInvoker} which invokes the {@code handler}s event handler methods</param>
+            <param name="name">the name of the handler to append. {@code null} to let the name auto-generated.</param>
+            <param name="handler">the handler to append</param>
+            <exception cref="T:System.ArgumentException">if there's an entry with the same name already in the pipeline</exception>
+            <exception cref="T:System.ArgumentNullException">if the specified handler is <code>null</code></exception>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddBefore(System.String,System.String,DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Inserts a {@link ChannelHandler} before an existing handler of this pipeline.
+            </summary>
+            <param name="baseName">the name of the existing handler</param>
+            <param name="name">the name of the handler to insert before. {@code null} to let the name auto-generated.</param>
+            <param name="handler">the handler to insert before</param>
+            @throws NoSuchElementException
+            if there's no such entry with the specified {@code baseName}
+            @throws IllegalArgumentException
+            if there's an entry with the same name already in the pipeline
+            @throws NullPointerException
+            if the specified baseName or handler is {@code null}
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddBefore(DotNetty.Common.Concurrency.IEventExecutorGroup,System.String,System.String,DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Inserts a {@link ChannelHandler} before an existing handler of this pipeline.
+            </summary>
+            <param name="invoker">the {@link ChannelHandlerInvoker} which invokes the {@code handler}s event handler methods</param>
+            <param name="baseName">the name of the existing handler</param>
+            <param name="name">the name of the handler to insert before. {@code null} to let the name auto-generated.</param>
+            <param name="handler">the handler to insert before</param>
+            @throws NoSuchElementException
+            if there's no such entry with the specified {@code baseName}
+            @throws IllegalArgumentException
+            if there's an entry with the same name already in the pipeline
+            @throws NullPointerException
+            if the specified baseName or handler is {@code null}
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddAfter(System.String,System.String,DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Inserts a {@link ChannelHandler} after an existing handler of this pipeline.
+            </summary>
+            <param name="baseName">the name of the existing handler</param>
+            <param name="name">the name of the handler to insert after. {@code null} to let the name auto-generated.</param>
+            <param name="handler">the handler to insert after</param>
+            @throws NoSuchElementException
+            if there's no such entry with the specified {@code baseName}
+            @throws IllegalArgumentException
+            if there's an entry with the same name already in the pipeline
+            @throws NullPointerException
+            if the specified baseName or handler is {@code null}
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddAfter(DotNetty.Common.Concurrency.IEventExecutorGroup,System.String,System.String,DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Inserts a {@link ChannelHandler} after an existing handler of this pipeline.
+            </summary>
+            <param name="invoker">the {@link ChannelHandlerInvoker} which invokes the {@code handler}s event handler methods</param>
+            <param name="baseName">the name of the existing handler</param>
+            <param name="name">the name of the handler to insert after. {@code null} to let the name auto-generated.</param>
+            <param name="handler">the handler to insert after</param>
+            @throws NoSuchElementException
+            if there's no such entry with the specified {@code baseName}
+            @throws IllegalArgumentException
+            if there's an entry with the same name already in the pipeline
+            @throws NullPointerException
+            if the specified baseName or handler is {@code null}
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddFirst(DotNetty.Transport.Channels.IChannelHandler[])">
+            <summary>
+                Inserts a {@link ChannelHandler}s at the first position of this pipeline.
+                @param handlers  the handlers to insert first
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddFirst(DotNetty.Common.Concurrency.IEventExecutorGroup,DotNetty.Transport.Channels.IChannelHandler[])">
+            <summary>
+                Inserts a {@link ChannelHandler}s at the first position of this pipeline.
+                @param invoker   the {@link ChannelHandlerInvoker} which invokes the {@code handler}s event handler methods
+                @param handlers  the handlers to insert first
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddLast(DotNetty.Transport.Channels.IChannelHandler[])">
+            <summary>
+                Inserts a {@link ChannelHandler}s at the last position of this pipeline.
+                @param handlers  the handlers to insert last
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.AddLast(DotNetty.Common.Concurrency.IEventExecutorGroup,DotNetty.Transport.Channels.IChannelHandler[])">
+            <summary>
+                Inserts a {@link ChannelHandler}s at the last position of this pipeline.
+                @param invoker   the {@link ChannelHandlerInvoker} which invokes the {@code handler}s event handler methods
+                @param handlers  the handlers to insert last
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Remove(DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Removes the specified {@link ChannelHandler} from this pipeline.
+                @param  handler          the {@link ChannelHandler} to remove
+                @throws NoSuchElementException
+                if there's no such handler in this pipeline
+                @throws NullPointerException
+                if the specified handler is {@code null}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Remove(System.String)">
+            <summary>
+                Removes the {@link ChannelHandler} with the specified name from this pipeline.
+            </summary>
+            <param name="name">the name under which the {@link ChannelHandler} was stored.</param>
+            <returns>the removed handler</returns>
+            <exception cref="T:System.ArgumentException">if there's no such handler with the specified name in this pipeline</exception>
+            <exception cref="T:System.ArgumentNullException">if the specified name is {@code null}</exception>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:DotNetty.Transport.Channels.IChannelPipeline.Remove``1" -->
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.RemoveFirst">
+            <summary>
+                Removes the first {@link ChannelHandler} in this pipeline.
+                @return the removed handler
+                @throws NoSuchElementException
+                if this pipeline is empty
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.RemoveLast">
+            <summary>
+                Removes the last {@link ChannelHandler} in this pipeline.
+                @return the removed handler
+                @throws NoSuchElementException
+                if this pipeline is empty
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Replace(DotNetty.Transport.Channels.IChannelHandler,System.String,DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Replaces the specified {@link ChannelHandler} with a new handler in this pipeline.
+                @param  oldHandler    the {@link ChannelHandler} to be replaced
+                @param  newName       the name under which the replacement should be added.
+                {@code null} to use the same name with the handler being replaced.
+                @param  newHandler    the {@link ChannelHandler} which is used as replacement
+                @return itself
+                @throws NoSuchElementException
+                if the specified old handler does not exist in this pipeline
+                @throws IllegalArgumentException
+                if a handler with the specified new name already exists in this
+                pipeline, except for the handler to be replaced
+                @throws NullPointerException
+                if the specified old handler or new handler is {@code null}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Replace(System.String,System.String,DotNetty.Transport.Channels.IChannelHandler)">
+            Replaces the {@link ChannelHandler} of the specified name with a new handler in this pipeline.
+            @param  oldName       the name of the {@link ChannelHandler} to be replaced
+            @param  newName       the name under which the replacement should be added.
+            {@code null} to use the same name with the handler being replaced.
+            @param  newHandler    the {@link ChannelHandler} which is used as replacement
+            @return the removed handler
+            @throws NoSuchElementException
+            if the handler with the specified old name does not exist in this pipeline
+            @throws IllegalArgumentException
+            if a handler with the specified new name already exists in this
+            pipeline, except for the handler to be replaced
+            @throws NullPointerException
+            if the specified old handler or new handler is {@code null}
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Replace``1(System.String,DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Replaces the {@link ChannelHandler} of the specified type with a new handler in this pipeline.
+                @param  oldHandlerType   the type of the handler to be removed
+                @param  newName          the name under which the replacement should be added.
+                {@code null} to use the same name with the handler being replaced.
+                @param  newHandler       the {@link ChannelHandler} which is used as replacement
+                @return the removed handler
+                @throws NoSuchElementException
+                if the handler of the specified old handler type does not exist
+                in this pipeline
+                @throws IllegalArgumentException
+                if a handler with the specified new name already exists in this
+                pipeline, except for the handler to be replaced
+                @throws NullPointerException
+                if the specified old handler or new handler is {@code null}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.First">
+            <summary>
+                Returns the first {@link ChannelHandler} in this pipeline.
+                @return the first handler.  {@code null} if this pipeline is empty.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.FirstContext">
+            <summary>
+                Returns the context of the first {@link ChannelHandler} in this pipeline.
+                @return the context of the first handler.  {@code null} if this pipeline is empty.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Last">
+            <summary>
+                Returns the last {@link ChannelHandler} in this pipeline.
+                @return the last handler.  {@code null} if this pipeline is empty.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.LastContext">
+            <summary>
+                Returns the context of the last {@link ChannelHandler} in this pipeline.
+                @return the context of the last handler.  {@code null} if this pipeline is empty.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Get(System.String)">
+            <summary>Returns the {@link ChannelHandler} with the specified name in this pipeline.</summary>
+            <returns>the handler with the specified name. {@code null} if there's no such handler in this pipeline.</returns>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Get``1">
+            <summary>
+                Returns the {@link ChannelHandler} of the specified type in this
+                pipeline.
+                @return the handler of the specified handler type.
+                {@code null} if there's no such handler in this pipeline.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Context(DotNetty.Transport.Channels.IChannelHandler)">
+            <summary>
+                Returns the context object of the specified {@link ChannelHandler} in
+                this pipeline.
+                @return the context object of the specified handler.
+                {@code null} if there's no such handler in this pipeline.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Context(System.String)">
+            <summary>Returns the context object of the {@link ChannelHandler} with the specified name in this pipeline.</summary>
+            <returns>
+                the context object of the handler with the specified name. {@code null} if there's no such handler in this
+                pipeline.
+            </returns>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Context``1">
+            <summary>
+                Returns the context object of the {@link ChannelHandler} of the
+                specified type in this pipeline.
+                @return the context object of the handler of the specified type.
+                {@code null} if there's no such handler in this pipeline.
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.IChannelPipeline.Channel">
+            <summary>
+                Returns the <see cref="T:DotNetty.Transport.Channels.IChannel" /> that this pipeline is attached to.
+            </summary>
+            <returns>the channel. <c>null</c> if this pipeline is not attached yet.</returns>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.FireChannelRegistered">
+            <summary>
+                A {@link Channel} is active now, which means it is connected.
+                This will result in having the  {@link ChannelHandler#channelActive(ChannelHandlerContext)} method
+                called of the next  {@link ChannelHandler} contained in the  {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+            <summary>
+                A {@link Channel} was registered to its {@link EventLoop}.
+                This will result in having the  {@link ChannelHandler#channelRegistered(ChannelHandlerContext)} method
+                called of the next  {@link ChannelHandler} contained in the  {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.FireChannelUnregistered">
+            <summary>
+                A {@link Channel} was unregistered from its {@link EventLoop}.
+                This will result in having the  {@link ChannelHandler#channelUnregistered(ChannelHandlerContext)} method
+                called of the next  {@link ChannelHandler} contained in the  {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.FireChannelActive">
+            <summary>
+                A {@link Channel} is active now, which means it is connected.
+                This will result in having the  {@link ChannelHandler#channelActive(ChannelHandlerContext)} method
+                called of the next  {@link ChannelHandler} contained in the  {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.FireChannelInactive">
+            <summary>
+                A {@link Channel} is inactive now, which means it is closed.
+                This will result in having the  {@link ChannelHandler#channelInactive(ChannelHandlerContext)} method
+                called of the next  {@link ChannelHandler} contained in the  {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.FireExceptionCaught(System.Exception)">
+            <summary>
+                A {@link Channel} received an {@link Throwable} in one of its inbound operations.
+                This will result in having the  {@link ChannelHandler#exceptionCaught(ChannelHandlerContext, Throwable)}
+                method  called of the next  {@link ChannelHandler} contained in the  {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.FireUserEventTriggered(System.Object)">
+            <summary>
+                A {@link Channel} received an user defined event.
+                This will result in having the  {@link ChannelHandler#userEventTriggered(ChannelHandlerContext, Object)}
+                method  called of the next  {@link ChannelHandler} contained in the  {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.FireChannelRead(System.Object)">
+            <summary>
+                A {@link Channel} received a message.
+                This will result in having the {@link ChannelHandler#channelRead(ChannelHandlerContext, Object)}
+                method  called of the next {@link ChannelHandler} contained in the  {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.FireChannelWritabilityChanged">
+            <summary>
+                Triggers an {@link ChannelHandler#channelWritabilityChanged(ChannelHandlerContext)}
+                event to the next {@link ChannelHandler} in the {@link ChannelPipeline}.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:DotNetty.Transport.Channels.IChannelPipeline.BindAsync(System.Net.EndPoint)" -->
+        <!-- Badly formed XML comment ignored for member "M:DotNetty.Transport.Channels.IChannelPipeline.ConnectAsync(System.Net.EndPoint)" -->
+        <!-- Badly formed XML comment ignored for member "M:DotNetty.Transport.Channels.IChannelPipeline.ConnectAsync(System.Net.EndPoint,System.Net.EndPoint)" -->
+        <!-- Badly formed XML comment ignored for member "M:DotNetty.Transport.Channels.IChannelPipeline.DisconnectAsync" -->
+        <!-- Badly formed XML comment ignored for member "M:DotNetty.Transport.Channels.IChannelPipeline.CloseAsync" -->
+        <!-- Badly formed XML comment ignored for member "M:DotNetty.Transport.Channels.IChannelPipeline.DeregisterAsync" -->
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Read">
+            <summary>
+                Request to Read data from the {@link Channel} into the first inbound buffer, triggers an
+                {@link ChannelHandler#channelRead(ChannelHandlerContext, Object)} event if data was
+                read, and triggers a
+                {@link ChannelHandler#channelReadComplete(ChannelHandlerContext) channelReadComplete} event so the
+                handler can decide to continue reading.  If there's a pending read operation already, this method does nothing.
+                <p />
+                This will result in having the
+                {@link ChannelHandler#read(ChannelHandlerContext)}
+                method called of the next {@link ChannelHandler} contained in the  {@link ChannelPipeline} of the
+                {@link Channel}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.WriteAsync(System.Object)">
+            <summary>
+                Request to write a message via this {@link ChannelPipeline}.
+                This method will not request to actual flush, so be sure to call {@link #flush()}
+                once you want to request to flush all pending data to the actual transport.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.Flush">
+            <summary>
+                Request to flush all pending messages.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IChannelPipeline.WriteAndFlushAsync(System.Object)">
+            <summary>
+                Shortcut for call {@link #write(Object)} and {@link #flush()}.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IMessageSizeEstimator.NewHandle">
+            <summary>
+                Creates a new handle. The handle provides the actual operations.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IMessageSizeEstimatorHandle.Size(System.Object)">
+            <summary>
+                Calculate the size of the given message.
+                @param msg       The message for which the size should be calculated
+                @return size     The size in bytes. The returned size must be >= 0
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.IRecvByteBufAllocator">
+            <summary>
+                Allocates a new receive buffer whose capacity is probably large enough to read all inbound data and small enough
+                not to waste its space.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IRecvByteBufAllocator.NewHandle">
+            <summary>
+                Creates a new handle.  The handle provides the actual operations and keeps the internal information which is
+                required for predicting an optimal buffer capacity.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.Allocate(DotNetty.Buffers.IByteBufferAllocator)">
+            <summary>
+                Creates a new receive buffer whose capacity is probably large enough to read all inbound data and small
+                enough not to waste its space.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.Guess">
+            <summary>
+                Similar to <see cref="M:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.Allocate(DotNetty.Buffers.IByteBufferAllocator)" /> except that it does not allocate anything but just tells the
+                capacity.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.Reset(DotNetty.Transport.Channels.IChannelConfiguration)">
+            <summary>
+                Reset any counters that have accumulated and recommend how many messages/bytes should be read for the next
+                read loop.
+                <p>
+                    This may be used by <see cref="M:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.ContinueReading" /> to determine if the read operation should complete.
+                </p>
+                This is only ever a hint and may be ignored by the implementation.
+            </summary>
+            <param name="config">The channel configuration which may impact this object's behavior.</param>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.IncMessagesRead(System.Int32)">
+            <summary>Increment the number of messages that have been read for the current read loop.</summary>
+            <param name="numMessages">The amount to increment by.</param>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.LastBytesRead">
+            <summary>
+                Get or set the bytes that have been read for the last read operation.
+                This may be used to increment the number of bytes that have been read.
+            </summary>
+            <remarks>
+                Returned value may be negative if an read error
+                occurs. If a negative value is seen it is expected to be return on the next set to
+                <see cref="P:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.LastBytesRead" />. A negative value will signal a termination condition enforced externally
+                to this class and is not required to be enforced in <see cref="M:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.ContinueReading" />.
+            </remarks>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.AttemptedBytesRead">
+            <summary>Get or set how many bytes the read operation will (or did) attempt to read.</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.ContinueReading">
+            <summary>Determine if the current read loop should should continue.</summary>
+            <returns><c>true</c> if the read loop should continue reading. <c>false</c> if the read loop is complete.</returns>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.IRecvByteBufAllocatorHandle.ReadComplete">
+            <summary>Signals read completion.</summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.PendingWriteQueue">
+            A queue of write operations which are pending for later execution. It also updates the
+            {@linkplain Channel#isWritable() writability} of the associated {@link Channel}, so that
+            the pending write operations are also considered to determine the writability.
+        </member>
+        <member name="P:DotNetty.Transport.Channels.PendingWriteQueue.IsEmpty">
+            Returns {@code true} if there are no pending write operations left in this queue.
+        </member>
+        <member name="P:DotNetty.Transport.Channels.PendingWriteQueue.Size">
+            Returns the number of pending write operations.
+        </member>
+        <member name="M:DotNetty.Transport.Channels.PendingWriteQueue.Add(System.Object)">
+            Add the given {@code msg} and {@link ChannelPromise}.
+        </member>
+        <member name="M:DotNetty.Transport.Channels.PendingWriteQueue.RemoveAndFailAll(System.Exception)">
+            Remove all pending write operation and fail them with the given {@link Throwable}. The message will be released
+            via {@link ReferenceCountUtil#safeRelease(Object)}.
+        </member>
+        <member name="M:DotNetty.Transport.Channels.PendingWriteQueue.RemoveAndFail(System.Exception)">
+            Remove a pending write operation and fail it with the given {@link Throwable}. The message will be released via
+            {@link ReferenceCountUtil#safeRelease(Object)}.
+        </member>
+        <member name="M:DotNetty.Transport.Channels.PendingWriteQueue.RemoveAndWriteAllAsync">
+             Remove all pending write operation and performs them via
+             {@link ChannelHandlerContext#write(Object, ChannelPromise)}.
+            
+             @return  {@link ChannelFuture} if something was written and {@code null}
+                      if the {@link PendingWriteQueue} is empty.
+        </member>
+        <member name="M:DotNetty.Transport.Channels.PendingWriteQueue.RemoveAndWriteAsync">
+             Removes a pending write operation and performs it via
+             {@link ChannelHandlerContext#write(Object, ChannelPromise)}.
+            
+             @return  {@link ChannelFuture} if something was written and {@code null}
+                      if the {@link PendingWriteQueue} is empty.
+        </member>
+        <member name="M:DotNetty.Transport.Channels.PendingWriteQueue.Remove">
+            <summary>
+                Removes a pending write operation and release it's message via {@link ReferenceCountUtil#safeRelease(Object)}.
+            </summary>
+            <returns><seealso cref="T:DotNetty.Common.Concurrency.TaskCompletionSource" /> of the pending write or <c>null</c> if the queue is empty.</returns>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.PendingWriteQueue.Current">
+            <summary>
+                Return the current message or {@code null} if empty.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.PendingWriteQueue.PendingWrite">
+            Holds all meta-data and construct the linked-list structure.
+        </member>
+        <member name="T:DotNetty.Transport.Channels.Sockets.AbstractSocketByteChannel">
+            <summary>
+                {@link AbstractNioChannel} base class for {@link Channel}s that operate on bytes.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketByteChannel.#ctor(DotNetty.Transport.Channels.IChannel,System.Net.Sockets.Socket)">
+            <summary>Create a new instance</summary>
+            <param name="parent">the parent <see cref="T:DotNetty.Transport.Channels.IChannel"/> by which this instance was created. May be <c>null</c></param>
+            <param name="socket">the underlying <see cref="T:System.Net.Sockets.Socket"/> on which it operates</param>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketByteChannel.DoReadBytes(DotNetty.Buffers.IByteBuffer)">
+            <summary>
+                Read bytes into the given {@link ByteBuf} and return the amount.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketByteChannel.DoWriteBytes(DotNetty.Buffers.IByteBuffer)">
+            <summary>Write bytes form the given <see cref="T:DotNetty.Buffers.IByteBuffer"/> to the underlying <see cref="T:DotNetty.Transport.Channels.IChannel"/>.</summary>
+            <param name="buf">the <see cref="T:DotNetty.Buffers.IByteBuffer"/> from which the bytes should be written</param>
+            <returns>the amount of written bytes</returns>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketChannel.ClearReadPending">
+            <summary>
+                Set read pending to <c>false</c>.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketChannel.OnIoCompleted(System.Object,System.Net.Sockets.SocketAsyncEventArgs)">
+            <remarks>PORT NOTE: matches behavior of NioEventLoop.processSelectedKey</remarks>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketChannel.ISocketChannelUnsafe.FinishConnect(DotNetty.Transport.Channels.Sockets.SocketChannelAsyncOperation)">
+            <summary>
+                Finish connect
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketChannel.ISocketChannelUnsafe.FinishRead(DotNetty.Transport.Channels.Sockets.SocketChannelAsyncOperation)">
+            <summary>
+                Read from underlying {@link SelectableChannel}
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketChannel.DoConnect(System.Net.EndPoint,System.Net.EndPoint)">
+            <summary>
+                Connect to the remote peer
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketChannel.DoFinishConnect(DotNetty.Transport.Channels.Sockets.SocketChannelAsyncOperation)">
+            <summary>
+                Finish the connect
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.Sockets.AbstractSocketMessageChannel">
+            <summary>
+            {@link AbstractNioChannel} base class for {@link Channel}s that operate on messages.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketMessageChannel.#ctor(DotNetty.Transport.Channels.IChannel,System.Net.Sockets.Socket)">
+            <summary>
+            @see {@link AbstractNioChannel#AbstractNioChannel(Channel, SelectableChannel, int)}
+            </summary>
+        </member>
+        <member name="P:DotNetty.Transport.Channels.Sockets.AbstractSocketMessageChannel.ContinueOnWriteError">
+            <summary>
+            Returns {@code true} if we should continue the write loop on a write error.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketMessageChannel.DoReadMessages(System.Collections.Generic.List{System.Object})">
+            <summary>
+            Read messages into the given array and return the amount which was read.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.AbstractSocketMessageChannel.DoWriteMessage(System.Object,DotNetty.Transport.Channels.ChannelOutboundBuffer)">
+             <summary>
+             Write a message to the underlying {@link java.nio.channels.Channel}.
+            
+             @return {@code true} if and only if the message has been written
+             </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.Sockets.ChannelInputShutdownEvent">
+            <summary>
+                Special event which will be fired and passed to the
+                {@link ChannelHandler#userEventTriggered(ChannelHandlerContext, Object)} methods once the input of
+                a {@link SocketChannel} was shutdown and the {@link SocketChannelConfig#isAllowHalfClosure()} method returns
+                {@code true}.
+            </summary>
+        </member>
+        <member name="F:DotNetty.Transport.Channels.Sockets.ChannelInputShutdownEvent.Instance">
+            <summary>
+                Instance to use
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.Sockets.DefaultServerSocketChannelConfig">
+            <summary>
+                The default {@link ServerSocketChannelConfig} implementation.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.DefaultServerSocketChannelConfig.#ctor(DotNetty.Transport.Channels.Sockets.IServerSocketChannel,System.Net.Sockets.Socket)">
+            <summary>
+                Creates a new instance.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.Sockets.DefaultSocketChannelConfiguration">
+            <summary>
+                The default {@link SocketChannelConfig} implementation.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.Sockets.IServerSocketChannel">
+            <summary>
+                A TCP/IP {@link ServerChannel} which accepts incoming TCP/IP connections.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.Sockets.TcpServerSocketChannel">
+            <summary>
+                A <see cref="T:DotNetty.Transport.Channels.Sockets.IServerSocketChannel" /> implementation which uses Socket-based implementation to accept new
+                connections.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.TcpServerSocketChannel.#ctor">
+            <summary>
+                Create a new instance
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.TcpServerSocketChannel.#ctor(System.Net.Sockets.AddressFamily)">
+            <summary>
+                Create a new instance
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.TcpServerSocketChannel.#ctor(System.Net.Sockets.Socket)">
+            <summary>
+                Create a new instance using the given <see cref="T:System.Net.Sockets.Socket"/>.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.Sockets.TcpSocketChannel">
+            <summary>
+                <see cref="T:DotNetty.Transport.Channels.Sockets.ISocketChannel" /> which uses Socket-based implementation.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.TcpSocketChannel.#ctor">
+            <summary>Create a new instance</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.TcpSocketChannel.#ctor(System.Net.Sockets.AddressFamily)">
+            <summary>Create a new instance</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.TcpSocketChannel.#ctor(System.Net.Sockets.Socket)">
+            <summary>Create a new instance using the given <see cref="T:DotNetty.Transport.Channels.Sockets.ISocketChannel" />.</summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Sockets.TcpSocketChannel.#ctor(DotNetty.Transport.Channels.IChannel,System.Net.Sockets.Socket)">
+            <summary>Create a new instance</summary>
+            <param name="parent">
+                the <see cref="T:DotNetty.Transport.Channels.IChannel" /> which created this instance or <c>null</c> if it was created by the
+                user
+            </param>
+            <param name="socket">the <see cref="T:DotNetty.Transport.Channels.Sockets.ISocketChannel" /> which will be used</param>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Util.SafeSetSuccess(DotNetty.Common.Concurrency.TaskCompletionSource,DotNetty.Common.Internal.Logging.IInternalLogger)">
+            <summary>
+                Marks the specified {@code promise} as success.  If the {@code promise} is done already, log a message.
+            </summary>
+        </member>
+        <member name="M:DotNetty.Transport.Channels.Util.SafeSetFailure(DotNetty.Common.Concurrency.TaskCompletionSource,System.Exception,DotNetty.Common.Internal.Logging.IInternalLogger)">
+            <summary>
+                Marks the specified {@code promise} as failure.  If the {@code promise} is done already, log a message.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.IServerChannel">
+            <summary>
+                A {@link Channel} that accepts an incoming connection attempt and creates
+                its child {@link Channel}s by accepting them.  {@link ServerSocketChannel} is
+                a good example.
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.DefaultChannelConfiguration">
+            <summary>
+                Shared configuration for SocketAsyncChannel. Provides access to pre-configured resources like ByteBuf allocator and
+                IO buffer pools
+            </summary>
+        </member>
+        <member name="T:DotNetty.Transport.Channels.ChannelDuplexHandler">
+            <summary>
+            It is a good starting point if your <see cref="T:DotNetty.Transport.Channels.IChannelHandler"/> implementation needs to intercept operations and also
+            state updates.
+            </summary>
+        </member>
+    </members>
+</doc>
