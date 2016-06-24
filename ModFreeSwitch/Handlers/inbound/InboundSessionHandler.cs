@@ -9,18 +9,13 @@ using ModFreeSwitch.Messages;
 using NLog;
 
 namespace ModFreeSwitch.Handlers.inbound {
-    public class InboundSessionHandler : ChannelHandlerAdapter {
-        /// <summary>
-        ///     Helps process api command sequentially however in a asynchronous manner
-        /// </summary>
-        private readonly Queue<CommandAsyncEvent> _commandAsyncEvents;
+    public class InboundSessionHandler : EslSessionHandler {
 
         private readonly IInboundListener _inboundListener;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public InboundSessionHandler(IInboundListener inboundListener) {
             _inboundListener = inboundListener;
-            _commandAsyncEvents = new Queue<CommandAsyncEvent>();
         }
 
         public override async void ExceptionCaught(IChannelHandlerContext context,
@@ -38,7 +33,7 @@ namespace ModFreeSwitch.Handlers.inbound {
             var reply = await SendCommandAsync(connectCommand, channel);
             if (!reply.IsOk) return;
             var connectedCall = new ConnectedCall(new EslEvent(reply.Response, true));
-            await _inboundListener.OnConnected(connectedCall);
+            await _inboundListener.OnConnected(connectedCall, channel);
         }
 
         public override async void ChannelRead(IChannelHandlerContext context,
@@ -49,7 +44,7 @@ namespace ModFreeSwitch.Handlers.inbound {
 
             // Handle command/reply
             if (contentType.Equals(EslHeadersValues.CommandReply)) {
-                var commandAsyncEvent = _commandAsyncEvents.Dequeue();
+                var commandAsyncEvent = CommandAsyncEvents.Dequeue();
                 var reply = new CommandReply(commandAsyncEvent.Command.Command, eslMessage);
                 commandAsyncEvent.Complete(reply);
                 return;
@@ -57,7 +52,7 @@ namespace ModFreeSwitch.Handlers.inbound {
 
             // Handle api/response
             if (contentType.Equals(EslHeadersValues.ApiResponse)) {
-                var commandAsyncEvent = _commandAsyncEvents.Dequeue();
+                var commandAsyncEvent = CommandAsyncEvents.Dequeue();
                 var apiResponse = new ApiResponse(commandAsyncEvent.Command.Command,
                     eslMessage);
                 commandAsyncEvent.Complete(apiResponse);
@@ -88,35 +83,5 @@ namespace ModFreeSwitch.Handlers.inbound {
             _logger.Warn("Unexpected message content type [{0}]", contentType);
         }
 
-        public async Task<ApiResponse> SendApiAsync(ApiCommand command,
-            IChannel context) {
-            var asyncEvent = new CommandAsyncEvent(command);
-            _commandAsyncEvents.Enqueue(asyncEvent);
-            await context.WriteAndFlushAsync(command);
-            return await asyncEvent.Task as ApiResponse;
-        }
-
-        public async Task<Guid> SendBgApiAsync(BgApiCommand command,
-            IChannel context) {
-            var asyncEvent = new CommandAsyncEvent(command);
-            var jobUuid = Guid.Empty;
-            _commandAsyncEvents.Enqueue(asyncEvent);
-            await context.WriteAndFlushAsync(command);
-            var reply = await asyncEvent.Task as CommandReply;
-            if (reply == null) return jobUuid;
-            if (reply.IsOk)
-                return Guid.TryParse(reply[EslHeaders.JobUuid], out jobUuid)
-                    ? jobUuid
-                    : Guid.Empty;
-            return jobUuid;
-        }
-
-        public async Task<CommandReply> SendCommandAsync(BaseCommand command,
-            IChannel context) {
-            var asyncEvent = new CommandAsyncEvent(command);
-            _commandAsyncEvents.Enqueue(asyncEvent);
-            await context.WriteAndFlushAsync(command);
-            return await asyncEvent.Task as CommandReply;
-        }
     }
 }

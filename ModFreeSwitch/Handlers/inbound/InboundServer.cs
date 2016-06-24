@@ -8,11 +8,11 @@ using LogLevel = DotNetty.Handlers.Logging.LogLevel;
 
 namespace ModFreeSwitch.Handlers.inbound {
     public class InboundServer {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private ServerBootstrap _bootstrap;
         private readonly MultithreadEventLoopGroup _bossEventLoopGroup;
-        private IChannel _channel;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly MultithreadEventLoopGroup _workerEventLoopGroup;
+        private ServerBootstrap _bootstrap;
+        private IChannel _channel;
 
         public InboundServer(int port,
             int backlog) {
@@ -24,8 +24,8 @@ namespace ModFreeSwitch.Handlers.inbound {
 
         public InboundServer(int port) : this(port, 100) {}
 
-        public int Port { get; }
         public int Backlog { get; }
+        public int Port { get; }
 
         public async Task StartAsync() {
             Init();

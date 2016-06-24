@@ -49,6 +49,10 @@ namespace ModFreeSwitch.Handlers.outbound {
         public string Password { get; }
         public int Port { get; }
 
+        public async Task OnAuthentication() {
+            await AuthenticateAsync();
+        }
+
         public async Task OnDisconnectNotice() {
             _logger.Warn("channel {0} disconnected", _channel.RemoteAddress);
             await CleanUpAsync();
@@ -150,8 +154,6 @@ namespace ModFreeSwitch.Handlers.outbound {
         }
 
         public bool CanSend() {
-            var handler = (OutboundSessionHandler) _channel.Pipeline.Last();
-            Authenticated = handler.Authenticated;
             return Authenticated && IsActive();
         }
 
@@ -203,6 +205,13 @@ namespace ModFreeSwitch.Handlers.outbound {
             return reply.IsOk;
         }
 
+        protected async Task AuthenticateAsync() {
+            var command = new AuthCommand(Password);
+            var handler = (OutboundSessionHandler) _channel.Pipeline.Last();
+            var reply = await handler.SendCommandAsync(command, _channel);
+            Authenticated = reply.IsOk;
+        }
+
         protected void Initialize() {
             _eventLoopGroup = new MultithreadEventLoopGroup();
             _bootstrap = new Bootstrap();
@@ -213,7 +222,7 @@ namespace ModFreeSwitch.Handlers.outbound {
             _bootstrap.Option(ChannelOption.SoKeepalive, true);
             _bootstrap.Option(ChannelOption.SoReuseaddr, true);
             _bootstrap.Option(ChannelOption.ConnectTimeout, ConnectionTimeout);
-            _bootstrap.Handler(new OutboundSessionInitializer(Password, this));
+            _bootstrap.Handler(new OutboundSessionInitializer(this));
         }
 
         #region FreeSwitch Events Handlers

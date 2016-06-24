@@ -114,6 +114,7 @@
     <Compile Include="Common\GuidFactory.cs" />
     <Compile Include="Common\IEndPointAddress.cs" />
     <Compile Include="Common\StringUtil.cs" />
+    <Compile Include="EslSessionHandler.cs" />
     <Compile Include="EventSocketClient.cs" />
     <Compile Include="Events\BackgroundJob.cs" />
     <Compile Include="Events\CallUpdate.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Handlers\outbound\OutboundSessionHandler.cs" />
     <Compile Include="Handlers\outbound\OutboundSessionInitializer.cs" />
     <Compile Include="Handlers\outbound\IOutboundListener.cs" />
+    <Compile Include="IListener.cs" />
     <Compile Include="Messages\ApiResponse.cs" />
     <Compile Include="Messages\CommandReply.cs" />
     <Compile Include="Messages\EslMessage.cs" />

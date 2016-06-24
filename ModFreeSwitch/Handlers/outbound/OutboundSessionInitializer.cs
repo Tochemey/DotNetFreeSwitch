@@ -6,13 +6,11 @@ using ModFreeSwitch.Codecs;
 
 namespace ModFreeSwitch.Handlers.outbound {
     public class OutboundSessionInitializer : ChannelInitializer<ISocketChannel> {
-        public OutboundSessionInitializer(string password,
+        public OutboundSessionInitializer(
             IOutboundListener outboundListener) {
-            Password = password;
             OutboundListener = outboundListener;
         }
 
-        public string Password { get; }
         public IOutboundListener OutboundListener { get; }
 
         protected override void InitChannel(ISocketChannel channel) {
@@ -22,7 +20,7 @@ namespace ModFreeSwitch.Handlers.outbound {
             pipeline.AddLast("EslFrameEncoder", new EslFrameEncoder());
             pipeline.AddLast("StringEncoder", new StringEncoder());
             pipeline.AddLast("DebugLogging", new LoggingHandler(LogLevel.INFO));
-            pipeline.AddLast(new OutboundSessionHandler(Password, OutboundListener));
+            pipeline.AddLast(new OutboundSessionHandler(OutboundListener));
         }
     }
 }
