@@ -8,50 +8,44 @@ using ModFreeSwitch.Events;
 using ModFreeSwitch.Messages;
 using NLog;
 
-namespace ModFreeSwitch.Handlers.outbound {
-    /// <summary>
-    ///     EslClientHandler. This class will handle all request and responses that will go to freeSwitch.
-    /// </summary>
-    public class EslClientHandler : ChannelHandlerAdapter {
+namespace ModFreeSwitch.Handlers.inbound {
+    public class InboundSessionHandler : ChannelHandlerAdapter {
         /// <summary>
         ///     Helps process api command sequentially however in a asynchronous manner
         /// </summary>
         private readonly Queue<CommandAsyncEvent> _commandAsyncEvents;
 
-        private readonly IEventListener _eslEventListener;
+        private readonly IInboundListener _inboundListener;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        ///     This password is used to connect to mod_event_socket module of freeSwitch.
-        /// </summary>
-        private readonly string _password;
-
-        public EslClientHandler(string password,
-            IEventListener eslEventListener) {
-            _password = password;
-            _eslEventListener = eslEventListener;
+        public InboundSessionHandler(IInboundListener inboundListener) {
+            _inboundListener = inboundListener;
             _commandAsyncEvents = new Queue<CommandAsyncEvent>();
         }
 
-        public EslClientHandler(IEventListener eslEventListener)
-            : this("ClueCon", eslEventListener) {}
+        public override async void ExceptionCaught(IChannelHandlerContext context,
+            Exception exception) {
+            _logger.Error(exception, "Exception occured.");
+            await _inboundListener.OnError(exception);
+        }
 
-        public bool Authenticated { get; private set; }
+        public override async void ChannelActive(IChannelHandlerContext context) {
+            var channel = context.Channel;
+            _logger.Debug(
+                "received a new connection from freeswitch {0}. Sending a connect command...",
+                channel.LocalAddress);
+            var connectCommand = new ConnectCommand();
+            var reply = await SendCommandAsync(connectCommand, channel);
+            if (!reply.IsOk) return;
+            var connectedCall = new ConnectedCall(new EslEvent(reply.Response, true));
+            await _inboundListener.OnConnected(connectedCall);
+        }
 
-        /// <summary>
-        ///     This helps read the data received from the socket client.
-        /// </summary>
-        /// <param name="context">Channel context</param>
-        /// <param name="message">the decoded message received</param>
         public override async void ChannelRead(IChannelHandlerContext context,
             object message) {
             var eslMessage = message as EslMessage;
             if (eslMessage == null) return;
             var contentType = eslMessage.ContentType();
-            if (contentType.Equals(EslHeadersValues.AuthRequest)) {
-                await Authenticate(context.Channel);
-                return;
-            }
 
             // Handle command/reply
             if (contentType.Equals(EslHeadersValues.CommandReply)) {
@@ -64,8 +58,7 @@ namespace ModFreeSwitch.Handlers.outbound {
             // Handle api/response
             if (contentType.Equals(EslHeadersValues.ApiResponse)) {
                 var commandAsyncEvent = _commandAsyncEvents.Dequeue();
-                var apiResponse = new ApiResponse(
-                    commandAsyncEvent.Command.Command,
+                var apiResponse = new ApiResponse(commandAsyncEvent.Command.Command,
                     eslMessage);
                 commandAsyncEvent.Complete(apiResponse);
                 return;
@@ -73,15 +66,21 @@ namespace ModFreeSwitch.Handlers.outbound {
 
             // Handle text/event-plain
             if (contentType.Equals(EslHeadersValues.TextEventPlain)) {
-                EslEvent eslEvent;
-                if (eslMessage.HasHeader("Event-Name") &&
-                    eslMessage.Headers["Event-Name"].Equals("CHANNEL_DATA")) {
-                    eslEvent = new EslEvent(eslMessage, true);
-                }
-                else {
-                    eslEvent = new EslEvent(eslMessage);
-                }
-                await _eslEventListener.OnEventReceived(eslEvent);
+                var eslEvent = new EslEvent(eslMessage);
+
+                await _inboundListener.OnEventReceived(eslEvent);
+                return;
+            }
+
+            // Handle disconnect/notice message
+            if (contentType.Equals(EslHeadersValues.TextDisconnectNotice)) {
+                await _inboundListener.OnDisconnectNotice();
+                return;
+            }
+
+            // Handle rude/rejection message
+            if (contentType.Equals(EslHeadersValues.TextRudeRejection)) {
+                await _inboundListener.OnRudeRejection();
                 return;
             }
 
@@ -89,7 +88,7 @@ namespace ModFreeSwitch.Handlers.outbound {
             _logger.Warn("Unexpected message content type [{0}]", contentType);
         }
 
-        public async Task<ApiResponse> SendApi(ApiCommand command,
+        public async Task<ApiResponse> SendApiAsync(ApiCommand command,
             IChannel context) {
             var asyncEvent = new CommandAsyncEvent(command);
             _commandAsyncEvents.Enqueue(asyncEvent);
@@ -97,7 +96,7 @@ namespace ModFreeSwitch.Handlers.outbound {
             return await asyncEvent.Task as ApiResponse;
         }
 
-        public async Task<Guid> SendBgApi(BgApiCommand command,
+        public async Task<Guid> SendBgApiAsync(BgApiCommand command,
             IChannel context) {
             var asyncEvent = new CommandAsyncEvent(command);
             var jobUuid = Guid.Empty;
@@ -112,18 +111,12 @@ namespace ModFreeSwitch.Handlers.outbound {
             return jobUuid;
         }
 
-        public async Task<CommandReply> SendCommand(BaseCommand command,
+        public async Task<CommandReply> SendCommandAsync(BaseCommand command,
             IChannel context) {
             var asyncEvent = new CommandAsyncEvent(command);
             _commandAsyncEvents.Enqueue(asyncEvent);
             await context.WriteAndFlushAsync(command);
             return await asyncEvent.Task as CommandReply;
-        }
-
-        protected async Task Authenticate(IChannel context) {
-            var command = new AuthCommand(_password);
-            var reply = await SendCommand(command, context);
-            Authenticated = reply.IsOk;
         }
     }
 }

@@ -1,26 +1,25 @@
 ﻿using DotNetty.Codecs;
+using DotNetty.Handlers.Logging;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using ModFreeSwitch.Codecs;
 
-namespace ModFreeSwitch.Handlers.outbound {
-    public class EslClientInitializer : ChannelInitializer<ISocketChannel> {
-        public EslClientInitializer(string password,
-            IEventListener eventListener) {
-            Password = password;
-            EventListener = eventListener;
+namespace ModFreeSwitch.Handlers.inbound {
+    public class InboundSessionInitializer : ChannelInitializer<ISocketChannel>
+    {
+        public InboundSessionInitializer(IInboundListener inboundListener) {
+            InboundListener = inboundListener;
         }
 
-        public string Password { get; }
-        public IEventListener EventListener { get; }
-
+        public IInboundListener InboundListener { get; }
         protected override void InitChannel(ISocketChannel channel) {
             // get the channel pipeline
             var pipeline = channel.Pipeline;
             pipeline.AddLast("EslFrameDecoder", new EslFrameDecoder());
             pipeline.AddLast("EslFrameEncoder", new EslFrameEncoder());
             pipeline.AddLast("StringEncoder", new StringEncoder());
-            pipeline.AddLast(new EslClientHandler(Password, EventListener));
+            pipeline.AddLast("DebugLogging", new LoggingHandler(LogLevel.INFO));
+            pipeline.AddLast(new InboundSessionHandler(InboundListener));
         }
     }
 }

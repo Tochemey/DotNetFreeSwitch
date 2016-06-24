@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Text;
 using ModFreeSwitch.Codecs;
 using ModFreeSwitch.Common;
 using ModFreeSwitch.Messages;
@@ -54,14 +56,14 @@ namespace ModFreeSwitch.Events {
 
                 var map = ParseBodyLines();
                 if (map.ContainsKey(headerName)) return map[headerName];
-                if (map.ContainsKey("variable_" + headerName))
-                    return map["variable_" + headerName];
-                return null;
+                return map.ContainsKey("variable_" + headerName)
+                    ? map["variable_" + headerName]
+                    : null;
             }
         }
 
-        protected StringDictionary ParseBodyLines() {
-            var resp = new StringDictionary();
+        protected Dictionary<string, string> ParseBodyLines() {
+            var resp = new Dictionary<string, string>();
             foreach (var bodyLine in _response.BodyLines) {
                 var parsedLines = EslHeaderParser.SplitHeader(bodyLine);
                 if (parsedLines == null) continue;
@@ -69,6 +71,20 @@ namespace ModFreeSwitch.Events {
                 if (parsedLines.Length == 1) resp.Add("__CONTENT__", bodyLine);
             }
             return resp;
+        }
+
+        public override string ToString() {
+            var sb = new StringBuilder();
+            if (_ignoreBody) {
+                foreach (string str in _response.Headers.Keys)
+                    sb.AppendLine(str + ":" + _response.Headers[str]);
+                return sb.ToString();
+            }
+
+            var map = ParseBodyLines();
+            foreach (string str in map.Keys)
+                sb.AppendLine(str + ":" + map[str]);
+            return sb.ToString();
         }
     }
 }

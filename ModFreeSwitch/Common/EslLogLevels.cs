@@ -1,5 +1,5 @@
 namespace ModFreeSwitch.Common {
-    public enum EventSocketLogLevels {
+    public enum EslLogLevels {
         CONSOLE = 0,
         ALERT = 1,
         CRIT = 2,

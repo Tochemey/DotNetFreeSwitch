@@ -12,6 +12,8 @@ using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Embedded;
 using ModFreeSwitch.Codecs;
 using ModFreeSwitch.Commands;
+using ModFreeSwitch.Common;
+using ModFreeSwitch.Events;
 using ModFreeSwitch.Handlers.outbound;
 using ModFreeSwitch.Messages;
 using Xunit;
@@ -134,9 +136,9 @@ namespace ModFreeSwitch.Test
             string password = "ClueCon";
             int port = 8021;
 
-            EslClient client = new EslClient(address,port, password);
+            OutboundSession client = new OutboundSession(address,port, password);
             client.ConnectAsync().Wait(500);
-            //Thread.Sleep(1000); // this is due to the asynchronous pattern of the framework
+            Thread.Sleep(100); // this is due to the asynchronous pattern of the framework
             Assert.Equal(true, client.IsActive());
             Assert.Equal(true, client.CanSend());
             Assert.Equal(true, client.CanSend());
@@ -146,6 +148,66 @@ namespace ModFreeSwitch.Test
             Assert.Equal(true, client.CanSend());
             Assert.Equal(true, client.CanSend());
             Assert.Equal(true, client.CanSend());
+        }
+
+        [Fact]
+        public async void SubscribeToEventsTest() {
+            const string address = "192.168.74.128";
+            const string password = "ClueCon";
+            const int port = 8021;
+
+            OutboundSession client = new OutboundSession(address, port, password);
+            await client.ConnectAsync();
+            Thread.Sleep(100); // this is due to the asynchronous pattern of the framework
+
+            string @event = "plain ALL";
+            bool subscribed = await client.SubscribeAsync(@event);
+
+            Assert.Equal(true, subscribed);
+        }
+
+        [Fact]
+        public async void SendApiTest() {
+            const string address = "192.168.74.128";
+            const string password = "ClueCon";
+            const int port = 8021;
+
+            OutboundSession client = new OutboundSession(address, port, password);
+            await client.ConnectAsync();
+            Thread.Sleep(100); // this is due to the asynchronous pattern of the framework
+            const string commandString = "sofia profile external gwlist up";
+            ApiResponse response = await client.SendApiAsync(new ApiCommand(commandString));
+
+            Assert.Contains("smsghlocalsip", response.ReplyText);
+        }
+
+        [Fact]
+        public async void SendBgApiTest() {
+            const string address = "192.168.74.128";
+            const string password = "ClueCon";
+            const int port = 8021;
+
+            OutboundSession client = new OutboundSession(address, port, password);
+            await client.ConnectAsync();
+            Thread.Sleep(100); // this is due to the asynchronous pattern of the framework
+            Guid jobId = await client.SendBgApiAsync(new BgApiCommand("status", string.Empty));
+
+            Assert.True(jobId != Guid.Empty);
+        }
+
+        [Fact]
+        public async void SendCommandTest() {
+            const string address = "192.168.74.128";
+            const string password = "ClueCon";
+            const int port = 8021;
+
+            OutboundSession client = new OutboundSession(address, port, password);
+            await client.ConnectAsync();
+            Thread.Sleep(100); // this is due to the asynchronous pattern of the framework
+   
+            BgApiCommand cmd = new BgApiCommand("fsctl", "debug_level 7");
+            CommandReply reply = await client.SendCommandAsync(cmd);
+            Assert.True(reply.IsOk);
         }
 
         public void Dispose() {

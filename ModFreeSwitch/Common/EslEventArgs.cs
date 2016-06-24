@@ -1,18 +1,14 @@
 ﻿using System;
-using DotNetty.Transport.Channels;
-using ModFreeSwitch.Messages;
+using ModFreeSwitch.Events;
 
 namespace ModFreeSwitch.Common {
     /// <summary>
     /// </summary>
     public class EslEventArgs : EventArgs {
-        public EslEventArgs(IChannelHandlerContext context,
-            EslMessage message) {
-            Context = context;
-            Message = message;
+        public EslEventArgs(EslEvent eslEvent) {
+            EslEvent = eslEvent;
         }
 
-        public IChannelHandlerContext Context { get; private set; }
-        public EslMessage Message { get; private set; }
+        public EslEvent EslEvent { get; private set; }
     }
 }

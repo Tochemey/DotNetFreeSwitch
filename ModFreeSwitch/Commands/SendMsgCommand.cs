@@ -78,22 +78,14 @@ namespace ModFreeSwitch.Commands {
         public override string Command {
             get {
                 var cmd =
-                    string.Format(
-                        "sendmsg  {0}\ncall-command: {1}\nexecute-app-name: {2}\nexecute-app-arg: {3}\nloops: {4}",
-                        _uuid,
-                        _callCommand,
-                        ApplicationName,
-                        ApplicationArgs,
-                        _loop);
-                if (_eventLock) cmd += string.Format("\nevent-lock: {0}", "true");
-                else cmd += string.Format("\nevent-lock: {0}", "false");
+                    $"sendmsg  {_uuid}\ncall-command: {_callCommand}\nexecute-app-name: {ApplicationName}\nexecute-app-arg: {ApplicationArgs}\nloops: {_loop}";
+                if (_eventLock) cmd += $"\nevent-lock: {"true"}";
+                else cmd += $"\nevent-lock: {"false"}";
                 return cmd;
             }
         }
 
-        public override string Argument {
-            get { return string.Empty; }
-        }
+        public override string Argument => string.Empty;
 
         public string ApplicationName { get; }
 

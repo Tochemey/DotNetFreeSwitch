@@ -24,7 +24,7 @@ namespace ModFreeSwitch.Codecs {
         ///     We all know that according to their documentation every freeSwitch has two parts.
         ///     <see cref="http://wiki.freeswitch.org/wiki/Event_List#Minimum_event_information" />
         /// </summary>
-        public enum DecoderState {
+         public enum DecoderState {
             ReadHeader,
             ReadBody
         }
@@ -112,23 +112,30 @@ namespace ModFreeSwitch.Codecs {
                     // read the content length
                     var contentLength = _actualMessage.ContentLength();
 
-                    // read the body bytes
-                    var bodyBytes = input.ReadBytes(contentLength);
-                    if (_logger.IsDebugEnabled)
-                        _logger.Debug("read [{0}] body bytes", bodyBytes.WriterIndex);
-                    // most bodies are line based, so split on LF
-                    while (bodyBytes.IsReadable()) {
-                        var bodyLine = ReadLine(bodyBytes, contentLength);
-                        if (_logger.IsDebugEnabled)
-                            _logger.Debug("read body line [{0}]", bodyLine);
-                        _actualMessage.BodyLines.Add(bodyLine);
-                    }
+                    // Let us check whether we do not have another message on he line
+                    var currentReaderIndex = input.ReaderIndex;
+                    var writerIndex = input.WriterIndex;
+                    int len = contentLength + currentReaderIndex;
 
-                    // end of the message body
-                    Checkpoint(DecoderState.ReadHeader);
-                    // send message upstream
-                    output.Add(_actualMessage);
-                    _actualMessage = null;
+                    if (len <= writerIndex) {
+                        // read the body bytes
+                        var bodyBytes = input.ReadBytes(contentLength);
+                        if (_logger.IsDebugEnabled)
+                            _logger.Debug("read [{0}] body bytes", bodyBytes.WriterIndex);
+                        // most bodies are line based, so split on LF
+                        while (bodyBytes.IsReadable()) {
+                            var bodyLine = ReadLine(bodyBytes, contentLength);
+                            if (_logger.IsDebugEnabled)
+                                _logger.Debug("read body line [{0}]", bodyLine);
+                            _actualMessage.BodyLines.Add(bodyLine);
+                        }
+
+                        // end of the message body
+                        Checkpoint(DecoderState.ReadHeader);
+                        // send message upstream
+                        output.Add(_actualMessage);
+                        _actualMessage = null;
+                    }
 
                     break;
                 default:

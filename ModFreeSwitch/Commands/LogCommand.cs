@@ -8,9 +8,9 @@ namespace ModFreeSwitch.Commands {
         /// <summary>
         ///     Log level
         /// </summary>
-        private readonly EventSocketLogLevels _logLevel;
+        private readonly EslLogLevels _logLevel;
 
-        public LogCommand(EventSocketLogLevels logLevel) {
+        public LogCommand(EslLogLevels logLevel) {
             _logLevel = logLevel;
         }
 

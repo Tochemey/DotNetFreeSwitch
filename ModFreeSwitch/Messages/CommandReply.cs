@@ -3,23 +3,20 @@
     ///     Command/Reply message
     /// </summary>
     public sealed class CommandReply {
-        /// <summary>
-        ///     CommandReply response
-        /// </summary>
-        private readonly EslMessage _response;
-
         public CommandReply(string command,
             EslMessage response) {
             Command = command;
-            _response = response;
-            ReplyText = _response != null
-                ? _response.HeaderValue(EslHeaders.ReplyText)
+            Response = response;
+            ReplyText = Response != null
+                ? Response.HeaderValue(EslHeaders.ReplyText)
                 : string.Empty;
             IsOk = !string.IsNullOrEmpty(ReplyText) &&
                    ReplyText.StartsWith(EslHeadersValues.Ok);
         }
 
         public string Command { get; private set; }
+
+        public EslMessage Response { get; }
 
         /// <summary>
         ///     Actual reply text
@@ -31,15 +28,11 @@
         /// </summary>
         public bool IsOk { get; private set; }
 
-        public string this[string headerName] {
-            get { return _response.HeaderValue(headerName); }
-        }
+        public string this[string headerName] => Response.HeaderValue(headerName);
 
         /// <summary>
         ///     Returns the actual command/reply type
         /// </summary>
-        public string ContentType {
-            get { return _response.ContentType(); }
-        }
+        public string ContentType => Response.ContentType();
     }
 }

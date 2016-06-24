@@ -1,11 +1,13 @@
-﻿namespace ModFreeSwitch.Messages {
+﻿using System.Linq;
+
+namespace ModFreeSwitch.Messages {
     public sealed class ApiResponse {
         public ApiResponse(string command,
             EslMessage response) {
             Command = command;
             var response1 = response;
             ReplyText = response1 != null
-                ? response1.HeaderValue(EslHeaders.ReplyText)
+                ? response1.BodyLines.First()
                 : string.Empty;
             IsOk = !string.IsNullOrEmpty(ReplyText) &&
                    ReplyText.StartsWith(EslHeadersValues.Ok);

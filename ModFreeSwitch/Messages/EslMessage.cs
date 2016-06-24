@@ -13,14 +13,14 @@ namespace ModFreeSwitch.Messages {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         public EslMessage() {
-            Headers = new StringDictionary();
+            Headers = new Dictionary<string, string>();
             BodyLines = new List<string>();
         }
 
         /// <summary>
         ///     FreeSwitch decoded message headers.
         /// </summary>
-        public StringDictionary Headers { set; get; }
+        public Dictionary<string, string> Headers { set; get; }
 
         /// <summary>
         ///     FreeSwitch decoded message body lines.
@@ -96,7 +96,7 @@ namespace ModFreeSwitch.Messages {
         }
 
         public override string ToString() {
-            var sb = new StringBuilder("FreeSwitchMessage: contentType=[");
+            var sb = new StringBuilder("EslMessage: contentType=[");
             sb.Append(ContentType());
             sb.Append("] headers=");
             sb.Append(Headers.Count);

@@ -104,8 +104,8 @@
     <Compile Include="Common\DictionnaryExtension.cs" />
     <Compile Include="Common\Enumm.cs" />
     <Compile Include="Common\EslChannelVariable.cs" />
-    <Compile Include="Common\EventSocketLogLevels.cs" />
-    <Compile Include="Common\EventType.cs" />
+    <Compile Include="Common\EslLogLevels.cs" />
+    <Compile Include="Common\EslEventType.cs" />
     <Compile Include="Common\HangupCause.cs" />
     <Compile Include="Common\SayGenders.cs" />
     <Compile Include="Common\SayMethods.cs" />
@@ -131,10 +131,16 @@
     <Compile Include="Events\EslEvent.cs" />
     <Compile Include="Events\RecordStop.cs" />
     <Compile Include="Events\SessionHeartbeat.cs" />
-    <Compile Include="Handlers\outbound\EslClient.cs" />
-    <Compile Include="Handlers\outbound\EslClientHandler.cs" />
-    <Compile Include="Handlers\outbound\EslClientInitializer.cs" />
-    <Compile Include="IEventListener.cs" />
+    <Compile Include="Handlers\inbound\ConnectedCall.cs" />
+    <Compile Include="Handlers\inbound\IInboundListener.cs" />
+    <Compile Include="Handlers\inbound\InboundServer.cs" />
+    <Compile Include="Handlers\inbound\InboundSession.cs" />
+    <Compile Include="Handlers\inbound\InboundSessionHandler.cs" />
+    <Compile Include="Handlers\inbound\InboundSessionInitializer.cs" />
+    <Compile Include="Handlers\outbound\OutboundSession.cs" />
+    <Compile Include="Handlers\outbound\OutboundSessionHandler.cs" />
+    <Compile Include="Handlers\outbound\OutboundSessionInitializer.cs" />
+    <Compile Include="Handlers\outbound\IOutboundListener.cs" />
     <Compile Include="Messages\ApiResponse.cs" />
     <Compile Include="Messages\CommandReply.cs" />
     <Compile Include="Messages\EslMessage.cs" />
@@ -142,9 +148,7 @@
     <Compile Include="Messages\EslHeadersValues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Handlers\inbound\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
