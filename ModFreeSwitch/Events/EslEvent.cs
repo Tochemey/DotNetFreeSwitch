@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Text;
 using ModFreeSwitch.Codecs;
 using ModFreeSwitch.Common;
@@ -19,13 +18,13 @@ namespace ModFreeSwitch.Events {
 
         public EslEvent(EslMessage response) : this(response, false) {}
 
-        public string CallerUuid => this["Caller-Unique-ID"];
+        public Guid CallerGuid => Guid.Parse(this["Caller-Unique-ID"]);
 
-        public string ChannelCallUuid => this["Channel-Call-UUID"];
+        public Guid ChannelCallGuid => Guid.Parse(this["Channel-Call-UUID"]);
 
         public string ChannelName => this["Channel-Name"];
 
-        public string CoreUuid => this["Core-UUID"];
+        public Guid CoreGuid => Guid.Parse(this["Core-UUID"]);
 
         public string EventCallingFile => this["Event-Calling-File"];
 
@@ -43,7 +42,7 @@ namespace ModFreeSwitch.Events {
 
         public DateTime EventTimeStamp => this["Event-Date-timestamp"].FromUnixTime();
 
-        public string UniqueId => this["Unique-ID"];
+        public Guid UniqueId => Guid.Parse(this["Unique-ID"]);
 
         public string this[string headerName] {
             get {
@@ -76,13 +75,13 @@ namespace ModFreeSwitch.Events {
         public override string ToString() {
             var sb = new StringBuilder();
             if (_ignoreBody) {
-                foreach (string str in _response.Headers.Keys)
+                foreach (var str in _response.Headers.Keys)
                     sb.AppendLine(str + ":" + _response.Headers[str]);
                 return sb.ToString();
             }
 
             var map = ParseBodyLines();
-            foreach (string str in map.Keys)
+            foreach (var str in map.Keys)
                 sb.AppendLine(str + ":" + map[str]);
             return sb.ToString();
         }
