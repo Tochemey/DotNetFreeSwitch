@@ -7,15 +7,15 @@ namespace ModFreeSwitch.Events {
 
         public string AnswerState => this["Answer-State"];
 
-        public ChannelDirection CallDirection
-            => Enumm.Parse<ChannelDirection>(this["Call-Direction"]);
+        public EslChannelDirection CallDirection
+            => Enumm.Parse<EslChannelDirection>(this["Call-Direction"]);
 
-        public ChannelState ChannelState {
+        public EslChannelState EslChannelState {
             get {
                 var ch = this["Channel-State"];
                 return string.IsNullOrEmpty(ch)
-                    ? ChannelState.UNKNOWN
-                    : Enumm.Parse<ChannelState>(ch.Trim());
+                    ? EslChannelState.UNKNOWN
+                    : Enumm.Parse<EslChannelState>(ch.Trim());
             }
         }
 
@@ -28,12 +28,12 @@ namespace ModFreeSwitch.Events {
             }
         }
 
-        public ChannelDirection PresenceCallDirection {
+        public EslChannelDirection PresenceCallDirection {
             get {
                 var pcd = this["Presence-Call-Direction"];
                 return string.IsNullOrEmpty(pcd)
-                    ? ChannelDirection.UNKNOWN
-                    : Enumm.Parse<ChannelDirection>(this["Presence-Call-Direction"]);
+                    ? EslChannelDirection.UNKNOWN
+                    : Enumm.Parse<EslChannelDirection>(this["Presence-Call-Direction"]);
             }
         }
     }

@@ -15,11 +15,14 @@ namespace ModFreeSwitch.Handlers.inbound {
         private IChannel _channel;
         private ConnectedCall _connectedCall;
 
-        public Task OnConnected(ConnectedCall connectedInfo,
+        public async Task OnConnected(ConnectedCall connectedInfo,
             IChannel channel) {
             _connectedCall = connectedInfo;
             _channel = channel;
-            return Task.CompletedTask;
+            await ResumeAsync();
+            await MyEventsAsync();
+            await DivertEventsAsync(true);
+            // perform other stuff with the connected call here
         }
 
         public Task OnDisconnectNotice() {
@@ -116,8 +119,8 @@ namespace ModFreeSwitch.Handlers.inbound {
             if (handler != null) await handler(this, eslEventArgs);
         }
 
-        public Task OnRudeRejection() {
-            throw new NotImplementedException();
+        public async Task OnRudeRejection() {
+            if (_channel != null) await _channel.CloseAsync();
         }
 
         public async Task AnswerAsync() {

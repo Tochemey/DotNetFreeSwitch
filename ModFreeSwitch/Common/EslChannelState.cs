@@ -1,5 +1,5 @@
 ﻿namespace ModFreeSwitch.Common {
-    public enum ChannelState {
+    public enum EslChannelState {
         /// <summary>
         ///     Channel is created
         /// </summary>

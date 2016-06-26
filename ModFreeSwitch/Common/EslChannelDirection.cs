@@ -1,5 +1,5 @@
 ﻿namespace ModFreeSwitch.Common {
-    public enum ChannelDirection {
+    public enum EslChannelDirection {
         INBOUND,
         OUTBOUND,
         UNKNOWN

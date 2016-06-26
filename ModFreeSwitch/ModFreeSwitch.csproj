@@ -97,8 +97,8 @@
     <Compile Include="Common\AsyncEventHandler.cs" />
     <Compile Include="Common\AsyncManualResetEvent .cs" />
     <Compile Include="Common\CallState.cs" />
-    <Compile Include="Common\ChannelDirection.cs" />
-    <Compile Include="Common\ChannelState.cs" />
+    <Compile Include="Common\EslChannelDirection.cs" />
+    <Compile Include="Common\EslChannelState.cs" />
     <Compile Include="Common\CommandAsyncEvent.cs" />
     <Compile Include="Common\DateTimeExtensions.cs" />
     <Compile Include="Common\DictionnaryExtension.cs" />
