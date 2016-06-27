@@ -15,7 +15,7 @@ namespace ModFreeSwitch.Handlers.inbound {
         protected override void InitChannel(ISocketChannel channel) {
             // get the channel pipeline
             var pipeline = channel.Pipeline;
-            pipeline.AddLast("EslFrameDecoder", new EslFrameDecoder());
+            pipeline.AddLast("EslFrameDecoder", new EslFrameDecoder(true));
             pipeline.AddLast("EslFrameEncoder", new EslFrameEncoder());
             pipeline.AddLast("StringEncoder", new StringEncoder());
             pipeline.AddLast("DebugLogging", new LoggingHandler(LogLevel.INFO));

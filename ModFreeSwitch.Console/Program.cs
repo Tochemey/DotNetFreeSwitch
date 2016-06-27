@@ -1,49 +1,67 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ModFreeSwitch.Commands;
+using ModFreeSwitch.Common;
 using ModFreeSwitch.Events;
+using ModFreeSwitch.Handlers.inbound;
 using ModFreeSwitch.Handlers.outbound;
-using ModFreeSwitch.Messages;
 using NLog;
 
-namespace ModFreeSwitch.Console
-{
-    class Program
-    {
+namespace ModFreeSwitch.Console {
+    internal class Program {
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        static void Main(string[] args)
-        {
-            string address = "192.168.74.128";
-            string password = "ClueCon";
-            int port = 8021;
 
-            OutboundSession client = new OutboundSession(address, port, password);
+        private static void Main(string[] args) {
+            const string address = "192.168.74.128";
+            const string password = "ClueCon";
+            const int port = 8021;
+            const int ServerPort = 10000;
+
+            var client = new OutboundSession(address, port, password);
             client.ConnectAsync()
-                .Wait(1000);
+                .ConfigureAwait(false);
 
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
 
             _logger.Info("Connected and Authenticated {0}", client.CanSend());
-            string @event = "plain ALL";
-            bool subscribed = client.SubscribeAsync(@event)
-                .Wait(500);
+            var @event = "plain CHANNEL_HANGUP CHANNEL_HANGP_COMPLETE";
+            var subscribed = client.SubscribeAsync(@event)
+                .ConfigureAwait(false);
 
-            _logger.Info("subscribed {0}", subscribed);
-            //client.OnReceivedUnHandledEvent += (source,
-            //    e) => {
-            //        EslEvent eslEvent = e.EslEvent;
-            //        _logger.Warn("Event Received: {0}", eslEvent.EventName);
-            //        return Task.CompletedTask;
-            //    };
+ 
+            var commandString = "sofia profile external gwlist up";
+            var response = client.SendApiAsync(new ApiCommand(commandString))
+                .ConfigureAwait(false);
+            _logger.Warn("Api Response {0}", response.GetAwaiter().GetResult().ReplyText);
 
-            string commandString = "sofia profile external gwlist up";
-            ApiResponse response = client.SendApiAsync(new ApiCommand(commandString)).Result;
-            _logger.Warn("Api Response {0}", response.ReplyText);
+
+            var inboundServer = new InboundServer(ServerPort, new DefaultInboundSession());
+            inboundServer.StartAsync().Wait(500);
+            string callCommand = "{ignore_early_media=false,originate_timeout=120}sofia/gateway/smsghlocalsip/233247063817 &socket(192.168.74.1:10000 async full)";
+
+            client.SendBgApiAsync(new BgApiCommand("originate", callCommand)).Wait(500);
+
             System.Console.ReadKey();
+        }
+    }
+
+    public class DefaultInboundSession : InboundSession {
+        private const string audioFile = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3";
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+        public override Task HandleEvents(EslEvent @event,
+            EslEventType eventType) {
+            _logger.Debug(@event);
+            return Task.CompletedTask;
+        }
+
+        public override Task PreHandleAsync() {
+            return Task.CompletedTask;
+        }
+
+        public override async Task HandleAsync() {
+            await PlayAsync(audioFile);
         }
     }
 }

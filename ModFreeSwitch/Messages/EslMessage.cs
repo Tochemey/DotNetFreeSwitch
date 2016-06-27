@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using ModFreeSwitch.Codecs;
@@ -69,7 +68,9 @@ namespace ModFreeSwitch.Messages {
         /// </summary>
         /// <returns>string the content type</returns>
         public string ContentType() {
-            return Headers[EslHeaders.ContentType];
+            return HasHeader(EslHeaders.ContentType)
+                ? Headers[EslHeaders.ContentType]
+                : string.Empty;
         }
 
         /// <summary>
@@ -95,15 +96,28 @@ namespace ModFreeSwitch.Messages {
             return 0;
         }
 
-        public override string ToString() {
-            var sb = new StringBuilder("EslMessage: contentType=[");
-            sb.Append(ContentType());
-            sb.Append("] headers=");
-            sb.Append(Headers.Count);
-            sb.Append(", body=");
-            sb.Append(BodyLines.Count);
-            sb.Append(" lines.");
+        public Dictionary<string, string> ParseBodyLines() {
+            var resp = new Dictionary<string, string>();
+            foreach (var bodyLine in BodyLines) {
+                var parsedLines = EslHeaderParser.SplitHeader(bodyLine);
+                if (parsedLines == null) continue;
+                if (parsedLines.Length == 2) resp.Add(parsedLines[0], parsedLines[1]);
+                if (parsedLines.Length == 1) resp.Add("__CONTENT__", bodyLine);
+            }
+            return resp;
+        }
 
+
+        public override string ToString() {
+            var sb = new StringBuilder();
+            foreach (var str in Headers.Keys)
+                sb.AppendLine(str + ":" + Headers[str]);
+            sb.AppendLine();
+
+            var map = ParseBodyLines();
+            foreach (var str in map.Keys)
+                sb.AppendLine(str + ":" + map[str]);
+            sb.AppendLine();
             return sb.ToString();
         }
     }

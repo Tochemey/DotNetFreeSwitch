@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using DotNetty.Transport.Channels;
 using ModFreeSwitch.Events;
 using ModFreeSwitch.Messages;
@@ -30,6 +31,8 @@ namespace ModFreeSwitch.Handlers.outbound {
             if (eslMessage == null) return;
             var contentType = eslMessage.ContentType();
 
+            if (string.IsNullOrEmpty(contentType)) return;
+
             // Handle auth/request
             if (contentType.Equals(EslHeadersValues.AuthRequest)) {
                 await _outboundListener.OnAuthentication();
@@ -55,15 +58,16 @@ namespace ModFreeSwitch.Handlers.outbound {
 
             // Handle text/event-plain
             if (contentType.Equals(EslHeadersValues.TextEventPlain)) {
-                var eslEvent = new EslEvent(eslMessage);
-
-                await _outboundListener.OnEventReceived(eslEvent);
+                await _outboundListener.OnEventReceived(eslMessage);
                 return;
             }
 
             // Handle disconnect/notice message
             if (contentType.Equals(EslHeadersValues.TextDisconnectNotice)) {
-                await _outboundListener.OnDisconnectNotice();
+                IChannel channel = context.Channel;
+                EndPoint address = channel.RemoteAddress;
+
+                await _outboundListener.OnDisconnectNotice(eslMessage, address);
                 return;
             }
 

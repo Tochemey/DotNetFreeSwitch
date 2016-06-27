@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using DotNetty.Codecs;
@@ -53,8 +54,9 @@ namespace ModFreeSwitch.Handlers.outbound {
             await AuthenticateAsync();
         }
 
-        public async Task OnDisconnectNotice() {
-            _logger.Warn("channel {0} disconnected", _channel.RemoteAddress);
+        public async Task OnDisconnectNotice(EslMessage eslMessage, EndPoint channelEndPoint) {
+            _logger.Debug("received disconnection message : {0}", eslMessage);
+            _logger.Warn("channel {0} disconnected", channelEndPoint);
             await CleanUpAsync();
         }
 
@@ -77,11 +79,11 @@ namespace ModFreeSwitch.Handlers.outbound {
             _logger.Error($"Encountered an issue : {exception}");
         }
 
-        public async Task OnEventReceived(EslEvent eslEvent) {
-            var eventName = eslEvent.EventName;
-            var eventType = Enumm.Parse<EslEventType>(eventName);
-            var eslEventArgs = new EslEventArgs(eslEvent);
-            AsyncEventHandler<EslEventArgs> handler = null;
+        public async Task OnEventReceived(EslMessage eslMessage) {
+            EslEvent eslEvent = new EslEvent(eslMessage);
+            var eventType = Enumm.Parse<EslEventType>(eslEvent.EventName);
+            var eslEventArgs = new EslEventArgs(new EslEvent(eslMessage));
+            AsyncEventHandler<EslEventArgs> handler;
             switch (eventType) {
                 case EslEventType.BACKGROUND_JOB:
                     handler = OnBackgroundJob;
@@ -141,7 +143,8 @@ namespace ModFreeSwitch.Handlers.outbound {
                     handler = OnChannelUnPark;
                     break;
                 default:
-                    _logger.Debug("received unhandled freeSwitch event {0}", eslEvent);
+                    _logger.Debug("received unhandled freeSwitch event:");
+                    _logger.Debug(eslEvent);
                     handler = OnReceivedUnHandledEvent;
                     break;
             }

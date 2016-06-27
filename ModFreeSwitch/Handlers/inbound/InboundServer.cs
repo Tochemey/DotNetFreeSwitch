@@ -11,18 +11,22 @@ namespace ModFreeSwitch.Handlers.inbound {
         private readonly MultithreadEventLoopGroup _bossEventLoopGroup;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly MultithreadEventLoopGroup _workerEventLoopGroup;
+        private readonly InboundSession inboundSession;
         private ServerBootstrap _bootstrap;
         private IChannel _channel;
 
         public InboundServer(int port,
-            int backlog) {
+            int backlog,
+            InboundSession inboundSession) {
             Port = port;
             Backlog = backlog;
+            this.inboundSession = inboundSession;
             _bossEventLoopGroup = new MultithreadEventLoopGroup(1);
             _workerEventLoopGroup = new MultithreadEventLoopGroup();
         }
 
-        public InboundServer(int port) : this(port, 100) {}
+        public InboundServer(int port,
+            InboundSession inboundSession) : this(port, 100, inboundSession) {}
 
         public int Backlog { get; }
         public int Port { get; }
@@ -44,10 +48,14 @@ namespace ModFreeSwitch.Handlers.inbound {
             _bootstrap = new ServerBootstrap();
             _bootstrap.Group(_bossEventLoopGroup, _workerEventLoopGroup);
             _bootstrap.Channel<TcpServerSocketChannel>();
-            _bootstrap.Option(ChannelOption.SoLinger, 1);
+            _bootstrap.Option(ChannelOption.SoLinger, 0);
             _bootstrap.Option(ChannelOption.SoBacklog, Backlog);
             _bootstrap.Handler(new LoggingHandler(LogLevel.INFO));
-            _bootstrap.ChildHandler(new InboundSessionInitializer(new InboundSession()));
+            _bootstrap.ChildHandler(new InboundSessionInitializer(inboundSession));
+            _bootstrap.ChildOption(ChannelOption.SoLinger, 0);
+            _bootstrap.ChildOption(ChannelOption.SoKeepalive, true);
+            _bootstrap.ChildOption(ChannelOption.TcpNodelay, true);
+            _bootstrap.ChildOption(ChannelOption.SoReuseaddr, true);
         }
     }
 }

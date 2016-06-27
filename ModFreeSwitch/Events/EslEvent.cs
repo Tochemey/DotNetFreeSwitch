@@ -53,7 +53,7 @@ namespace ModFreeSwitch.Events {
                         return _response.HeaderValue("variable_" + headerName);
                 }
 
-                var map = ParseBodyLines();
+                var map = _response.ParseBodyLines();
                 if (map.ContainsKey(headerName)) return map[headerName];
                 return map.ContainsKey("variable_" + headerName)
                     ? map["variable_" + headerName]
@@ -80,7 +80,7 @@ namespace ModFreeSwitch.Events {
                 return sb.ToString();
             }
 
-            var map = ParseBodyLines();
+            var map = _response.ParseBodyLines();
             foreach (var str in map.Keys)
                 sb.AppendLine(str + ":" + map[str]);
             return sb.ToString();

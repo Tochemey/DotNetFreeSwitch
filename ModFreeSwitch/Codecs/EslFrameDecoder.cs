@@ -87,8 +87,8 @@ namespace ModFreeSwitch.Codecs {
                         }
                         else {
                             reachedDoubleLf = true;
-                            Checkpoint();
                         }
+                        Checkpoint();
                     }
 
                     // have read all headers - check for content-length
@@ -136,7 +136,10 @@ namespace ModFreeSwitch.Codecs {
                         output.Add(_actualMessage);
                         _actualMessage = null;
                     }
-
+                    else {
+                        _logger.Debug("reading more bytes...");
+                        RequestReplay();
+                    }
                     break;
                 default:
                     throw new DecoderException("Illegal state: [" + State + ']');

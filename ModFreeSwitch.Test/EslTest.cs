@@ -2,14 +2,19 @@
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using DotNetty.Buffers;
 using DotNetty.Codecs;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Embedded;
 using ModFreeSwitch.Codecs;
 using ModFreeSwitch.Commands;
+using ModFreeSwitch.Common;
+using ModFreeSwitch.Events;
+using ModFreeSwitch.Handlers.inbound;
 using ModFreeSwitch.Handlers.outbound;
 using ModFreeSwitch.Messages;
+using NLog;
 using Xunit;
 
 namespace ModFreeSwitch.Test {
@@ -203,6 +208,43 @@ namespace ModFreeSwitch.Test {
             var cmd = new BgApiCommand("fsctl", "debug_level 7");
             var reply = await client.SendCommandAsync(cmd);
             Assert.True(reply.IsOk);
+        }
+
+        [Fact(Skip = "Run it later")]
+        public async void InboundModeTest() {
+            const string address = "192.168.74.128";
+            const string password = "ClueCon";
+            const int port = 8021;
+            const int ServerPort = 10000;
+
+            var client = new OutboundSession(address, port, password);
+            await client.ConnectAsync();
+            Thread.Sleep(100); // this is due to the asynchronous pattern of the framework
+
+            var inboundServer = new InboundServer(ServerPort, new DefaultInboundSession());
+            await inboundServer.StartAsync();
+            string callCommand = "{ignore_early_media=false,originate_timeout=120}sofia/gateway/smsghlocalsip/233247063817 &socket(192.168.74.1:10000 async full)";
+
+            Guid jobId = await client.SendBgApiAsync(new BgApiCommand("originate", callCommand));
+            Assert.True(jobId != Guid.Empty);
+        }
+
+        public class DefaultInboundSession : InboundSession {
+            private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+            const string audioFile = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3";
+            public override Task HandleEvents(EslEvent @event,
+                EslEventType eventType) {
+               _logger.Debug(@event);
+                return Task.CompletedTask;
+            }
+
+            public override Task PreHandleAsync() {
+                return Task.CompletedTask;
+            }
+
+            public override async Task HandleAsync() {
+                await PlayAsync(audioFile);
+            }
         }
     }
 }

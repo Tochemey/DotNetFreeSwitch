@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using DotNetty.Codecs;
@@ -10,23 +11,30 @@ using ModFreeSwitch.Messages;
 using NLog;
 
 namespace ModFreeSwitch.Handlers.inbound {
-    public class InboundSession : IInboundListener {
+    public abstract class InboundSession : IInboundListener {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private IChannel _channel;
-        private ConnectedCall _connectedCall;
+        protected IChannel Channel;
+        protected ConnectedCall ConnectedCall;
 
         public async Task OnConnected(ConnectedCall connectedInfo,
             IChannel channel) {
-            _connectedCall = connectedInfo;
-            _channel = channel;
+            ConnectedCall = connectedInfo;
+            Channel = channel;
             await ResumeAsync();
             await MyEventsAsync();
             await DivertEventsAsync(true);
-            // perform other stuff with the connected call here
+            await PreHandleAsync();
+            await AnswerAsync();
+            await HandleAsync();
         }
 
-        public Task OnDisconnectNotice() {
-            _logger.Warn("channel {0} disconnected", _channel.LocalAddress);
+        public async Task LingerAsync() {
+            await SendCommandAsync(new LingerCommand());
+        }
+
+        public Task OnDisconnectNotice(EslMessage eslMessage, EndPoint channelEndPoint) {
+            _logger.Debug("received disconnection message : {0}", eslMessage);
+            _logger.Warn("channel {0} disconnected", channelEndPoint);
             return Task.CompletedTask;
         }
 
@@ -34,93 +42,104 @@ namespace ModFreeSwitch.Handlers.inbound {
             if (exception is DecoderException) {
                 _logger.Warn(
                     $"Encountered an issue during encoding: {exception}. shutting down...");
-                await _channel.CloseAsync();
+                await Channel.CloseAsync();
                 return;
             }
 
             if (exception is SocketException) {
                 _logger.Warn(
                     $"Encountered an issue on the channel: {exception}. shutting down...");
-                await _channel.CloseAsync();
+                await Channel.CloseAsync();
                 return;
             }
 
             _logger.Error($"Encountered an issue : {exception}");
         }
 
-        public async Task OnEventReceived(EslEvent eslEvent) {
+        public async Task OnEventReceived(EslMessage eslMessage) {
+            EslEvent eslEvent = new EslEvent(eslMessage);
             var eventName = eslEvent.EventName;
             var eventType = Enumm.Parse<EslEventType>(eventName);
-            var eslEventArgs = new EslEventArgs(eslEvent);
-            AsyncEventHandler<EslEventArgs> handler = null;
             switch (eventType) {
                 case EslEventType.BACKGROUND_JOB:
-                    handler = OnBackgroundJob;
+                    var backgroundJob = new BackgroundJob(eslMessage);
+                    eslEvent = backgroundJob;
                     break;
                 case EslEventType.CALL_UPDATE:
-                    handler = OnCallUpdate;
+                    var callUpdate = new CallUpdate(eslMessage);
+                    eslEvent = callUpdate;
                     break;
                 case EslEventType.CHANNEL_BRIDGE:
-                    handler = OnChannelBridge;
+                    var channelBridge = new ChannelBridge(eslMessage);
+                    eslEvent = channelBridge;
                     break;
                 case EslEventType.CHANNEL_HANGUP:
-                    handler = OnChannelHangup;
-                    break;
                 case EslEventType.CHANNEL_HANGUP_COMPLETE:
-                    handler = OnChannelHangupComplete;
+                    var channelHangup = new ChannelHangup(eslMessage);
+                    eslEvent = channelHangup;
                     break;
                 case EslEventType.CHANNEL_PROGRESS:
-                    handler = OnChannelProgress;
+                    var channelProgress = new ChannelProgress(eslMessage);
+                    eslEvent = channelProgress;
                     break;
                 case EslEventType.CHANNEL_PROGRESS_MEDIA:
-                    handler = OnChannelProgressMedia;
+                    var channelProgressMedia = new ChannelProgressMedia(eslMessage);
+                    eslEvent = channelProgressMedia;
                     break;
                 case EslEventType.CHANNEL_EXECUTE:
-                    handler = OnChannelExecute;
+                    var channelExecute = new ChannelExecute(eslMessage);
+                    eslEvent = channelExecute;
                     break;
                 case EslEventType.CHANNEL_EXECUTE_COMPLETE:
-                    handler = OnChannelExecuteComplete;
+                    var channelExecuteComplete = new ChannelExecuteComplete(eslMessage);
+                    eslEvent = channelExecuteComplete;
                     break;
                 case EslEventType.CHANNEL_UNBRIDGE:
-                    handler = OnChannelUnbridge;
+                    var channelUnbridge = new ChannelUnbridge(eslMessage);
+                    eslEvent = channelUnbridge;
                     break;
                 case EslEventType.SESSION_HEARTBEAT:
-                    handler = OnSessionHeartbeat;
+                    var sessionHeartbeat = new SessionHeartbeat(eslMessage);
+                    eslEvent = sessionHeartbeat;
                     break;
                 case EslEventType.DTMF:
-                    handler = OnDtmf;
+                    var dtmf = new Dtmf(eslMessage);
+                    eslEvent = dtmf;
                     break;
                 case EslEventType.RECORD_STOP:
-                    handler = OnRecordStop;
+                    var recordStop = new RecordStop(eslMessage);
+                    eslEvent = recordStop;
                     break;
                 case EslEventType.CUSTOM:
-                    handler = OnCustom;
+                    var custom = new Custom(eslMessage);
+                    eslEvent = custom;
                     break;
                 case EslEventType.CHANNEL_STATE:
-                    handler = OnChannelState;
+                    var channelState = new ChannelStateEvent(eslMessage);
+                    eslEvent = channelState;
                     break;
                 case EslEventType.CHANNEL_ANSWER:
-                    handler = OnChannelAnswer;
+                    eslEvent = new EslEvent(eslMessage);
                     break;
                 case EslEventType.CHANNEL_ORIGINATE:
-                    handler = OnChannelOriginate;
+                    eslEvent = new EslEvent(eslMessage);
                     break;
                 case EslEventType.CHANNEL_PARK:
-                    handler = OnChannelPark;
+                    var channelPark = new ChannelPark(eslMessage);
+                    eslEvent = channelPark;
                     break;
                 case EslEventType.CHANNEL_UNPARK:
-                    handler = OnChannelUnPark;
+                    eslEvent = new EslEvent(eslMessage);
                     break;
                 default:
-                    _logger.Debug("received unhandled freeSwitch event {0}", eslEvent);
-                    handler = OnReceivedUnHandledEvent;
+                    await OnUnhandledEvents(new EslEvent(eslMessage));
                     break;
             }
-            if (handler != null) await handler(this, eslEventArgs);
+            await HandleEvents(eslEvent, eventType);
         }
 
         public async Task OnRudeRejection() {
-            if (_channel != null) await _channel.CloseAsync();
+            if (Channel != null) await Channel.CloseAsync();
         }
 
         public async Task AnswerAsync() {
@@ -138,12 +157,17 @@ namespace ModFreeSwitch.Handlers.inbound {
         }
 
         public bool CanHandleEvent(EslEvent @event) {
-            return (@event.UniqueId == _connectedCall.UniqueId) &&
-                   @event.CallerGuid == _connectedCall.CallerGuid;
+            return (@event.UniqueId == ConnectedCall.UniqueId) &&
+                   @event.CallerGuid == ConnectedCall.CallerGuid;
         }
 
         public bool CanSend() {
-            return _channel != null && _channel.Active;
+            return Channel != null && Channel.Active;
+        }
+
+        public virtual Task OnUnhandledEvents(EslEvent eslEvent) {
+            _logger.Debug("received unhandled freeSwitch event {0}", eslEvent);
+            return Task.CompletedTask;
         }
 
         public async Task DivertEventsAsync(bool flag) {
@@ -154,7 +178,7 @@ namespace ModFreeSwitch.Handlers.inbound {
         public async Task<CommandReply> ExecuteAsync(string application,
             string arguments,
             bool eventLock) {
-            var command = new SendMsgCommand(_connectedCall.CallerGuid,
+            var command = new SendMsgCommand(ConnectedCall.CallerGuid,
                 SendMsgCommand.CALL_COMMAND,
                 application,
                 arguments,
@@ -166,7 +190,7 @@ namespace ModFreeSwitch.Handlers.inbound {
             string arguments,
             int loop,
             bool eventLock) {
-            var command = new SendMsgCommand(_connectedCall.CallerGuid,
+            var command = new SendMsgCommand(ConnectedCall.CallerGuid,
                 SendMsgCommand.CALL_COMMAND,
                 application,
                 arguments,
@@ -184,18 +208,24 @@ namespace ModFreeSwitch.Handlers.inbound {
             return await ExecuteAsync(application, string.Empty, eventLock);
         }
 
+        public abstract Task HandleEvents(EslEvent @event, EslEventType eventType);
+
         public async Task MyEventsAsync() {
-            await SendCommandAsync(new MyEventsCommand(_connectedCall.CallerGuid));
+            await SendCommandAsync(new MyEventsCommand(ConnectedCall.CallerGuid));
         }
 
         public async Task PlayAsync(string audioFile,
-            bool eventLock) {
+            bool eventLock = false) {
             await ExecuteAsync("playback", audioFile, eventLock);
         }
 
         public async Task PreAnswerAsync() {
             await ExecuteAsync("pre_answer");
         }
+
+        public abstract Task PreHandleAsync();
+
+        public abstract Task HandleAsync();
 
         public async Task ResumeAsync() {
             await SendCommandAsync(new ResumeCommand());
@@ -225,21 +255,21 @@ namespace ModFreeSwitch.Handlers.inbound {
 
         public async Task<ApiResponse> SendApiAsync(ApiCommand apiCommand) {
             if (!CanSend()) return null;
-            var handler = (InboundSessionHandler) _channel.Pipeline.Last();
-            var response = await handler.SendApiAsync(apiCommand, _channel);
+            var handler = (InboundSessionHandler) Channel.Pipeline.Last();
+            var response = await handler.SendApiAsync(apiCommand, Channel);
             return response;
         }
 
         public async Task<Guid> SendBgApiAsync(BgApiCommand bgApiCommand) {
             if (!CanSend()) return Guid.Empty;
-            var handler = (InboundSessionHandler) _channel.Pipeline.Last();
-            return await handler.SendBgApiAsync(bgApiCommand, _channel);
+            var handler = (InboundSessionHandler) Channel.Pipeline.Last();
+            return await handler.SendBgApiAsync(bgApiCommand, Channel);
         }
 
         public async Task<CommandReply> SendCommandAsync(BaseCommand command) {
             if (!CanSend()) return null;
-            var handler = (InboundSessionHandler) _channel.Pipeline.Last();
-            var reply = await handler.SendCommandAsync(command, _channel);
+            var handler = (InboundSessionHandler) Channel.Pipeline.Last();
+            var reply = await handler.SendCommandAsync(command, Channel);
             return reply;
         }
 
@@ -287,6 +317,10 @@ namespace ModFreeSwitch.Handlers.inbound {
             await ExecuteAsync("stop_dtmf", eventLock);
         }
 
+        public async Task StopDtmfAsync(bool eventLock = false) {
+            await ExecuteAsync("stop_dtmf", eventLock);
+        }
+
         public async Task UnsetAsync(string variableName,
             bool eventLock) {
             await ExecuteAsync("unset", variableName, eventLock);
@@ -295,49 +329,5 @@ namespace ModFreeSwitch.Handlers.inbound {
         public async Task UnsetAsync(string variableName) {
             await ExecuteAsync("unset", variableName, false);
         }
-
-        #region FreeSwitch Events Handlers
-
-        public event AsyncEventHandler<EslEventArgs> OnBackgroundJob;
-
-        public event AsyncEventHandler<EslEventArgs> OnCallUpdate;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelAnswer;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelBridge;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelExecute;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelExecuteComplete;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelHangup;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelHangupComplete;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelOriginate;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelPark;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelProgress;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelProgressMedia;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelState;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelUnbridge;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelUnPark;
-
-        public event AsyncEventHandler<EslEventArgs> OnCustom;
-
-        public event AsyncEventHandler<EslEventArgs> OnDtmf;
-
-        public event AsyncEventHandler<EslEventArgs> OnReceivedUnHandledEvent;
-
-        public event AsyncEventHandler<EslEventArgs> OnRecordStop;
-
-        public event AsyncEventHandler<EslEventArgs> OnSessionHeartbeat;
-
-        #endregion
     }
 }

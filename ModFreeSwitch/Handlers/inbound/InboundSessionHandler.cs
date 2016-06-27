@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using DotNetty.Transport.Channels;
 using ModFreeSwitch.Commands;
@@ -20,6 +21,7 @@ namespace ModFreeSwitch.Handlers.inbound {
 
         public override async void ExceptionCaught(IChannelHandlerContext context,
             Exception exception) {
+            if(!context.Channel.Open) return;
             _logger.Error(exception, "Exception occured.");
             await _inboundListener.OnError(exception);
         }
@@ -28,7 +30,7 @@ namespace ModFreeSwitch.Handlers.inbound {
             var channel = context.Channel;
             _logger.Debug(
                 "received a new connection from freeswitch {0}. Sending a connect command...",
-                channel.LocalAddress);
+                channel.RemoteAddress);
             var connectCommand = new ConnectCommand();
             var reply = await SendCommandAsync(connectCommand, channel);
             if (!reply.IsOk) return;
@@ -39,9 +41,9 @@ namespace ModFreeSwitch.Handlers.inbound {
         public override async void ChannelRead(IChannelHandlerContext context,
             object message) {
             var eslMessage = message as EslMessage;
-            if (eslMessage == null) return;
-            var contentType = eslMessage.ContentType();
+            var contentType = eslMessage?.ContentType();
 
+            if(string.IsNullOrEmpty(contentType)) return;
             // Handle command/reply
             if (contentType.Equals(EslHeadersValues.CommandReply)) {
                 var commandAsyncEvent = CommandAsyncEvents.Dequeue();
@@ -61,15 +63,15 @@ namespace ModFreeSwitch.Handlers.inbound {
 
             // Handle text/event-plain
             if (contentType.Equals(EslHeadersValues.TextEventPlain)) {
-                var eslEvent = new EslEvent(eslMessage);
-
-                await _inboundListener.OnEventReceived(eslEvent);
+                await _inboundListener.OnEventReceived(eslMessage);
                 return;
             }
 
             // Handle disconnect/notice message
             if (contentType.Equals(EslHeadersValues.TextDisconnectNotice)) {
-                await _inboundListener.OnDisconnectNotice();
+                IChannel channel = context.Channel;
+                EndPoint address = channel.RemoteAddress;
+                await _inboundListener.OnDisconnectNotice(eslMessage, address);
                 return;
             }
 
