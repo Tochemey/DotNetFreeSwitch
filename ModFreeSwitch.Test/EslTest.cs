@@ -210,7 +210,7 @@ namespace ModFreeSwitch.Test {
             Assert.True(reply.IsOk);
         }
 
-        [Fact(Skip = "Run it later")]
+        [Fact]
         public async void InboundModeTest() {
             const string address = "192.168.74.128";
             const string password = "ClueCon";

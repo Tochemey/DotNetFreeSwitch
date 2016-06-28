@@ -67,7 +67,6 @@
     <Compile Include="Codecs\EslFrameEncoder.cs" />
     <Compile Include="Codecs\EslFrameDecoder.cs" />
     <Compile Include="Codecs\EslHeaderParser.cs" />
-    <Compile Include="Codecs\StringReader.cs" />
     <Compile Include="Commands\ApiCommand.cs" />
     <Compile Include="Commands\AuthCommand.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
