@@ -28,8 +28,7 @@ namespace ModFreeSwitch.Handlers.outbound {
         public override async void ChannelRead(IChannelHandlerContext context,
             object message) {
             var eslMessage = message as EslMessage;
-            if (eslMessage == null) return;
-            var contentType = eslMessage.ContentType();
+            var contentType = eslMessage?.ContentType();
 
             if (string.IsNullOrEmpty(contentType)) return;
 

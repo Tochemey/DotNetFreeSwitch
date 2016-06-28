@@ -24,7 +24,7 @@ namespace ModFreeSwitch.Codecs {
         ///     We all know that according to their documentation every freeSwitch has two parts.
         ///     <see cref="http://wiki.freeswitch.org/wiki/Event_List#Minimum_event_information" />
         /// </summary>
-         public enum DecoderState {
+        public enum DecoderState {
             ReadHeader,
             ReadBody
         }
@@ -62,87 +62,103 @@ namespace ModFreeSwitch.Codecs {
                  * Let us read the message head.
                  */
                 case DecoderState.ReadHeader:
-                    if (_actualMessage == null) _actualMessage = new EslMessage();
-                    var reachedDoubleLf = false;
-                    while (!reachedDoubleLf) {
-                        var headerLine = ReadLine(input);
-                        if (_logger.IsDebugEnabled)
-                            _logger.Debug("read header line [{0}]", headerLine);
-                        if (!string.IsNullOrEmpty(headerLine)) {
-                            var headerParts = EslHeaderParser.SplitHeader(headerLine);
-                            if (headerParts == null || headerParts.Length == 0) continue;
-                            var headerName = headerParts[0];
-                            if (string.IsNullOrEmpty(headerName)) {
-                                if (_treatUnknownHeadersAsBody)
-                                    _actualMessage.BodyLines.Add(headerLine);
-                                else
-                                    throw new DecoderException(
-                                        "Unhandled FreeSwitch message header[" +
-                                        headerParts[0] + ']');
-                            }
+                    // Let us initialize the actual message to decode
+                    SetActualMessage();
 
-                            _actualMessage.Headers.Add(headerName.Trim(LINE_FEED_CHAR),
-                                Uri.UnescapeDataString(headerParts[1])
-                                    .Trim(LINE_FEED_CHAR));
-                        }
-                        else {
-                            reachedDoubleLf = true;
-                        }
-                        Checkpoint();
-                    }
+                    // Read the headers
+                    ReadHeader(input);
 
-                    // have read all headers - check for content-length
-                    if (_actualMessage.HasContentLength()) {
-                        Checkpoint(DecoderState.ReadBody);
-                        if (_logger.IsDebugEnabled)
-                            _logger.Debug("have content-length, decoding body ..");
-                    }
-                    else {
-                        // end of message
-                        Checkpoint(DecoderState.ReadHeader);
-                        // send message upstream
-                        output.Add(_actualMessage);
-                        _actualMessage = null;
-                    }
+                    // have read all headers - check whether we can read the message body or not
+                    if (!CanReadBody()) { CompleteDecoding(output); }
                     break;
                 case DecoderState.ReadBody:
                     /**
                      * At this stage we are reading the message body based upon the content length in the header.
                      */
-                    // read the content length
-                    var contentLength = _actualMessage.ContentLength();
+                    ReadBody(input, output);
 
-                    // Let us check whether we do not have another message on he line
-                    var currentReaderIndex = input.ReaderIndex;
-                    var writerIndex = input.WriterIndex;
-                    int len = contentLength + currentReaderIndex;
-
-                    if (len <= writerIndex) {
-                        // read the body bytes
-                        var bodyBytes = input.ReadBytes(contentLength);
-                        if (_logger.IsDebugEnabled)
-                            _logger.Debug("read [{0}] body bytes", bodyBytes.WriterIndex);
-                        // most bodies are line based, so split on LF
-                        while (bodyBytes.IsReadable()) {
-                            var bodyLine = ReadLine(bodyBytes, contentLength);
-                            if (_logger.IsDebugEnabled)
-                                _logger.Debug("read body line [{0}]", bodyLine);
-                            _actualMessage.BodyLines.Add(bodyLine);
-                        }
-
-                        // end of the message body
-                        Checkpoint(DecoderState.ReadHeader);
-                        // send message upstream
-                        output.Add(_actualMessage);
-                        _actualMessage = null;
-                    }
-                    else {
-                        _logger.Debug("reading more bytes...");
-                        RequestReplay();
-                    }
                     break;
                 default:
                     throw new DecoderException("Illegal state: [" + State + ']');
+            }
+        }
+
+        private void SetActualMessage() {
+            if (_actualMessage == null) _actualMessage = new EslMessage();
+        }
+
+        private bool CanReadBody() {
+            if (!_actualMessage.HasContentLength()) return false;
+            Checkpoint(DecoderState.ReadBody);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("have content-length, decoding body ..");
+            return true;
+        }
+
+        private void CompleteDecoding(List<object> output) {
+            // complete the decoding. Get ready for the next message
+            Checkpoint(DecoderState.ReadHeader);
+            // send message upstream
+            output.Add(_actualMessage);
+            _actualMessage = null;
+        }
+
+        private void ReadBody(IByteBuffer buffer,
+            List<object> output) {
+            var maxlength = _actualMessage.ContentLength();
+            // Let us check whether we do not have another message on he line
+            var currentReaderIndex = buffer.ReaderIndex;
+            var writerIndex = buffer.WriterIndex;
+            var len = maxlength + currentReaderIndex;
+
+            if (len <= writerIndex) {
+                // read the body bytes
+                var bodyBytes = buffer.ReadBytes(maxlength);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("read [{0}] body bytes", bodyBytes.WriterIndex);
+                // most bodies are line based, so split on LF
+                while (bodyBytes.IsReadable()) {
+                    var bodyLine = ReadLine(bodyBytes, maxlength);
+                    if (_logger.IsDebugEnabled)
+                        _logger.Debug("read body line [{0}]", bodyLine);
+                    _actualMessage.BodyLines.Add(bodyLine);
+                }
+
+                CompleteDecoding(output);
+            }
+            else {
+                _logger.Debug("reading more bytes...");
+                RequestReplay();
+            }
+        }
+
+        private void ReadHeader(IByteBuffer buffer) {
+            var reachedDoubleLf = false;
+            while (!reachedDoubleLf) {
+                var headerLine = ReadLine(buffer);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("read header line [{0}]", headerLine);
+                if (!string.IsNullOrEmpty(headerLine)) {
+                    var headerParts = EslHeaderParser.SplitHeader(headerLine);
+                    if (headerParts == null || headerParts.Length == 0) continue;
+                    var headerName = headerParts[0];
+                    if (string.IsNullOrEmpty(headerName)) {
+                        if (_treatUnknownHeadersAsBody)
+                            _actualMessage.BodyLines.Add(headerLine);
+                        else
+                            throw new DecoderException(
+                                "Unhandled FreeSwitch message header[" + headerParts[0] +
+                                ']');
+                    }
+
+                    _actualMessage.Headers.Add(headerName.Trim(LINE_FEED_CHAR),
+                        Uri.UnescapeDataString(headerParts[1])
+                            .Trim(LINE_FEED_CHAR));
+                }
+                else {
+                    reachedDoubleLf = true;
+                }
+                Checkpoint();
             }
         }
 

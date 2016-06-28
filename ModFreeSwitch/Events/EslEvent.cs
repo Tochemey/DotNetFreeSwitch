@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
-using ModFreeSwitch.Codecs;
 using ModFreeSwitch.Common;
 using ModFreeSwitch.Messages;
 
@@ -61,16 +59,16 @@ namespace ModFreeSwitch.Events {
             }
         }
 
-        protected Dictionary<string, string> ParseBodyLines() {
-            var resp = new Dictionary<string, string>();
-            foreach (var bodyLine in _response.BodyLines) {
-                var parsedLines = EslHeaderParser.SplitHeader(bodyLine);
-                if (parsedLines == null) continue;
-                if (parsedLines.Length == 2) resp.Add(parsedLines[0], parsedLines[1]);
-                if (parsedLines.Length == 1) resp.Add("__CONTENT__", bodyLine);
-            }
-            return resp;
-        }
+        //protected Dictionary<string, string> ParseBodyLines() {
+        //    var resp = new Dictionary<string, string>();
+        //    foreach (var bodyLine in _response.BodyLines) {
+        //        var parsedLines = EslHeaderParser.SplitHeader(bodyLine);
+        //        if (parsedLines == null) continue;
+        //        if (parsedLines.Length == 2) resp.Add(parsedLines[0], parsedLines[1]);
+        //        if (parsedLines.Length == 1) resp.Add("__CONTENT__", bodyLine);
+        //    }
+        //    return resp;
+        //}
 
         public override string ToString() {
             var sb = new StringBuilder();

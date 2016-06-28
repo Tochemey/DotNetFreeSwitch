@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -13,6 +14,12 @@ using NLog;
 namespace ModFreeSwitch.Handlers.inbound {
     public abstract class InboundSession : IInboundListener {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        ///     This property holds any additional data that it is required by the InboundSession to run smoothly
+        /// </summary>
+        public Dictionary<object, object> AdditonalData = new Dictionary<object, object>();
+
         protected IChannel Channel;
         protected ConnectedCall ConnectedCall;
 
@@ -28,11 +35,8 @@ namespace ModFreeSwitch.Handlers.inbound {
             await HandleAsync();
         }
 
-        public async Task LingerAsync() {
-            await SendCommandAsync(new LingerCommand());
-        }
-
-        public Task OnDisconnectNotice(EslMessage eslMessage, EndPoint channelEndPoint) {
+        public Task OnDisconnectNotice(EslMessage eslMessage,
+            EndPoint channelEndPoint) {
             _logger.Debug("received disconnection message : {0}", eslMessage);
             _logger.Warn("channel {0} disconnected", channelEndPoint);
             return Task.CompletedTask;
@@ -57,7 +61,7 @@ namespace ModFreeSwitch.Handlers.inbound {
         }
 
         public async Task OnEventReceived(EslMessage eslMessage) {
-            EslEvent eslEvent = new EslEvent(eslMessage);
+            var eslEvent = new EslEvent(eslMessage);
             var eventName = eslEvent.EventName;
             var eventType = Enumm.Parse<EslEventType>(eventName);
             switch (eventType) {
@@ -165,11 +169,6 @@ namespace ModFreeSwitch.Handlers.inbound {
             return Channel != null && Channel.Active;
         }
 
-        public virtual Task OnUnhandledEvents(EslEvent eslEvent) {
-            _logger.Debug("received unhandled freeSwitch event {0}", eslEvent);
-            return Task.CompletedTask;
-        }
-
         public async Task DivertEventsAsync(bool flag) {
             var command = new DivertEventsCommand(flag);
             await SendCommandAsync(command);
@@ -208,10 +207,22 @@ namespace ModFreeSwitch.Handlers.inbound {
             return await ExecuteAsync(application, string.Empty, eventLock);
         }
 
-        public abstract Task HandleEvents(EslEvent @event, EslEventType eventType);
+        public abstract Task HandleAsync();
+
+        public abstract Task HandleEvents(EslEvent @event,
+            EslEventType eventType);
+
+        public async Task LingerAsync() {
+            await SendCommandAsync(new LingerCommand());
+        }
 
         public async Task MyEventsAsync() {
             await SendCommandAsync(new MyEventsCommand(ConnectedCall.CallerGuid));
+        }
+
+        public virtual Task OnUnhandledEvents(EslEvent eslEvent) {
+            _logger.Debug("received unhandled freeSwitch event {0}", eslEvent);
+            return Task.CompletedTask;
         }
 
         public async Task PlayAsync(string audioFile,
@@ -224,8 +235,6 @@ namespace ModFreeSwitch.Handlers.inbound {
         }
 
         public abstract Task PreHandleAsync();
-
-        public abstract Task HandleAsync();
 
         public async Task ResumeAsync() {
             await SendCommandAsync(new ResumeCommand());

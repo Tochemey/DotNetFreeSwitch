@@ -9,7 +9,7 @@ namespace ModFreeSwitch.Messages {
     ///     FreeSwitch decoded message.
     /// </summary>
     public class EslMessage {
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public EslMessage() {
             Headers = new Dictionary<string, string>();

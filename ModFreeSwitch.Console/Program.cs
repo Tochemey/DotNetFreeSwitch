@@ -47,7 +47,7 @@ namespace ModFreeSwitch.Console {
     }
 
     public class DefaultInboundSession : InboundSession {
-        private const string audioFile = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3";
+        private const string AudioFile = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3";
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public override Task HandleEvents(EslEvent @event,
@@ -61,7 +61,7 @@ namespace ModFreeSwitch.Console {
         }
 
         public override async Task HandleAsync() {
-            await PlayAsync(audioFile);
+            await PlayAsync(AudioFile);
         }
     }
 }
