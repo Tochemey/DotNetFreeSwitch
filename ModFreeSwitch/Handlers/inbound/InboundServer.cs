@@ -28,7 +28,7 @@ namespace ModFreeSwitch.Handlers.inbound {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly MultithreadEventLoopGroup _workerEventLoopGroup;
         private readonly InboundSession inboundSession;
-        private ServerBootstrap _bootstrap;
+        private readonly ServerBootstrap _bootstrap;
         private IChannel _channel;
 
         public InboundServer(int port,
@@ -37,6 +37,7 @@ namespace ModFreeSwitch.Handlers.inbound {
             Port = port;
             Backlog = backlog;
             this.inboundSession = inboundSession;
+            _bootstrap = new ServerBootstrap();
             _bossEventLoopGroup = new MultithreadEventLoopGroup(1);
             _workerEventLoopGroup = new MultithreadEventLoopGroup();
         }
@@ -61,7 +62,6 @@ namespace ModFreeSwitch.Handlers.inbound {
         }
 
         protected void Init() {
-            _bootstrap = new ServerBootstrap();
             _bootstrap.Group(_bossEventLoopGroup, _workerEventLoopGroup);
             _bootstrap.Channel<TcpServerSocketChannel>();
             _bootstrap.Option(ChannelOption.SoLinger, 0);

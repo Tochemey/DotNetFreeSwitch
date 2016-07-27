@@ -16,10 +16,13 @@
 
 using System.Linq;
 
-namespace ModFreeSwitch.Messages {
-    public sealed class ApiResponse {
+namespace ModFreeSwitch.Messages
+{
+    public sealed class ApiResponse
+    {
         public ApiResponse(string command,
-            EslMessage response) {
+            EslMessage response)
+        {
             Command = command;
             var response1 = response;
             ReplyText = response1 != null

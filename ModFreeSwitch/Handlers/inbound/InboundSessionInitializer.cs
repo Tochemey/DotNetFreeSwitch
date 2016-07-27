@@ -20,15 +20,19 @@ using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using ModFreeSwitch.Codecs;
 
-namespace ModFreeSwitch.Handlers.inbound {
+namespace ModFreeSwitch.Handlers.inbound
+{
     public class InboundSessionInitializer : ChannelInitializer<ISocketChannel>
     {
-        public InboundSessionInitializer(IInboundListener inboundListener) {
+        public InboundSessionInitializer(IInboundListener inboundListener)
+        {
             InboundListener = inboundListener;
         }
 
         public IInboundListener InboundListener { get; }
-        protected override void InitChannel(ISocketChannel channel) {
+
+        protected override void InitChannel(ISocketChannel channel)
+        {
             // get the channel pipeline
             var pipeline = channel.Pipeline;
             pipeline.AddLast("EslFrameDecoder", new EslFrameDecoder(true));
