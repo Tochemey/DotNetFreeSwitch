@@ -38,16 +38,13 @@ namespace ModFreeSwitch.Codecs {
 
         public EslFrameEncoder() : this(Encoding.GetEncoding(0)) {}
 
-        public override bool IsSharable {
-            get { return true; }
-        }
+        public override bool IsSharable => true;
 
         protected override void Encode(IChannelHandlerContext context,
             BaseCommand message,
             List<object> output) {
-            if (message == null) return;
             // Let us get the string representation of the message sent
-            if (string.IsNullOrEmpty(message.ToString())) return;
+            if (string.IsNullOrEmpty(message?.ToString())) return;
             var msg = message.ToString()
                 .Trim();
 
