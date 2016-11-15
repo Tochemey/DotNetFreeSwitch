@@ -243,9 +243,9 @@ namespace ModFreeSwitch.Handlers.inbound
             return await ExecuteAsync(application, string.Empty, eventLock);
         }
 
-        public abstract Task HandleAsync();
+        protected abstract Task HandleAsync();
 
-        public abstract Task HandleEvents(EslEvent @event,
+        protected abstract Task HandleEvents(EslEvent @event,
             EslEventType eventType);
 
         public async Task LingerAsync()
@@ -258,13 +258,13 @@ namespace ModFreeSwitch.Handlers.inbound
             await SendCommandAsync(new MyEventsCommand(ConnectedCall.CallerGuid));
         }
 
-        public virtual Task OnUnhandledEvents(EslEvent eslEvent)
+        protected virtual Task OnUnhandledEvents(EslEvent eslEvent)
         {
             _logger.Debug("received unhandled freeSwitch event {0}", eslEvent);
             return Task.CompletedTask;
         }
 
-        public async Task PlayAsync(string audioFile,
+        protected async Task PlayAsync(string audioFile,
             bool eventLock = false)
         {
             await ExecuteAsync("playback", audioFile, eventLock);
@@ -275,7 +275,7 @@ namespace ModFreeSwitch.Handlers.inbound
             await ExecuteAsync("pre_answer");
         }
 
-        public abstract Task PreHandleAsync();
+        protected abstract Task PreHandleAsync();
 
         public async Task ResumeAsync()
         {

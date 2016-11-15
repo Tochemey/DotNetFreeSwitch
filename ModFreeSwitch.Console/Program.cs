@@ -50,17 +50,17 @@ namespace ModFreeSwitch.Console {
         private const string AudioFile = "https://s3.amazonaws.com/plivocloud/Trumpet.mp3";
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public override Task HandleEvents(EslEvent @event,
+        protected override Task HandleEvents(EslEvent @event,
             EslEventType eventType) {
             _logger.Debug(@event);
             return Task.CompletedTask;
         }
 
-        public override Task PreHandleAsync() {
+        protected override Task PreHandleAsync() {
             return Task.CompletedTask;
         }
 
-        public override async Task HandleAsync() {
+        protected override async Task HandleAsync() {
             await PlayAsync(AudioFile);
         }
     }
