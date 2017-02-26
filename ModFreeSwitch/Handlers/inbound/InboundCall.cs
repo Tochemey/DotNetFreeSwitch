@@ -21,10 +21,10 @@ namespace ModFreeSwitch.Handlers.inbound {
     /// <summary>
     ///     Holds the details of the connected call
     /// </summary>
-    public class ConnectedCall {
+    public class InboundCall {
         private readonly EslEvent _event;
 
-        public ConnectedCall(EslEvent @event) {
+        public InboundCall(EslEvent @event) {
             _event = @event;
         }
 

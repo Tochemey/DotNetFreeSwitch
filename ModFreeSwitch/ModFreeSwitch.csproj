@@ -189,8 +189,8 @@
     <Compile Include="Events\EslEvent.cs" />
     <Compile Include="Events\RecordStop.cs" />
     <Compile Include="Events\SessionHeartbeat.cs" />
-    <Compile Include="Handlers\inbound\ConnectedCall.cs" />
     <Compile Include="Handlers\inbound\IInboundListener.cs" />
+    <Compile Include="Handlers\inbound\InboundCall.cs" />
     <Compile Include="Handlers\inbound\InboundServer.cs" />
     <Compile Include="Handlers\inbound\InboundSession.cs" />
     <Compile Include="Handlers\inbound\InboundSessionHandler.cs" />

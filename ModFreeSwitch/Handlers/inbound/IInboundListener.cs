@@ -28,6 +28,6 @@ namespace ModFreeSwitch.Handlers.inbound {
         /// <param name="connectedInfo"></param>
         /// <param name="channel"></param>
         /// <returns></returns>
-        Task OnConnected(ConnectedCall connectedInfo, IChannel channel);
+        Task OnConnected(InboundCall connectedInfo, IChannel channel);
     }
 }

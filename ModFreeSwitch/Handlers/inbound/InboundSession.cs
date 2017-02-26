@@ -39,12 +39,12 @@ namespace ModFreeSwitch.Handlers.inbound
         public Dictionary<object, object> AdditonalData = new Dictionary<object, object>();
 
         protected IChannel Channel;
-        protected ConnectedCall ConnectedCall;
+        protected InboundCall InboundCall;
 
-        public async Task OnConnected(ConnectedCall connectedInfo,
+        public async Task OnConnected(InboundCall connectedInfo,
             IChannel channel)
         {
-            ConnectedCall = connectedInfo;
+            InboundCall = connectedInfo;
             Channel = channel;
             await ResumeAsync();
             await MyEventsAsync();
@@ -191,8 +191,8 @@ namespace ModFreeSwitch.Handlers.inbound
 
         public bool CanHandleEvent(EslEvent @event)
         {
-            return (@event.UniqueId == ConnectedCall.UniqueId) &&
-                   @event.CallerGuid == ConnectedCall.CallerGuid;
+            return (@event.UniqueId == InboundCall.UniqueId) &&
+                   @event.CallerGuid == InboundCall.CallerGuid;
         }
 
         public bool CanSend()
@@ -210,7 +210,7 @@ namespace ModFreeSwitch.Handlers.inbound
             string arguments,
             bool eventLock)
         {
-            var command = new SendMsgCommand(ConnectedCall.CallerGuid,
+            var command = new SendMsgCommand(InboundCall.CallerGuid,
                 SendMsgCommand.CALL_COMMAND,
                 application,
                 arguments,
@@ -223,7 +223,7 @@ namespace ModFreeSwitch.Handlers.inbound
             int loop,
             bool eventLock)
         {
-            var command = new SendMsgCommand(ConnectedCall.CallerGuid,
+            var command = new SendMsgCommand(InboundCall.CallerGuid,
                 SendMsgCommand.CALL_COMMAND,
                 application,
                 arguments,
@@ -255,7 +255,7 @@ namespace ModFreeSwitch.Handlers.inbound
 
         public async Task MyEventsAsync()
         {
-            await SendCommandAsync(new MyEventsCommand(ConnectedCall.CallerGuid));
+            await SendCommandAsync(new MyEventsCommand(InboundCall.CallerGuid));
         }
 
         protected virtual Task OnUnhandledEvents(EslEvent eslEvent)

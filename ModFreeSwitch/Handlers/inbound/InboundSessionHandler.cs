@@ -50,7 +50,7 @@ namespace ModFreeSwitch.Handlers.inbound
             var connectCommand = new ConnectCommand();
             var reply = await SendCommandAsync(connectCommand, channel);
             if (!reply.IsOk) return;
-            var connectedCall = new ConnectedCall(new EslEvent(reply.Response, true));
+            var connectedCall = new InboundCall(new EslEvent(reply.Response, true));
             await _inboundListener.OnConnected(connectedCall, channel);
         }
 
