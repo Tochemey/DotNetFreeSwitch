@@ -57,8 +57,10 @@ namespace ModFreeSwitch.Handlers.inbound
         public Task OnDisconnectNotice(EslMessage eslMessage,
             EndPoint channelEndPoint)
         {
-            _logger.Debug("received disconnection message : {0}", eslMessage);
-            _logger.Warn("channel {0} disconnected", channelEndPoint);
+            _logger.Debug("received disconnection message : {0}",
+                eslMessage);
+            _logger.Warn("channel {0} disconnected",
+                channelEndPoint);
             return Task.CompletedTask;
         }
 
@@ -66,16 +68,14 @@ namespace ModFreeSwitch.Handlers.inbound
         {
             if (exception is DecoderException)
             {
-                _logger.Warn(
-                    $"Encountered an issue during encoding: {exception}. shutting down...");
+                _logger.Warn($"Encountered an issue during encoding: {exception}. shutting down...");
                 await Channel.CloseAsync();
                 return;
             }
 
             if (exception is SocketException)
             {
-                _logger.Warn(
-                    $"Encountered an issue on the channel: {exception}. shutting down...");
+                _logger.Warn($"Encountered an issue on the channel: {exception}. shutting down...");
                 await Channel.CloseAsync();
                 return;
             }
@@ -83,7 +83,7 @@ namespace ModFreeSwitch.Handlers.inbound
             _logger.Error($"Encountered an issue : {exception}");
         }
 
-        public async Task OnEventReceived(EslMessage eslMessage)
+        public void OnEventReceived(EslMessage eslMessage)
         {
             var eslEvent = new EslEvent(eslMessage);
             var eventName = eslEvent.EventName;
@@ -161,10 +161,11 @@ namespace ModFreeSwitch.Handlers.inbound
                     eslEvent = new EslEvent(eslMessage);
                     break;
                 default:
-                    await OnUnhandledEvents(new EslEvent(eslMessage));
+                     OnUnhandledEvents(new EslEvent(eslMessage));
                     break;
             }
-            await HandleEvents(eslEvent, eventType);
+             HandleEvents(eslEvent,
+                eventType);
         }
 
         public async Task OnRudeRejection()
@@ -174,31 +175,29 @@ namespace ModFreeSwitch.Handlers.inbound
 
         public async Task AnswerAsync()
         {
-            await ExecuteAsync("answer", true);
+            await ExecuteAsync("answer",
+                true);
         }
 
         public async Task BindDigitActionAsync(string command,
             bool eventLock = true)
         {
-            await ExecuteAsync("bind_digit_action", command, eventLock);
+            await ExecuteAsync("bind_digit_action",
+                command,
+                eventLock);
         }
 
         public async Task BridgeAsync(string bridgeText,
             bool eventLock = false)
         {
-            await ExecuteAsync("bridge", bridgeText, eventLock);
+            await ExecuteAsync("bridge",
+                bridgeText,
+                eventLock);
         }
 
-        public bool CanHandleEvent(EslEvent @event)
-        {
-            return (@event.UniqueId == InboundCall.UniqueId) &&
-                   @event.CallerGuid == InboundCall.CallerGuid;
-        }
+        public bool CanHandleEvent(EslEvent @event) { return @event.UniqueId == InboundCall.UniqueId && @event.CallerGuid == InboundCall.CallerGuid; }
 
-        public bool CanSend()
-        {
-            return Channel != null && Channel.Active;
-        }
+        public bool CanSend() { return Channel != null && Channel.Active; }
 
         public async Task DivertEventsAsync(bool flag)
         {
@@ -234,13 +233,17 @@ namespace ModFreeSwitch.Handlers.inbound
 
         public async Task<CommandReply> ExecuteAsync(string application)
         {
-            return await ExecuteAsync(application, string.Empty, false);
+            return await ExecuteAsync(application,
+                string.Empty,
+                false);
         }
 
         public async Task<CommandReply> ExecuteAsync(string application,
             bool eventLock)
         {
-            return await ExecuteAsync(application, string.Empty, eventLock);
+            return await ExecuteAsync(application,
+                string.Empty,
+                eventLock);
         }
 
         protected abstract Task HandleAsync();
@@ -248,48 +251,41 @@ namespace ModFreeSwitch.Handlers.inbound
         protected abstract Task HandleEvents(EslEvent @event,
             EslEventType eventType);
 
-        public async Task LingerAsync()
-        {
-            await SendCommandAsync(new LingerCommand());
-        }
+        public async Task LingerAsync() { await SendCommandAsync(new LingerCommand()); }
 
-        public async Task MyEventsAsync()
-        {
-            await SendCommandAsync(new MyEventsCommand(InboundCall.CallerGuid));
-        }
+        public async Task MyEventsAsync() { await SendCommandAsync(new MyEventsCommand(InboundCall.CallerGuid)); }
 
         protected virtual Task OnUnhandledEvents(EslEvent eslEvent)
         {
-            _logger.Debug("received unhandled freeSwitch event {0}", eslEvent);
+            _logger.Debug("received unhandled freeSwitch event {0}",
+                eslEvent);
             return Task.CompletedTask;
         }
 
         protected async Task PlayAsync(string audioFile,
             bool eventLock = false)
         {
-            await ExecuteAsync("playback", audioFile, eventLock);
+            await ExecuteAsync("playback",
+                audioFile,
+                eventLock);
         }
 
-        public async Task PreAnswerAsync()
-        {
-            await ExecuteAsync("pre_answer");
-        }
+        public async Task PreAnswerAsync() { await ExecuteAsync("pre_answer"); }
 
         protected abstract Task PreHandleAsync();
 
-        public async Task ResumeAsync()
-        {
-            await SendCommandAsync(new ResumeCommand());
-        }
+        public async Task ResumeAsync() { await SendCommandAsync(new ResumeCommand()); }
 
         public async Task RingReadyAsync()
         {
-            await ExecuteAsync("ring_ready", true);
+            await ExecuteAsync("ring_ready",
+                true);
         }
 
         public async Task RingReadyAsync(bool eventLock)
         {
-            await ExecuteAsync("ring_ready", eventLock);
+            await ExecuteAsync("ring_ready",
+                eventLock);
         }
 
         public async Task SayAsync(string language,
@@ -301,8 +297,8 @@ namespace ModFreeSwitch.Handlers.inbound
             bool eventLock)
         {
             await ExecuteAsync("say",
-                language + " " + type + " " + method.ToString()
-                    .Replace("_", "/") + " " + gender + " " + text,
+                language + " " + type + " " + method.ToString().Replace("_",
+                    "/") + " " + gender + " " + text,
                 loop,
                 eventLock);
         }
@@ -311,7 +307,8 @@ namespace ModFreeSwitch.Handlers.inbound
         {
             if (!CanSend()) return null;
             var handler = (InboundSessionHandler) Channel.Pipeline.Last();
-            var response = await handler.SendApiAsync(apiCommand, Channel);
+            var response = await handler.SendApiAsync(apiCommand,
+                Channel);
             return response;
         }
 
@@ -319,34 +316,42 @@ namespace ModFreeSwitch.Handlers.inbound
         {
             if (!CanSend()) return Guid.Empty;
             var handler = (InboundSessionHandler) Channel.Pipeline.Last();
-            return await handler.SendBgApiAsync(bgApiCommand, Channel);
+            return await handler.SendBgApiAsync(bgApiCommand,
+                Channel);
         }
 
         public async Task<CommandReply> SendCommandAsync(BaseCommand command)
         {
             if (!CanSend()) return null;
             var handler = (InboundSessionHandler) Channel.Pipeline.Last();
-            var reply = await handler.SendCommandAsync(command, Channel);
+            var reply = await handler.SendCommandAsync(command,
+                Channel);
             return reply;
         }
 
         public async Task SetAsync(string variableName,
             string variableValue)
         {
-            await ExecuteAsync("set", variableName + "=" + variableValue, false);
+            await ExecuteAsync("set",
+                variableName + "=" + variableValue,
+                false);
         }
 
         public async Task SetAsync(string variableName,
             string variableValue,
             bool eventLock)
         {
-            await ExecuteAsync("set", variableName + "=" + variableValue, eventLock);
+            await ExecuteAsync("set",
+                variableName + "=" + variableValue,
+                eventLock);
         }
 
         public async Task SleepAsync(int millisecond,
             bool eventLock = false)
         {
-            await ExecuteAsync("sleep", Convert.ToString(millisecond), eventLock);
+            await ExecuteAsync("sleep",
+                Convert.ToString(millisecond),
+                eventLock);
         }
 
         public async Task SpeakAsync(string engine,
@@ -356,45 +361,53 @@ namespace ModFreeSwitch.Handlers.inbound
             int loop = 1,
             bool eventLock = false)
         {
-            await
-                ExecuteAsync("speak",
-                    engine + "|" + voice + "|" + text +
-                    (!string.IsNullOrEmpty(timerName) ? "|" + timerName : ""),
-                    loop,
-                    eventLock);
+            await ExecuteAsync("speak",
+                engine + "|" + voice + "|" + text + (!string.IsNullOrEmpty(timerName) ? "|" + timerName : ""),
+                loop,
+                eventLock);
         }
 
         public async Task SpeakAsync(string engine,
             int loop = 1,
             bool eventLock = false)
         {
-            await ExecuteAsync("speak", engine, loop, eventLock);
+            await ExecuteAsync("speak",
+                engine,
+                loop,
+                eventLock);
         }
 
         public async Task StartDtmfAsync(bool eventLock)
         {
-            await ExecuteAsync("start_dtmf", eventLock);
+            await ExecuteAsync("start_dtmf",
+                eventLock);
         }
 
         public async Task StopAsync(bool eventLock = false)
         {
-            await ExecuteAsync("stop_dtmf", eventLock);
+            await ExecuteAsync("stop_dtmf",
+                eventLock);
         }
 
         public async Task StopDtmfAsync(bool eventLock = false)
         {
-            await ExecuteAsync("stop_dtmf", eventLock);
+            await ExecuteAsync("stop_dtmf",
+                eventLock);
         }
 
         public async Task UnsetAsync(string variableName,
             bool eventLock)
         {
-            await ExecuteAsync("unset", variableName, eventLock);
+            await ExecuteAsync("unset",
+                variableName,
+                eventLock);
         }
 
         public async Task UnsetAsync(string variableName)
         {
-            await ExecuteAsync("unset", variableName, false);
+            await ExecuteAsync("unset",
+                variableName,
+                false);
         }
     }
 }

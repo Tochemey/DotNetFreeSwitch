@@ -17,6 +17,8 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using DotNetty.Codecs;
 using DotNetty.Transport.Bootstrapping;
@@ -35,6 +37,8 @@ namespace ModFreeSwitch.Handlers.outbound
         private readonly Bootstrap _bootstrap;
 
         private readonly MultithreadEventLoopGroup _eventLoopGroup;
+
+        private readonly Subject<EslEventStream> _eventReceived = new Subject<EslEventStream>();
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private IChannel _channel;
 
@@ -60,33 +64,44 @@ namespace ModFreeSwitch.Handlers.outbound
             Address = address;
             Port = port;
             Password = password;
-            ConnectionTimeout = new TimeSpan(0, 0, 0, 0, 1000);
+            ConnectionTimeout = new TimeSpan(0,
+                0,
+                0,
+                0,
+                1000);
             _eventLoopGroup = new MultithreadEventLoopGroup();
             _bootstrap = new Bootstrap();
 
             Initialize();
         }
 
-        public OutboundSession() : this("localhost", 8021, "ClueCon")
-        {}
+        public OutboundSession() : this("localhost",
+            8021,
+            "ClueCon")
+        { }
 
-        public OutboundSession(TimeSpan timeout)
-            : this("localhost", 8021, "ClueCon", timeout)
-        {}
+        public OutboundSession(TimeSpan timeout) : this("localhost",
+            8021,
+            "ClueCon",
+            timeout)
+        { }
 
         public string Address { get; }
         public bool Authenticated { get; private set; }
         public TimeSpan ConnectionTimeout { get; }
         public string Password { get; }
         public int Port { get; }
+        public IObservable<EslEventStream> EventReceived => _eventReceived.AsObservable();
 
-        public async Task OnAuthentication() => await AuthenticateAsync();
+        public async Task OnAuthentication() { await AuthenticateAsync(); }
 
         public async Task OnDisconnectNotice(EslMessage eslMessage,
             EndPoint channelEndPoint)
         {
-            _logger.Debug("received disconnection message : {0}", eslMessage);
-            _logger.Warn("channel {0} disconnected", channelEndPoint);
+            _logger.Debug("received disconnection message : {0}",
+                eslMessage);
+            _logger.Warn("channel {0} disconnected",
+                channelEndPoint);
             await CleanUpAsync();
         }
 
@@ -95,16 +110,14 @@ namespace ModFreeSwitch.Handlers.outbound
             // disconnect when we have encountered system related errors
             if (exception is DecoderException)
             {
-                _logger.Warn(
-                    $"Encountered an issue during encoding: {exception}. shutting down...");
+                _logger.Warn($"Encountered an issue during encoding: {exception}. shutting down...");
                 await DisconnectAsync();
                 return;
             }
 
             if (exception is SocketException)
             {
-                _logger.Warn(
-                    $"Encountered an issue on the channel: {exception}. shutting down...");
+                _logger.Warn($"Encountered an issue on the channel: {exception}. shutting down...");
                 await DisconnectAsync();
                 return;
             }
@@ -112,87 +125,30 @@ namespace ModFreeSwitch.Handlers.outbound
             _logger.Error($"Encountered an issue : {exception}");
         }
 
-        public async Task OnEventReceived(EslMessage eslMessage)
+        public void OnEventReceived(EslMessage eslMessage)
         {
-            var eslEvent = new EslEvent(eslMessage);
-            var eventType = Enumm.Parse<EslEventType>(eslEvent.EventName);
-            var eslEventArgs = new EslEventArgs(new EslEvent(eslMessage));
-            AsyncEventHandler<EslEventArgs> handler;
-            switch (eventType)
+            try
             {
-                case EslEventType.BACKGROUND_JOB:
-                    handler = OnBackgroundJob;
-                    break;
-                case EslEventType.CALL_UPDATE:
-                    handler = OnCallUpdate;
-                    break;
-                case EslEventType.CHANNEL_BRIDGE:
-                    handler = OnChannelBridge;
-                    break;
-                case EslEventType.CHANNEL_HANGUP:
-                    handler = OnChannelHangup;
-                    break;
-                case EslEventType.CHANNEL_HANGUP_COMPLETE:
-                    handler = OnChannelHangupComplete;
-                    break;
-                case EslEventType.CHANNEL_PROGRESS:
-                    handler = OnChannelProgress;
-                    break;
-                case EslEventType.CHANNEL_PROGRESS_MEDIA:
-                    handler = OnChannelProgressMedia;
-                    break;
-                case EslEventType.CHANNEL_EXECUTE:
-                    handler = OnChannelExecute;
-                    break;
-                case EslEventType.CHANNEL_EXECUTE_COMPLETE:
-                    handler = OnChannelExecuteComplete;
-                    break;
-                case EslEventType.CHANNEL_UNBRIDGE:
-                    handler = OnChannelUnbridge;
-                    break;
-                case EslEventType.SESSION_HEARTBEAT:
-                    handler = OnSessionHeartbeat;
-                    break;
-                case EslEventType.DTMF:
-                    handler = OnDtmf;
-                    break;
-                case EslEventType.RECORD_STOP:
-                    handler = OnRecordStop;
-                    break;
-                case EslEventType.CUSTOM:
-                    handler = OnCustom;
-                    break;
-                case EslEventType.CHANNEL_STATE:
-                    handler = OnChannelState;
-                    break;
-                case EslEventType.CHANNEL_ANSWER:
-                    handler = OnChannelAnswer;
-                    break;
-                case EslEventType.CHANNEL_ORIGINATE:
-                    handler = OnChannelOriginate;
-                    break;
-                case EslEventType.CHANNEL_PARK:
-                    handler = OnChannelPark;
-                    break;
-                case EslEventType.CHANNEL_UNPARK:
-                    handler = OnChannelUnPark;
-                    break;
-                default:
-                    _logger.Debug("received unhandled freeSwitch event:");
-                    _logger.Debug(eslEvent);
-                    handler = OnReceivedUnHandledEvent;
-                    break;
+                var eslEvent = new EslEvent(eslMessage);
+                var eventType = Enumm.Parse<EslEventType>(eslEvent.EventName);
+                _eventReceived.OnNext(new EslEventStream(eslEvent,
+                    eventType));
             }
-            if (handler != null) await handler(this, eslEventArgs);
+            catch (Exception exception)
+            {
+                _logger.Warn($"Encountered an issue on the channel: {exception}.");
+                _eventReceived.OnError(exception);
+            }
         }
 
         public async Task OnRudeRejection()
         {
-            _logger.Warn("channel {0} received rude/rejection", _channel.RemoteAddress);
+            _logger.Warn("channel {0} received rude/rejection",
+                _channel.RemoteAddress);
             await CleanUpAsync();
         }
 
-        public bool CanSend() => Authenticated && IsActive();
+        public bool CanSend() { return Authenticated && IsActive(); }
 
         public async Task CleanUpAsync()
         {
@@ -202,7 +158,8 @@ namespace ModFreeSwitch.Handlers.outbound
         public async Task ConnectAsync()
         {
             _logger.Info("connecting to freeSwitch mod_event_socket...");
-            _channel = await _bootstrap.ConnectAsync(Address, Port);
+            _channel = await _bootstrap.ConnectAsync(Address,
+                Port);
             _logger.Info("successfully connected to freeSwitch mod_event_socket.");
         }
 
@@ -212,13 +169,14 @@ namespace ModFreeSwitch.Handlers.outbound
             if (_eventLoopGroup != null) await _eventLoopGroup.ShutdownGracefullyAsync();
         }
 
-        public bool IsActive() => _channel != null && _channel.Active;
+        public bool IsActive() { return _channel != null && _channel.Active; }
 
         public async Task<ApiResponse> SendApiAsync(ApiCommand apiCommand)
         {
             if (!CanSend()) return null;
             var handler = (OutboundSessionHandler) _channel.Pipeline.Last();
-            var response = await handler.SendApiAsync(apiCommand, _channel);
+            var response = await handler.SendApiAsync(apiCommand,
+                _channel);
             return response;
         }
 
@@ -226,14 +184,16 @@ namespace ModFreeSwitch.Handlers.outbound
         {
             if (!CanSend()) return Guid.Empty;
             var handler = (OutboundSessionHandler) _channel.Pipeline.Last();
-            return await handler.SendBgApiAsync(bgApiCommand, _channel);
+            return await handler.SendBgApiAsync(bgApiCommand,
+                _channel);
         }
 
         public async Task<CommandReply> SendCommandAsync(BaseCommand command)
         {
             if (!CanSend()) return null;
             var handler = (OutboundSessionHandler) _channel.Pipeline.Last();
-            var reply = await handler.SendCommandAsync(command, _channel);
+            var reply = await handler.SendCommandAsync(command,
+                _channel);
             return reply;
         }
 
@@ -242,7 +202,8 @@ namespace ModFreeSwitch.Handlers.outbound
             if (!CanSend()) return false;
             var handler = (OutboundSessionHandler) _channel.Pipeline.Last();
             var command = new EventCommand(events);
-            var reply = await handler.SendCommandAsync(command, _channel);
+            var reply = await handler.SendCommandAsync(command,
+                _channel);
             return reply.IsOk;
         }
 
@@ -250,7 +211,8 @@ namespace ModFreeSwitch.Handlers.outbound
         {
             var command = new AuthCommand(Password);
             var handler = (OutboundSessionHandler) _channel.Pipeline.Last();
-            var reply = await handler.SendCommandAsync(command, _channel);
+            var reply = await handler.SendCommandAsync(command,
+                _channel);
             Authenticated = reply.IsOk;
         }
 
@@ -258,56 +220,17 @@ namespace ModFreeSwitch.Handlers.outbound
         {
             _bootstrap.Group(_eventLoopGroup);
             _bootstrap.Channel<TcpSocketChannel>();
-            _bootstrap.Option(ChannelOption.SoLinger, 1);
-            _bootstrap.Option(ChannelOption.TcpNodelay, true);
-            _bootstrap.Option(ChannelOption.SoKeepalive, true);
-            _bootstrap.Option(ChannelOption.SoReuseaddr, true);
-            _bootstrap.Option(ChannelOption.ConnectTimeout, ConnectionTimeout);
+            _bootstrap.Option(ChannelOption.SoLinger,
+                1);
+            _bootstrap.Option(ChannelOption.TcpNodelay,
+                true);
+            _bootstrap.Option(ChannelOption.SoKeepalive,
+                true);
+            _bootstrap.Option(ChannelOption.SoReuseaddr,
+                true);
+            _bootstrap.Option(ChannelOption.ConnectTimeout,
+                ConnectionTimeout);
             _bootstrap.Handler(new OutboundSessionInitializer(this));
         }
-
-        #region FreeSwitch Events Handlers
-
-        public event AsyncEventHandler<EslEventArgs> OnBackgroundJob;
-
-        public event AsyncEventHandler<EslEventArgs> OnCallUpdate;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelAnswer;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelBridge;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelExecute;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelExecuteComplete;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelHangup;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelHangupComplete;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelOriginate;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelPark;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelProgress;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelProgressMedia;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelState;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelUnbridge;
-
-        public event AsyncEventHandler<EslEventArgs> OnChannelUnPark;
-
-        public event AsyncEventHandler<EslEventArgs> OnCustom;
-
-        public event AsyncEventHandler<EslEventArgs> OnDtmf;
-
-        public event AsyncEventHandler<EslEventArgs> OnReceivedUnHandledEvent;
-
-        public event AsyncEventHandler<EslEventArgs> OnRecordStop;
-
-        public event AsyncEventHandler<EslEventArgs> OnSessionHeartbeat;
-
-        #endregion
     }
 }

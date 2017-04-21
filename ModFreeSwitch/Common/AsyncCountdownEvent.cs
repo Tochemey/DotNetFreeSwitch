@@ -18,8 +18,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ModFreeSwitch.Common {
-    public class AsyncCountdownEvent {
+namespace ModFreeSwitch.Common
+{
+    public class AsyncCountdownEvent
+    {
         private readonly AsyncManualResetEvent _mAmre = new AsyncManualResetEvent();
         private int _mCount;
 
@@ -29,25 +31,21 @@ namespace ModFreeSwitch.Common {
         ///     operations participate, and as they complete they signal the event, which counts down from the original number to
         ///     0.  When it gets to 0, it becomes set, and all waiters can complete.
         /// </summary>
-        public AsyncCountdownEvent(int initialCount) {
-            if (initialCount <= 0)
-                throw new ArgumentOutOfRangeException(nameof(initialCount));
+        public AsyncCountdownEvent(int initialCount)
+        {
+            if (initialCount <= 0) throw new ArgumentOutOfRangeException(nameof(initialCount));
             _mCount = initialCount;
         }
 
-        public Task WaitAsync() {
-            return _mAmre.WaitAsync();
-        }
+        public Task WaitAsync() { return _mAmre.WaitAsync(); }
 
-        public void Signal() {
-            if (_mCount <= 0)
-                throw new InvalidOperationException();
+        public void Signal()
+        {
+            if (_mCount <= 0) throw new InvalidOperationException();
 
             var newCount = Interlocked.Decrement(ref _mCount);
-            if (newCount == 0)
-                _mAmre.Set();
-            else if (newCount < 0)
-                throw new InvalidOperationException();
+            if (newCount == 0) _mAmre.Set();
+            else if (newCount < 0) throw new InvalidOperationException();
         }
 
         /// <summary>
@@ -57,7 +55,8 @@ namespace ModFreeSwitch.Common {
         ///     to implement this common pattern
         /// </summary>
         /// <returns></returns>
-        public Task SignalAndWait() {
+        public Task SignalAndWait()
+        {
             Signal();
             return WaitAsync();
         }

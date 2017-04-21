@@ -14,8 +14,10 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Common {
-    public enum SayMethods {
+namespace ModFreeSwitch.Common
+{
+    public enum SayMethods
+    {
         N_A,
         PRONOUNCED,
         ITERATED,

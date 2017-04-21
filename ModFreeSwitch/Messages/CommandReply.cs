@@ -14,23 +14,23 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Messages {
+namespace ModFreeSwitch.Messages
+{
     /// <summary>
     ///     Command/Reply message
     /// </summary>
-    public sealed class CommandReply {
+    public sealed class CommandReply
+    {
         public CommandReply(string command,
-            EslMessage response) {
+            EslMessage response)
+        {
             Command = command;
             Response = response;
-            ReplyText = Response != null
-                ? Response.HeaderValue(EslHeaders.ReplyText)
-                : string.Empty;
-            IsOk = !string.IsNullOrEmpty(ReplyText) &&
-                   ReplyText.StartsWith(EslHeadersValues.Ok);
+            ReplyText = Response != null ? Response.HeaderValue(EslHeaders.ReplyText) : string.Empty;
+            IsOk = !string.IsNullOrEmpty(ReplyText) && ReplyText.StartsWith(EslHeadersValues.Ok);
         }
 
-        public string Command { get; private set; }
+        public string Command { get; }
 
         public EslMessage Response { get; }
 
@@ -42,7 +42,7 @@ namespace ModFreeSwitch.Messages {
         /// <summary>
         ///     Check whether the command has been successful or not.
         /// </summary>
-        public bool IsOk { get; private set; }
+        public bool IsOk { get; }
 
         public string this[string headerName] => Response.HeaderValue(headerName);
 

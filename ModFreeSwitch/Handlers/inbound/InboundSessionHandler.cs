@@ -28,30 +28,30 @@ namespace ModFreeSwitch.Handlers.inbound
         private readonly IInboundListener _inboundListener;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public InboundSessionHandler(IInboundListener inboundListener)
-        {
-            _inboundListener = inboundListener;
-        }
+        public InboundSessionHandler(IInboundListener inboundListener) { _inboundListener = inboundListener; }
 
         public override async void ExceptionCaught(IChannelHandlerContext context,
             Exception exception)
         {
             if (!context.Channel.Open) return;
-            _logger.Error(exception, "Exception occured.");
+            _logger.Error(exception,
+                "Exception occured.");
             await _inboundListener.OnError(exception);
         }
 
         public override async void ChannelActive(IChannelHandlerContext context)
         {
             var channel = context.Channel;
-            _logger.Debug(
-                "received a new connection from freeswitch {0}. Sending a connect command...",
+            _logger.Debug("received a new connection from freeswitch {0}. Sending a connect command...",
                 channel.RemoteAddress);
             var connectCommand = new ConnectCommand();
-            var reply = await SendCommandAsync(connectCommand, channel);
+            var reply = await SendCommandAsync(connectCommand,
+                channel);
             if (!reply.IsOk) return;
-            var connectedCall = new InboundCall(new EslEvent(reply.Response, true));
-            await _inboundListener.OnConnected(connectedCall, channel);
+            var connectedCall = new InboundCall(new EslEvent(reply.Response,
+                true));
+            await _inboundListener.OnConnected(connectedCall,
+                channel);
         }
 
         public override async void ChannelRead(IChannelHandlerContext context,
@@ -65,7 +65,8 @@ namespace ModFreeSwitch.Handlers.inbound
             if (contentType.Equals(EslHeadersValues.CommandReply))
             {
                 var commandAsyncEvent = CommandAsyncEvents.Dequeue();
-                var reply = new CommandReply(commandAsyncEvent.Command.Command, eslMessage);
+                var reply = new CommandReply(commandAsyncEvent.Command.Command,
+                    eslMessage);
                 commandAsyncEvent.Complete(reply);
                 return;
             }
@@ -83,7 +84,7 @@ namespace ModFreeSwitch.Handlers.inbound
             // Handle text/event-plain
             if (contentType.Equals(EslHeadersValues.TextEventPlain))
             {
-                await _inboundListener.OnEventReceived(eslMessage);
+                _inboundListener.OnEventReceived(eslMessage);
                 return;
             }
 
@@ -92,7 +93,8 @@ namespace ModFreeSwitch.Handlers.inbound
             {
                 var channel = context.Channel;
                 var address = channel.RemoteAddress;
-                await _inboundListener.OnDisconnectNotice(eslMessage, address);
+                _inboundListener.OnDisconnectNotice(eslMessage,
+                    address);
                 return;
             }
 
@@ -104,7 +106,8 @@ namespace ModFreeSwitch.Handlers.inbound
             }
 
             // Unexpected freeSwitch message
-            _logger.Warn("Unexpected message content type [{0}]", contentType);
+            _logger.Warn("Unexpected message content type [{0}]",
+                contentType);
         }
     }
 }

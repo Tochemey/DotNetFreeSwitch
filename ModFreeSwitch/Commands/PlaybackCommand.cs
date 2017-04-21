@@ -19,33 +19,35 @@ using System.Collections.Generic;
 using System.Linq;
 using ModFreeSwitch.Common;
 
-namespace ModFreeSwitch.Commands {
+namespace ModFreeSwitch.Commands
+{
     /// <summary>
     ///     Playback wrapper
     /// </summary>
-    public sealed class PlaybackCommand : BaseCommand {
+    public sealed class PlaybackCommand : BaseCommand
+    {
         public PlaybackCommand(string audioFile,
             IList<EslChannelVariable> variables,
-            long loop) {
-            if (string.IsNullOrEmpty(audioFile))
-                throw new ArgumentNullException("audioFile");
+            long loop)
+        {
+            if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException("audioFile");
             AudioFile = audioFile;
             Variables = variables;
             Loop = loop;
         }
 
         public PlaybackCommand(string audioFile,
-            IList<EslChannelVariable> variables) {
-            if (string.IsNullOrEmpty(audioFile))
-                throw new ArgumentNullException("audioFile");
+            IList<EslChannelVariable> variables)
+        {
+            if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException("audioFile");
             AudioFile = audioFile;
             Variables = variables;
             Loop = 1;
         }
 
-        public PlaybackCommand(string audioFile) {
-            if (string.IsNullOrEmpty(audioFile))
-                throw new ArgumentNullException("audioFile");
+        public PlaybackCommand(string audioFile)
+        {
+            if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException("audioFile");
             AudioFile = audioFile;
             Variables = new List<EslChannelVariable>();
             Loop = 1;
@@ -67,23 +69,21 @@ namespace ModFreeSwitch.Commands {
         /// </summary>
         public IList<EslChannelVariable> Variables { get; }
 
-        public override string Command {
-            get { return "playback"; }
-        }
+        public override string Command => "playback";
 
-        public override string Argument {
-            get { return ToString(); }
-        }
+        public override string Argument => ToString();
 
-        public override string ToString() {
-            var variables = Variables != null && Variables.Count > 0
-                ? Variables.Aggregate(string.Empty,
-                    (current,
-                        variable) => current + (variable + ","))
-                : string.Empty;
+        public override string ToString()
+        {
+            var variables = Variables != null && Variables.Count > 0 ? Variables.Aggregate(string.Empty,
+                (current,
+                    variable) => current + (variable + ",")) : string.Empty;
             if (variables.Length > 0)
-                variables = "{" + variables.Remove(variables.Length - 1, 1) + "}";
-            return string.Format("{0}{1}", variables, AudioFile);
+                variables = "{" + variables.Remove(variables.Length - 1,
+                                1) + "}";
+            return string.Format("{0}{1}",
+                variables,
+                AudioFile);
         }
     }
 }

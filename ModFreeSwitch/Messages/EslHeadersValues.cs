@@ -14,11 +14,13 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Messages {
+namespace ModFreeSwitch.Messages
+{
     /// <summary>
     ///     FreeSwitch message header values
     /// </summary>
-    public static class EslHeadersValues {
+    public static class EslHeadersValues
+    {
         /// <summary>
         ///     Often informs about the status of a command response
         /// </summary>

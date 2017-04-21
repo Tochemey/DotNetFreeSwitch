@@ -14,14 +14,12 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Commands {
-    public sealed class ExitCommand : BaseCommand {
-        public override string Command {
-            get { return "exit"; }
-        }
+namespace ModFreeSwitch.Commands
+{
+    public sealed class ExitCommand : BaseCommand
+    {
+        public override string Command => "exit";
 
-        public override string Argument {
-            get { return string.Empty; }
-        }
+        public override string Argument => string.Empty;
     }
 }

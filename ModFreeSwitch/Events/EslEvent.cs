@@ -19,18 +19,23 @@ using System.Text;
 using ModFreeSwitch.Common;
 using ModFreeSwitch.Messages;
 
-namespace ModFreeSwitch.Events {
-    public class EslEvent {
+namespace ModFreeSwitch.Events
+{
+    public class EslEvent
+    {
         private readonly bool _ignoreBody;
         private readonly EslMessage _response;
 
         public EslEvent(EslMessage response,
-            bool ignoreBody) {
+            bool ignoreBody)
+        {
             _response = response;
             _ignoreBody = ignoreBody;
         }
 
-        public EslEvent(EslMessage response) : this(response, false) {}
+        public EslEvent(EslMessage response) : this(response,
+            false)
+        { }
 
         public Guid CallerGuid => Guid.Parse(this["Caller-Unique-ID"]);
 
@@ -58,20 +63,19 @@ namespace ModFreeSwitch.Events {
 
         public Guid UniqueId => Guid.Parse(this["Unique-ID"]);
 
-        public string this[string headerName] {
-            get {
-                if (_ignoreBody) {
-                    if (_response.HasHeader(headerName))
-                        return _response.HeaderValue(headerName);
-                    if (_response.HasHeader("variable_" + headerName))
-                        return _response.HeaderValue("variable_" + headerName);
+        public string this[string headerName]
+        {
+            get
+            {
+                if (_ignoreBody)
+                {
+                    if (_response.HasHeader(headerName)) return _response.HeaderValue(headerName);
+                    if (_response.HasHeader("variable_" + headerName)) return _response.HeaderValue("variable_" + headerName);
                 }
 
                 var map = _response.ParseBodyLines();
                 if (map.ContainsKey(headerName)) return map[headerName];
-                return map.ContainsKey("variable_" + headerName)
-                    ? map["variable_" + headerName]
-                    : null;
+                return map.ContainsKey("variable_" + headerName) ? map["variable_" + headerName] : null;
             }
         }
 
@@ -86,17 +90,17 @@ namespace ModFreeSwitch.Events {
         //    return resp;
         //}
 
-        public override string ToString() {
+        public override string ToString()
+        {
             var sb = new StringBuilder();
-            if (_ignoreBody) {
-                foreach (var str in _response.Headers.Keys)
-                    sb.AppendLine(str + ":" + _response.Headers[str]);
+            if (_ignoreBody)
+            {
+                foreach (var str in _response.Headers.Keys) sb.AppendLine(str + ":" + _response.Headers[str]);
                 return sb.ToString();
             }
 
             var map = _response.ParseBodyLines();
-            foreach (var str in map.Keys)
-                sb.AppendLine(str + ":" + map[str]);
+            foreach (var str in map.Keys) sb.AppendLine(str + ":" + map[str]);
             return sb.ToString();
         }
     }

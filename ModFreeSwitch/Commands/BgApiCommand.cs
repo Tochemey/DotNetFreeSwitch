@@ -16,11 +16,13 @@
 
 using System;
 
-namespace ModFreeSwitch.Commands {
+namespace ModFreeSwitch.Commands
+{
     /// <summary>
     ///     BgApi Command. It helps to execute other command in a background job on FreeSwitch
     /// </summary>
-    public sealed class BgApiCommand : BaseCommand {
+    public sealed class BgApiCommand : BaseCommand
+    {
         /// <summary>
         ///     The command to execute Arguments
         /// </summary>
@@ -32,7 +34,8 @@ namespace ModFreeSwitch.Commands {
         private readonly string _commandName;
 
         public BgApiCommand(string commandName,
-            string commandArgs) {
+            string commandArgs)
+        {
             _commandName = commandName;
             _commandArgs = commandArgs;
         }
@@ -42,26 +45,20 @@ namespace ModFreeSwitch.Commands {
         /// </summary>
         public Guid CommandId { get; set; }
 
-        public string CommandName {
-            get { return _commandName; }
-        }
+        public string CommandName => _commandName;
 
-        public string CommandArgs {
-            get { return _commandArgs; }
-        }
+        public string CommandArgs => _commandArgs;
 
         /// <summary>
         ///     The BgApi command
         /// </summary>
-        public override string Command {
-            get { return "bgapi"; }
-        }
+        public override string Command => "bgapi";
 
         /// <summary>
         ///     The BgApi command argument
         /// </summary>
-        public override string Argument {
-            get { return string.Format("{0} {1}", CommandName, CommandArgs); }
-        }
+        public override string Argument => string.Format("{0} {1}",
+            CommandName,
+            CommandArgs);
     }
 }

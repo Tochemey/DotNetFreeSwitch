@@ -16,11 +16,13 @@
 
 using System;
 
-namespace ModFreeSwitch.Commands {
+namespace ModFreeSwitch.Commands
+{
     /// <summary>
     ///     SendMSG command. Help execute an application for a specific FreeSwitch channel
     /// </summary>
-    public sealed class SendMsgCommand : BaseCommand {
+    public sealed class SendMsgCommand : BaseCommand
+    {
         public const string CALL_COMMAND = "execute";
         private readonly string _callCommand;
         private readonly bool _eventLock;
@@ -32,7 +34,8 @@ namespace ModFreeSwitch.Commands {
             string applicationName,
             string applicationArgs,
             bool eventLock,
-            int loop) {
+            int loop)
+        {
             _uuid = uuid;
             _callCommand = callCommand;
             ApplicationName = applicationName;
@@ -45,7 +48,8 @@ namespace ModFreeSwitch.Commands {
             string applicationName,
             string applicationArgs,
             bool eventLock,
-            int loop) {
+            int loop)
+        {
             ApplicationName = applicationName;
             ApplicationArgs = applicationArgs;
             _loop = loop;
@@ -58,7 +62,8 @@ namespace ModFreeSwitch.Commands {
             string callCommand,
             string applicationName,
             string applicationArgs,
-            bool eventLock) {
+            bool eventLock)
+        {
             _uuid = uniqueId;
             ApplicationName = applicationName;
             ApplicationArgs = applicationArgs;
@@ -70,7 +75,8 @@ namespace ModFreeSwitch.Commands {
         public SendMsgCommand(string callCommand,
             string applicationName,
             string applicationArgs,
-            bool eventLock) {
+            bool eventLock)
+        {
             ApplicationName = applicationName;
             ApplicationArgs = applicationArgs;
             _eventLock = eventLock;
@@ -82,7 +88,8 @@ namespace ModFreeSwitch.Commands {
 
         public SendMsgCommand(string applicationName,
             string applicationArgs,
-            bool eventLock) {
+            bool eventLock)
+        {
             ApplicationName = applicationName;
             ApplicationArgs = applicationArgs;
             _eventLock = eventLock;
@@ -91,10 +98,11 @@ namespace ModFreeSwitch.Commands {
             _uuid = Guid.Empty;
         }
 
-        public override string Command {
-            get {
-                var cmd =
-                    $"sendmsg  {_uuid}\ncall-command: {_callCommand}\nexecute-app-name: {ApplicationName}\nexecute-app-arg: {ApplicationArgs}\nloops: {_loop}";
+        public override string Command
+        {
+            get
+            {
+                var cmd = $"sendmsg  {_uuid}\ncall-command: {_callCommand}\nexecute-app-name: {ApplicationName}\nexecute-app-arg: {ApplicationArgs}\nloops: {_loop}";
                 if (_eventLock) cmd += $"\nevent-lock: {"true"}";
                 else cmd += $"\nevent-lock: {"false"}";
                 return cmd;

@@ -30,16 +30,13 @@ namespace ModFreeSwitch.Handlers.outbound
 
         private readonly IOutboundListener _outboundListener;
 
-
-        public OutboundSessionHandler(IOutboundListener outboundListener)
-        {
-            _outboundListener = outboundListener;
-        }
+        public OutboundSessionHandler(IOutboundListener outboundListener) { _outboundListener = outboundListener; }
 
         public override async void ExceptionCaught(IChannelHandlerContext context,
             Exception exception)
         {
-            _logger.Error(exception, "Exception occured.");
+            _logger.Error(exception,
+                "Exception occured.");
             await _outboundListener.OnError(exception);
         }
 
@@ -50,24 +47,19 @@ namespace ModFreeSwitch.Handlers.outbound
             var contentType = eslMessage?.ContentType();
 
             if (string.IsNullOrEmpty(contentType)) return;
-
-            // Handle auth/request
             if (contentType.Equals(EslHeadersValues.AuthRequest))
             {
                 await _outboundListener.OnAuthentication();
                 return;
             }
-
-            // Handle command/reply
             if (contentType.Equals(EslHeadersValues.CommandReply))
             {
                 var commandAsyncEvent = CommandAsyncEvents.Dequeue();
-                var reply = new CommandReply(commandAsyncEvent.Command.Command, eslMessage);
+                var reply = new CommandReply(commandAsyncEvent.Command.Command,
+                    eslMessage);
                 commandAsyncEvent.Complete(reply);
                 return;
             }
-
-            // Handle api/response
             if (contentType.Equals(EslHeadersValues.ApiResponse))
             {
                 var commandAsyncEvent = CommandAsyncEvents.Dequeue();
@@ -76,25 +68,20 @@ namespace ModFreeSwitch.Handlers.outbound
                 commandAsyncEvent.Complete(apiResponse);
                 return;
             }
-
-            // Handle text/event-plain
             if (contentType.Equals(EslHeadersValues.TextEventPlain))
             {
-                await _outboundListener.OnEventReceived(eslMessage);
+                _outboundListener.OnEventReceived(eslMessage);
                 return;
             }
-
-            // Handle disconnect/notice message
             if (contentType.Equals(EslHeadersValues.TextDisconnectNotice))
             {
                 var channel = context.Channel;
                 var address = channel.RemoteAddress;
 
-                await _outboundListener.OnDisconnectNotice(eslMessage, address);
+                await _outboundListener.OnDisconnectNotice(eslMessage,
+                    address);
                 return;
             }
-
-            // Handle rude/rejection message
             if (contentType.Equals(EslHeadersValues.TextRudeRejection))
             {
                 await _outboundListener.OnRudeRejection();
@@ -102,7 +89,8 @@ namespace ModFreeSwitch.Handlers.outbound
             }
 
             // Unexpected freeSwitch message
-            _logger.Warn("Unexpected message content type [{0}]", contentType);
+            _logger.Warn("Unexpected message content type [{0}]",
+                contentType);
         }
     }
 }

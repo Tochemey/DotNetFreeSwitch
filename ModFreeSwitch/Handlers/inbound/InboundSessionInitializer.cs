@@ -24,10 +24,7 @@ namespace ModFreeSwitch.Handlers.inbound
 {
     public class InboundSessionInitializer : ChannelInitializer<ISocketChannel>
     {
-        public InboundSessionInitializer(IInboundListener inboundListener)
-        {
-            InboundListener = inboundListener;
-        }
+        public InboundSessionInitializer(IInboundListener inboundListener) { InboundListener = inboundListener; }
 
         public IInboundListener InboundListener { get; }
 
@@ -35,10 +32,14 @@ namespace ModFreeSwitch.Handlers.inbound
         {
             // get the channel pipeline
             var pipeline = channel.Pipeline;
-            pipeline.AddLast("EslFrameDecoder", new EslFrameDecoder(true));
-            pipeline.AddLast("EslFrameEncoder", new EslFrameEncoder());
-            pipeline.AddLast("StringEncoder", new StringEncoder());
-            pipeline.AddLast("DebugLogging", new LoggingHandler(LogLevel.INFO));
+            pipeline.AddLast("EslFrameDecoder",
+                new EslFrameDecoder(true));
+            pipeline.AddLast("EslFrameEncoder",
+                new EslFrameEncoder());
+            pipeline.AddLast("StringEncoder",
+                new StringEncoder());
+            pipeline.AddLast("DebugLogging",
+                new LoggingHandler(LogLevel.INFO));
             pipeline.AddLast(new InboundSessionHandler(InboundListener));
         }
     }

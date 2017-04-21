@@ -16,12 +16,14 @@
 
 using ModFreeSwitch.Messages;
 
-namespace ModFreeSwitch.Events {
+namespace ModFreeSwitch.Events
+{
     /// <summary>
     ///     Result for a background job.
     /// </summary>
-    public class BackgroundJob : EslEvent {
-        public BackgroundJob(EslMessage message) : base(message) {}
+    public class BackgroundJob : EslEvent
+    {
+        public BackgroundJob(EslMessage message) : base(message) { }
 
         /// <summary>
         ///     Gets ID of the bgapi job
@@ -41,10 +43,11 @@ namespace ModFreeSwitch.Events {
         /// <summary>
         ///     Gets the actual command result.
         /// </summary>
-        public string CommandResult {
-            get {
+        public string CommandResult
+        {
+            get
+            {
                 var commandResult = this["__CONTENT__"];
-                if (!string.IsNullOrEmpty(commandResult)) return commandResult;
                 return commandResult;
             }
         }
@@ -55,9 +58,9 @@ namespace ModFreeSwitch.Events {
         /// <returns>
         ///     A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString() {
-            return CommandName + "(" + CommandArguments + ") = '" + CommandResult +
-                   "'\r\n\t";
+        public override string ToString()
+        {
+            return CommandName + "(" + CommandArguments + ") = '" + CommandResult + "'\r\n\t";
         }
     }
 }

@@ -19,11 +19,13 @@ using System.Collections.Generic;
 using System.Linq;
 using ModFreeSwitch.Common;
 
-namespace ModFreeSwitch.Commands {
+namespace ModFreeSwitch.Commands
+{
     /// <summary>
     ///     originate
     /// </summary>
-    public sealed class OriginateCommand : BaseCommand {
+    public sealed class OriginateCommand : BaseCommand
+    {
         private readonly IEndPointAddress _caller;
         private readonly string _callerIdName;
         private readonly string _callerIdNumber;
@@ -39,7 +41,8 @@ namespace ModFreeSwitch.Commands {
             string context,
             string callerIdName,
             string callerIdNumber,
-            int timeout) {
+            int timeout)
+        {
             _caller = caller;
             _destination = destination;
             _dialplan = dialplan;
@@ -51,7 +54,8 @@ namespace ModFreeSwitch.Commands {
         }
 
         public OriginateCommand(IEndPointAddress caller,
-            IEndPointAddress destination) {
+            IEndPointAddress destination)
+        {
             _caller = caller;
             _destination = destination;
             _dialplan = "XML";
@@ -73,27 +77,28 @@ namespace ModFreeSwitch.Commands {
         /// </summary>
         public int Heartbeat { set; get; }
 
-        public override string Command {
-            get { return "originate"; }
-        }
+        public override string Command => "originate";
 
-        public override string Argument {
-            get {
-                SetChannelVariable("origination_uuid", Id.ToString());
-                SetChannelVariable("ignore_early_media", "true");
-                SetChannelVariable("enable_heartbeat_events", Heartbeat.ToString());
-                var variables = _channelVariables != null && _channelVariables.Count > 0
-                    ? _channelVariables.Aggregate(string.Empty,
-                        (current,
-                            variable) => current + (variable + ","))
-                    : string.Empty;
-                if (variables.Length > 0) {
+        public override string Argument
+        {
+            get
+            {
+                SetChannelVariable("origination_uuid",
+                    Id.ToString());
+                SetChannelVariable("ignore_early_media",
+                    "true");
+                SetChannelVariable("enable_heartbeat_events",
+                    Heartbeat.ToString());
+                var variables = _channelVariables != null && _channelVariables.Count > 0 ? _channelVariables.Aggregate(string.Empty,
+                    (current,
+                        variable) => current + (variable + ",")) : string.Empty;
+                if (variables.Length > 0)
                     if (string.IsNullOrEmpty(Option))
-                        variables = "{" + variables.Remove(variables.Length - 1, 1) + "}";
+                        variables = "{" + variables.Remove(variables.Length - 1,
+                                        1) + "}";
                     else
-                        variables = "{" + Option + ", " +
-                                    variables.Remove(variables.Length - 1, 1) + "}";
-                }
+                        variables = "{" + Option + ", " + variables.Remove(variables.Length - 1,
+                                        1) + "}";
                 return string.Format("{0}{1} {2} {3} {4} {5} {6} {7}",
                     variables,
                     _caller.ToDialString(),
@@ -107,8 +112,10 @@ namespace ModFreeSwitch.Commands {
         }
 
         public void SetChannelVariable(string variable,
-            string value) {
-            var var = new EslChannelVariable(variable, value);
+            string value)
+        {
+            var var = new EslChannelVariable(variable,
+                value);
             _channelVariables.Add(var);
         }
     }

@@ -14,13 +14,16 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Common {
+namespace ModFreeSwitch.Common
+{
     /// <summary>
     ///     Represent a FreeSwitch channel variable
     /// </summary>
-    public sealed class EslChannelVariable {
+    public sealed class EslChannelVariable
+    {
         public EslChannelVariable(string name,
-            string value) {
+            string value)
+        {
             Name = name;
             Value = value;
         }
@@ -29,8 +32,6 @@ namespace ModFreeSwitch.Common {
 
         public string Value { get; }
 
-        public override string ToString() {
-            return Name + "=" + Value;
-        }
+        public override string ToString() { return Name + "=" + Value; }
     }
 }

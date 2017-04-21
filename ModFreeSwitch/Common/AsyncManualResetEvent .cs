@@ -17,19 +17,18 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ModFreeSwitch.Common {
-    public class AsyncManualResetEvent {
-        private volatile TaskCompletionSource<bool> _mTcs =
-            new TaskCompletionSource<bool>();
+namespace ModFreeSwitch.Common
+{
+    public class AsyncManualResetEvent
+    {
+        private volatile TaskCompletionSource<bool> _mTcs = new TaskCompletionSource<bool>();
 
-        public Task WaitAsync() {
-            return _mTcs.Task;
-        }
+        public Task WaitAsync() { return _mTcs.Task; }
 
-        public void Set() {
+        public void Set()
+        {
             var tcs = _mTcs;
-            Task.Factory.StartNew(
-                s => ((TaskCompletionSource<bool>) s).TrySetResult(true),
+            Task.Factory.StartNew(s => ((TaskCompletionSource<bool>) s).TrySetResult(true),
                 tcs,
                 CancellationToken.None,
                 TaskCreationOptions.PreferFairness,
@@ -37,15 +36,15 @@ namespace ModFreeSwitch.Common {
             tcs.Task.Wait();
         }
 
-        public void Reset() {
-            while (true) {
+        public void Reset()
+        {
+            while (true)
+            {
                 var tcs = _mTcs;
                 var taskCompletionSource = _mTcs;
-                if (!tcs.Task.IsCompleted ||
-                    Interlocked.CompareExchange(ref taskCompletionSource,
+                if (!tcs.Task.IsCompleted || Interlocked.CompareExchange(ref taskCompletionSource,
                         new TaskCompletionSource<bool>(),
-                        tcs) == tcs)
-                    return;
+                        tcs) == tcs) return;
             }
         }
     }

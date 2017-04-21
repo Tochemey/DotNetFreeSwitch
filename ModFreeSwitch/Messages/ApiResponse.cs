@@ -25,14 +25,11 @@ namespace ModFreeSwitch.Messages
         {
             Command = command;
             var response1 = response;
-            ReplyText = response1 != null
-                ? response1.BodyLines.First()
-                : string.Empty;
-            IsOk = !string.IsNullOrEmpty(ReplyText) &&
-                   ReplyText.StartsWith(EslHeadersValues.Ok);
+            ReplyText = response1 != null ? response1.BodyLines.First() : string.Empty;
+            IsOk = !string.IsNullOrEmpty(ReplyText) && ReplyText.StartsWith(EslHeadersValues.Ok);
         }
 
-        public string Command { get; private set; }
+        public string Command { get; }
 
         /// <summary>
         ///     Actual reply text
@@ -42,6 +39,6 @@ namespace ModFreeSwitch.Messages
         /// <summary>
         ///     Check whether the command has been successful or not.
         /// </summary>
-        public bool IsOk { get; private set; }
+        public bool IsOk { get; }
     }
 }

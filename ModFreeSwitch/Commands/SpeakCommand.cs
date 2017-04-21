@@ -14,13 +14,16 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Commands {
+namespace ModFreeSwitch.Commands
+{
     /// <summary>
     ///     Speak command
     ///     Speaks a string or file of text to the channel using the defined speech engine.
     /// </summary>
-    public sealed class SpeakCommand : BaseCommand {
-        public SpeakCommand() {
+    public sealed class SpeakCommand : BaseCommand
+    {
+        public SpeakCommand()
+        {
             Engine = "flite";
             Voice = "kal";
         }
@@ -45,15 +48,8 @@ namespace ModFreeSwitch.Commands {
         /// </summary>
         public string TimerName { set; get; }
 
-        public override string Command {
-            get { return "speak"; }
-        }
+        public override string Command => "speak";
 
-        public override string Argument {
-            get {
-                return Engine + "|" + Voice + "|" + Text +
-                       (!string.IsNullOrEmpty(TimerName) ? "|" + TimerName : "");
-            }
-        }
+        public override string Argument => Engine + "|" + Voice + "|" + Text + (!string.IsNullOrEmpty(TimerName) ? "|" + TimerName : "");
     }
 }

@@ -14,8 +14,10 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Common {
-    public enum EslLogLevels {
+namespace ModFreeSwitch.Common
+{
+    public enum EslLogLevels
+    {
         CONSOLE = 0,
         ALERT = 1,
         CRIT = 2,

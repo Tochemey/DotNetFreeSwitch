@@ -14,8 +14,10 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Common {
-    public enum HangupCause {
+namespace ModFreeSwitch.Common
+{
+    public enum HangupCause
+    {
         NONE = 0,
         UNALLOCATED_NUMBER = 1,
         NO_ROUTE_TRANSIT_NET = 2,

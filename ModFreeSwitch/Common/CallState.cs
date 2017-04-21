@@ -14,8 +14,10 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Common {
-    public enum CallState {
+namespace ModFreeSwitch.Common
+{
+    public enum CallState
+    {
         DOWN = 0,
         DIALING = 1,
         RINGING = 2,

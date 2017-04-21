@@ -14,17 +14,15 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Commands {
+namespace ModFreeSwitch.Commands
+{
     /// <summary>
     ///     Resume command
     /// </summary>
-    public sealed class ResumeCommand : BaseCommand {
-        public override string Command {
-            get { return "resume"; }
-        }
+    public sealed class ResumeCommand : BaseCommand
+    {
+        public override string Command => "resume";
 
-        public override string Argument {
-            get { return string.Empty; }
-        }
+        public override string Argument => string.Empty;
     }
 }

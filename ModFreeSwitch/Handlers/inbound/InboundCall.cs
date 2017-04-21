@@ -17,16 +17,16 @@
 using System;
 using ModFreeSwitch.Events;
 
-namespace ModFreeSwitch.Handlers.inbound {
+namespace ModFreeSwitch.Handlers.inbound
+{
     /// <summary>
     ///     Holds the details of the connected call
     /// </summary>
-    public class InboundCall {
+    public class InboundCall
+    {
         private readonly EslEvent _event;
 
-        public InboundCall(EslEvent @event) {
-            _event = @event;
-        }
+        public InboundCall(EslEvent @event) { _event = @event; }
 
         public Guid CallerGuid => Guid.Parse(_event["Caller-Unique-ID"]);
         public string CallerId => _event["Caller-Caller-ID-Number"];

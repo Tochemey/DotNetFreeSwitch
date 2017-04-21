@@ -14,8 +14,10 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Common {
-    public enum SayGenders {
+namespace ModFreeSwitch.Common
+{
+    public enum SayGenders
+    {
         FEMININE,
         MASCULINE,
         NEUTER

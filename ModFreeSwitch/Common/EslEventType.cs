@@ -14,8 +14,10 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Common {
-    public enum EslEventType {
+namespace ModFreeSwitch.Common
+{
+    public enum EslEventType
+    {
         CUSTOM,
         CHANNEL_CREATE,
         CHANNEL_DESTROY,
@@ -91,6 +93,6 @@ namespace ModFreeSwitch.Common {
         ADD_SCHEDULE,
         DEL_SCHEDULE,
         EXE_SCHEDULE,
-        TRAP,
+        TRAP
     }
 }

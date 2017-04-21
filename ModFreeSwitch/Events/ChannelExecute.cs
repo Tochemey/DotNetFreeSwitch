@@ -16,12 +16,14 @@
 
 using ModFreeSwitch.Messages;
 
-namespace ModFreeSwitch.Events {
+namespace ModFreeSwitch.Events
+{
     /// <summary>
     ///     Function have been executed on channel
     /// </summary>
-    public class ChannelExecute : EslEvent {
-        public ChannelExecute(EslMessage message) : base(message) {}
+    public class ChannelExecute : EslEvent
+    {
+        public ChannelExecute(EslMessage message) : base(message) { }
 
         /// <summary>
         ///     Gets application to execute.
@@ -38,8 +40,6 @@ namespace ModFreeSwitch.Events {
         /// </summary>
         protected string ApplicationResponse => this["Application-Response"];
 
-        public override string ToString() {
-            return "ChannelExecute(" + Application + ", '" + ApplicationData + "')";
-        }
+        public override string ToString() { return "ChannelExecute(" + Application + ", '" + ApplicationData + "')"; }
     }
 }

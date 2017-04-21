@@ -14,8 +14,10 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Common {
-    public enum SayTypes {
+namespace ModFreeSwitch.Common
+{
+    public enum SayTypes
+    {
         NUMBER,
         ITEMS,
         PERSONS,

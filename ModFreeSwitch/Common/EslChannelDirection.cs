@@ -14,8 +14,10 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Common {
-    public enum EslChannelDirection {
+namespace ModFreeSwitch.Common
+{
+    public enum EslChannelDirection
+    {
         INBOUND,
         OUTBOUND,
         UNKNOWN

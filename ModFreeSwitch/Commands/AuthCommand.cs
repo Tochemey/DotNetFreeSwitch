@@ -14,32 +14,28 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Commands {
+namespace ModFreeSwitch.Commands
+{
     /// <summary>
     ///     The auth command helps to authenticate against FreeSwitch Event Socket module.
     /// </summary>
-    public sealed class AuthCommand : BaseCommand {
+    public sealed class AuthCommand : BaseCommand
+    {
         /// <summary>
         ///     The authentication password
         /// </summary>
         private readonly string _password;
 
-        public AuthCommand(string password) {
-            _password = password;
-        }
+        public AuthCommand(string password) { _password = password; }
 
         /// <summary>
         ///     Auth Command
         /// </summary>
-        public override string Command {
-            get { return "auth"; }
-        }
+        public override string Command => "auth";
 
         /// <summary>
         ///     Auth command argument
         /// </summary>
-        public override string Argument {
-            get { return _password; }
-        }
+        public override string Argument => _password;
     }
 }

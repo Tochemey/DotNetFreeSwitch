@@ -14,8 +14,10 @@
     limitations under the License.
 */
 
-namespace ModFreeSwitch.Common {
-    public enum EslChannelState {
+namespace ModFreeSwitch.Common
+{
+    public enum EslChannelState
+    {
         /// <summary>
         ///     Channel is created
         /// </summary>

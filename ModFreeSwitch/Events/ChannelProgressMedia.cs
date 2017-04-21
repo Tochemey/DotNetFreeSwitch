@@ -14,15 +14,15 @@
     limitations under the License.
 */
 
-using System.Collections.Generic;
 using ModFreeSwitch.Messages;
 
-namespace ModFreeSwitch.Events {
+namespace ModFreeSwitch.Events
+{
     /// <summary>
     ///     A channel has started early media
     /// </summary>
-    public class ChannelProgressMedia : EslEvent {
-        public ChannelProgressMedia(EslMessage message) : base(message) {}
-
+    public class ChannelProgressMedia : EslEvent
+    {
+        public ChannelProgressMedia(EslMessage message) : base(message) { }
     }
 }
