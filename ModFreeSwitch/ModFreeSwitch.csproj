@@ -217,7 +217,6 @@
     <Compile Include="Common\IEndPointAddress.cs" />
     <Compile Include="Common\StringUtil.cs" />
     <Compile Include="EslSessionHandler.cs" />
-    <Compile Include="EventSocketClient.cs" />
     <Compile Include="Events\BackgroundJob.cs" />
     <Compile Include="Events\CallUpdate.cs" />
     <Compile Include="Events\ChannelBridge.cs" />
