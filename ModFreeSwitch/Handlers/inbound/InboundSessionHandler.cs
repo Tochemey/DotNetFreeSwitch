@@ -57,57 +57,44 @@ namespace ModFreeSwitch.Handlers.inbound
         public override async void ChannelRead(IChannelHandlerContext context,
             object message)
         {
-            var eslMessage = message as EslMessage;
-            var contentType = eslMessage?.ContentType();
-
-            if (string.IsNullOrEmpty(contentType)) return;
-            // Handle command/reply
-            if (contentType.Equals(EslHeadersValues.CommandReply))
+            switch (message)
             {
-                var commandAsyncEvent = CommandAsyncEvents.Dequeue();
-                var reply = new CommandReply(commandAsyncEvent.Command.Command,
-                    eslMessage);
-                commandAsyncEvent.Complete(reply);
-                return;
-            }
+                case EslMessage msg when !string.IsNullOrEmpty(msg?.ContentType()):
+                    switch (msg.ContentType())
+                    {
+                        case EslHeadersValues.CommandReply:
+                        case EslHeadersValues.ApiResponse:
+                            var commandAsyncEvent = CommandAsyncEvents.Dequeue();
+                            var apiResponse = new ApiResponse(commandAsyncEvent.Command.Command,
+                                msg);
+                            commandAsyncEvent.Complete(apiResponse);
+                            break;
+                        case EslHeadersValues.TextEventPlain:
+                            _inboundListener.OnEventReceived(msg);
+                            break;
+                        case EslHeadersValues.TextDisconnectNotice:
+                            var channel = context.Channel;
+                            var address = channel.RemoteAddress;
 
-            // Handle api/response
-            if (contentType.Equals(EslHeadersValues.ApiResponse))
-            {
-                var commandAsyncEvent = CommandAsyncEvents.Dequeue();
-                var apiResponse = new ApiResponse(commandAsyncEvent.Command.Command,
-                    eslMessage);
-                commandAsyncEvent.Complete(apiResponse);
-                return;
+                            await _inboundListener.OnDisconnectNotice(msg,
+                                address);
+                            break;
+                        case EslHeadersValues.TextRudeRejection:
+                            await _inboundListener.OnRudeRejection();
+                            break;
+                        default:
+                            // Unexpected freeSwitch message
+                            _logger.Warn("Unexpected message content type [{0}]",
+                                msg.ContentType());
+                            break;
+                    }
+                    break;
+                default:
+                    // Unexpected freeSwitch message
+                    _logger.Warn("Unexpected message [{0}]",
+                        message);
+                    return;
             }
-
-            // Handle text/event-plain
-            if (contentType.Equals(EslHeadersValues.TextEventPlain))
-            {
-                _inboundListener.OnEventReceived(eslMessage);
-                return;
-            }
-
-            // Handle disconnect/notice message
-            if (contentType.Equals(EslHeadersValues.TextDisconnectNotice))
-            {
-                var channel = context.Channel;
-                var address = channel.RemoteAddress;
-                _inboundListener.OnDisconnectNotice(eslMessage,
-                    address);
-                return;
-            }
-
-            // Handle rude/rejection message
-            if (contentType.Equals(EslHeadersValues.TextRudeRejection))
-            {
-                await _inboundListener.OnRudeRejection();
-                return;
-            }
-
-            // Unexpected freeSwitch message
-            _logger.Warn("Unexpected message content type [{0}]",
-                contentType);
         }
     }
 }

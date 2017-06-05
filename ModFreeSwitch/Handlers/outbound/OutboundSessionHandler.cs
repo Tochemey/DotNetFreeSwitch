@@ -43,54 +43,47 @@ namespace ModFreeSwitch.Handlers.outbound
         public override async void ChannelRead(IChannelHandlerContext context,
             object message)
         {
-            var eslMessage = message as EslMessage;
-            var contentType = eslMessage?.ContentType();
+            switch (message)
+            {
+                case EslMessage msg when !string.IsNullOrEmpty(msg?.ContentType()):
+                    switch (msg.ContentType())
+                    {
+                        case EslHeadersValues.AuthRequest:
+                            await _outboundListener.OnAuthentication();
+                            break;
+                        case EslHeadersValues.CommandReply:
+                        case EslHeadersValues.ApiResponse:
+                            var commandAsyncEvent = CommandAsyncEvents.Dequeue();
+                            var apiResponse = new ApiResponse(commandAsyncEvent.Command.Command,
+                                msg);
+                            commandAsyncEvent.Complete(apiResponse);
+                            break;
+                        case EslHeadersValues.TextEventPlain:
+                            _outboundListener.OnEventReceived(msg);
+                            break;
+                        case EslHeadersValues.TextDisconnectNotice:
+                            var channel = context.Channel;
+                            var address = channel.RemoteAddress;
 
-            if (string.IsNullOrEmpty(contentType)) return;
-            if (contentType.Equals(EslHeadersValues.AuthRequest))
-            {
-                await _outboundListener.OnAuthentication();
-                return;
+                            await _outboundListener.OnDisconnectNotice(msg,
+                                address);
+                            break;
+                        case EslHeadersValues.TextRudeRejection:
+                            await _outboundListener.OnRudeRejection();
+                            break;
+                        default:
+                            // Unexpected freeSwitch message
+                            _logger.Warn("Unexpected message content type [{0}]",
+                                msg.ContentType());
+                            break;
+                    }
+                    break;
+                default:
+                    // Unexpected freeSwitch message
+                    _logger.Warn("Unexpected message [{0}]",
+                        message);
+                    return;
             }
-            if (contentType.Equals(EslHeadersValues.CommandReply))
-            {
-                var commandAsyncEvent = CommandAsyncEvents.Dequeue();
-                var reply = new CommandReply(commandAsyncEvent.Command.Command,
-                    eslMessage);
-                commandAsyncEvent.Complete(reply);
-                return;
-            }
-            if (contentType.Equals(EslHeadersValues.ApiResponse))
-            {
-                var commandAsyncEvent = CommandAsyncEvents.Dequeue();
-                var apiResponse = new ApiResponse(commandAsyncEvent.Command.Command,
-                    eslMessage);
-                commandAsyncEvent.Complete(apiResponse);
-                return;
-            }
-            if (contentType.Equals(EslHeadersValues.TextEventPlain))
-            {
-                _outboundListener.OnEventReceived(eslMessage);
-                return;
-            }
-            if (contentType.Equals(EslHeadersValues.TextDisconnectNotice))
-            {
-                var channel = context.Channel;
-                var address = channel.RemoteAddress;
-
-                await _outboundListener.OnDisconnectNotice(eslMessage,
-                    address);
-                return;
-            }
-            if (contentType.Equals(EslHeadersValues.TextRudeRejection))
-            {
-                await _outboundListener.OnRudeRejection();
-                return;
-            }
-
-            // Unexpected freeSwitch message
-            _logger.Warn("Unexpected message content type [{0}]",
-                contentType);
         }
     }
 }
