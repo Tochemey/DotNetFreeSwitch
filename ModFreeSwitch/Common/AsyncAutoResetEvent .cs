@@ -25,15 +25,15 @@ namespace ModFreeSwitch.Common
 
         private readonly Queue<TaskCompletionSource<bool>> _mWaits = new Queue<TaskCompletionSource<bool>>();
 
-        private bool m_signaled;
+        private bool _mSignaled;
 
         public Task WaitAsync()
         {
             lock (_mWaits)
             {
-                if (m_signaled)
+                if (_mSignaled)
                 {
-                    m_signaled = false;
+                    _mSignaled = false;
                     return SCompleted;
                 }
                 var tcs = new TaskCompletionSource<bool>();
@@ -48,9 +48,9 @@ namespace ModFreeSwitch.Common
             lock (_mWaits)
             {
                 if (_mWaits.Count > 0) toRelease = _mWaits.Dequeue();
-                else if (!m_signaled) m_signaled = true;
+                else if (!_mSignaled) _mSignaled = true;
             }
-            if (toRelease != null) toRelease.SetResult(true);
+            toRelease?.SetResult(true);
         }
     }
 }

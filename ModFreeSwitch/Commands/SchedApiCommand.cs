@@ -17,7 +17,7 @@
 namespace ModFreeSwitch.Commands
 {
     /// <summary>
-    ///     Helps Schedule some command to be executed.
+    /// Helps Schedule some command to be executed. 
     /// </summary>
     public sealed class SchedApiCommand : BaseCommand
     {
@@ -40,25 +40,17 @@ namespace ModFreeSwitch.Commands
             _asynchronous = asynchronous;
         }
 
-        public override string Command => "sched_api";
-
         public override string Argument
         {
             get
             {
-                var args = string.Format("+{0} {1} {2} {3}",
-                    _time,
-                    _groupName,
-                    _command,
-                    _asynchronous ? "&" : string.Empty);
+                var args = $"+{_time} {_groupName} {_command} {(_asynchronous ? "&" : string.Empty)}";
                 if (_repetitive)
-                    args = string.Format("@{0} {1} {2} {3}",
-                        _time,
-                        _groupName,
-                        _command,
-                        _asynchronous ? "&" : string.Empty);
+                    args = $"@{_time} {_groupName} {_command} {(_asynchronous ? "&" : string.Empty)}";
                 return args;
             }
         }
+
+        public override string Command => "sched_api";
     }
 }

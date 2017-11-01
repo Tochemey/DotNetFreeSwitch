@@ -19,46 +19,35 @@ using System;
 namespace ModFreeSwitch.Commands
 {
     /// <summary>
-    ///     BgApi Command. It helps to execute other command in a background job on FreeSwitch
+    /// BgApi Command. It helps to execute other command in a background job on FreeSwitch 
     /// </summary>
     public sealed class BgApiCommand : BaseCommand
     {
-        /// <summary>
-        ///     The command to execute Arguments
-        /// </summary>
-        private readonly string _commandArgs;
-
-        /// <summary>
-        ///     The command to execute name
-        /// </summary>
-        private readonly string _commandName;
-
         public BgApiCommand(string commandName,
             string commandArgs)
         {
-            _commandName = commandName;
-            _commandArgs = commandArgs;
+            CommandName = commandName;
+            CommandArgs = commandArgs;
         }
 
         /// <summary>
-        ///     Each command send by BgApi will have a trackable Id that will helps identify which one has sent a response.
+        /// The BgApi command argument 
         /// </summary>
-        public Guid CommandId { get; set; }
-
-        public string CommandName => _commandName;
-
-        public string CommandArgs => _commandArgs;
+        public override string Argument => $"{CommandName} {CommandArgs}";
 
         /// <summary>
-        ///     The BgApi command
+        /// The BgApi command 
         /// </summary>
         public override string Command => "bgapi";
 
+        public string CommandArgs { get; }
+
         /// <summary>
-        ///     The BgApi command argument
+        /// Each command send by BgApi will have a trackable Id that will helps identify which one
+        /// has sent a response.
         /// </summary>
-        public override string Argument => string.Format("{0} {1}",
-            CommandName,
-            CommandArgs);
+        public Guid CommandId { get; set; }
+
+        public string CommandName { get; }
     }
 }

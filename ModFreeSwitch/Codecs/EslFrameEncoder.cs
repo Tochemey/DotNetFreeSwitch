@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 using DotNetty.Buffers;
@@ -48,7 +49,7 @@ namespace ModFreeSwitch.Codecs
             if (string.IsNullOrEmpty(message?.ToString())) return;
             var msg = message.ToString().Trim();
 
-            if (!msg.Trim().EndsWith(MessageEndString)) msg += MessageEndString;
+            if (!msg.Trim().EndsWith(MessageEndString, StringComparison.Ordinal)) msg += MessageEndString;
             if (logger.IsDebugEnabled)
                 logger.Debug("Encoded message sent [{0}]",
                     msg.Trim());

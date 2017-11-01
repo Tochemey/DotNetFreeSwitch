@@ -17,16 +17,15 @@
 namespace ModFreeSwitch.Commands
 {
     /// <summary>
-    ///     DivertEvent
+    /// DivertEvent 
     /// </summary>
     public sealed class DivertEventsCommand : BaseCommand
     {
         private readonly bool _flag;
 
-        public DivertEventsCommand(bool flag) { _flag = flag; }
-
-        public override string Command => "divert_events";
+        public DivertEventsCommand(bool flag) => _flag = flag;
 
         public override string Argument => _flag ? "on" : "off";
+        public override string Command => "divert_events";
     }
 }

@@ -28,8 +28,7 @@ namespace ModFreeSwitch.Common
         /// <param name="factory">Factory to use</param>
         public static void Assign(GuidFactory factory)
         {
-            if (factory == null) throw new ArgumentNullException("factory");
-            _instance = factory;
+            _instance = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
         /// <summary>

@@ -17,25 +17,20 @@
 namespace ModFreeSwitch.Commands
 {
     /// <summary>
-    ///     The auth command helps to authenticate against FreeSwitch Event Socket module.
+    /// The auth command helps to authenticate against FreeSwitch Event Socket module. 
     /// </summary>
     public sealed class AuthCommand : BaseCommand
     {
+        public AuthCommand(string password) => Argument = password;
+
         /// <summary>
-        ///     The authentication password
+        /// Auth command argument 
         /// </summary>
-        private readonly string _password;
-
-        public AuthCommand(string password) { _password = password; }
+        public override string Argument { get; }
 
         /// <summary>
-        ///     Auth Command
+        /// Auth Command 
         /// </summary>
         public override string Command => "auth";
-
-        /// <summary>
-        ///     Auth command argument
-        /// </summary>
-        public override string Argument => _password;
     }
 }

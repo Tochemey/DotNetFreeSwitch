@@ -18,15 +18,10 @@ namespace ModFreeSwitch.Commands
 {
     public sealed class EventsCommand : BaseCommand
     {
-        /// <summary>
-        ///     Space separated list of events
-        /// </summary>
-        private readonly string _events;
+        public EventsCommand(string events) => Argument = events;
 
-        public EventsCommand(string events) { _events = events; }
+        public override string Argument { get; }
 
         public override string Command => "events";
-
-        public override string Argument => _events;
     }
 }

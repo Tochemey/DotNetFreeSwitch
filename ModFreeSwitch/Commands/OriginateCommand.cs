@@ -14,15 +14,15 @@
     limitations under the License.
 */
 
+using ModFreeSwitch.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ModFreeSwitch.Common;
 
 namespace ModFreeSwitch.Commands
 {
     /// <summary>
-    ///     originate
+    /// originate 
     /// </summary>
     public sealed class OriginateCommand : BaseCommand
     {
@@ -65,20 +65,6 @@ namespace ModFreeSwitch.Commands
             _timeout = 0;
         }
 
-        public Guid Id { get; set; }
-
-        /// <summary>
-        ///     Optional attribute like sip headers.
-        /// </summary>
-        public string Option { set; get; }
-
-        /// <summary>
-        ///     Call session heartbeat
-        /// </summary>
-        public int Heartbeat { set; get; }
-
-        public override string Command => "originate";
-
         public override string Argument
         {
             get
@@ -92,24 +78,30 @@ namespace ModFreeSwitch.Commands
                 var variables = _channelVariables != null && _channelVariables.Count > 0 ? _channelVariables.Aggregate(string.Empty,
                     (current,
                         variable) => current + (variable + ",")) : string.Empty;
-                if (variables.Length > 0)
-                    if (string.IsNullOrEmpty(Option))
-                        variables = "{" + variables.Remove(variables.Length - 1,
-                                        1) + "}";
-                    else
-                        variables = "{" + Option + ", " + variables.Remove(variables.Length - 1,
-                                        1) + "}";
-                return string.Format("{0}{1} {2} {3} {4} {5} {6} {7}",
-                    variables,
-                    _caller.ToDialString(),
-                    _destination.ToDialString(),
-                    _dialplan,
-                    _context,
-                    _callerIdName,
-                    _callerIdNumber,
-                    _timeout);
+                if (variables.Length <= 0) return $"{variables}{_caller.ToDialString()} {_destination.ToDialString()} {_dialplan} {_context} {_callerIdName} {_callerIdNumber} {_timeout}";
+                if (string.IsNullOrEmpty(Option))
+                    variables = "{" + variables.Remove(variables.Length - 1,
+                                    1) + "}";
+                else
+                    variables = "{" + Option + ", " + variables.Remove(variables.Length - 1,
+                                    1) + "}";
+                return $"{variables}{_caller.ToDialString()} {_destination.ToDialString()} {_dialplan} {_context} {_callerIdName} {_callerIdNumber} {_timeout}";
             }
         }
+
+        public override string Command => "originate";
+
+        /// <summary>
+        /// Call session heartbeat 
+        /// </summary>
+        public int Heartbeat { set; get; }
+
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Optional attribute like sip headers. 
+        /// </summary>
+        public string Option { set; get; }
 
         public void SetChannelVariable(string variable,
             string value)

@@ -17,25 +17,20 @@
 namespace ModFreeSwitch.Commands
 {
     /// <summary>
-    ///     FreeSwitch API command.
+    /// FreeSwitch API command. 
     /// </summary>
     public sealed class ApiCommand : BaseCommand
     {
+        public ApiCommand(string apiCommand) => Argument = apiCommand;
+
         /// <summary>
-        ///     The command string to send
+        /// The api command argument 
         /// </summary>
-        private readonly string _apiCommand;
-
-        public ApiCommand(string apiCommand) { _apiCommand = apiCommand; }
+        public override string Argument { get; }
 
         /// <summary>
-        ///     The api command itself
+        /// The api command itself 
         /// </summary>
         public override string Command => "api";
-
-        /// <summary>
-        ///     The api command argument
-        /// </summary>
-        public override string Argument => _apiCommand;
     }
 }

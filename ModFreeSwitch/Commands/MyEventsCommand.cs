@@ -19,19 +19,18 @@ using System;
 namespace ModFreeSwitch.Commands
 {
     /// <summary>
-    ///     Helps to listen a specific channel events.
+    /// Helps to listen a specific channel events. 
     /// </summary>
     public sealed class MyEventsCommand : BaseCommand
     {
         /// <summary>
-        ///     Channel Id
+        /// Channel Id 
         /// </summary>
         private readonly Guid _uuid;
 
-        public MyEventsCommand(Guid uuid) { _uuid = uuid; }
-
-        public override string Command => "myevents";
+        public MyEventsCommand(Guid uuid) => _uuid = uuid;
 
         public override string Argument => _uuid.ToString();
+        public override string Command => "myevents";
     }
 }

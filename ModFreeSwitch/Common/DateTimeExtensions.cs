@@ -26,9 +26,8 @@ namespace ModFreeSwitch.Common
 
         public static DateTime FromUnixTime(this string value)
         {
-            long time;
             return long.TryParse(value,
-                out time) ? UnixEpoch.AddMilliseconds(Convert.ToDouble(time) / 1000) : DateTime.MinValue;
+                out var time) ? UnixEpoch.AddMilliseconds(Convert.ToDouble(time) / 1000) : DateTime.MinValue;
         }
     }
 }

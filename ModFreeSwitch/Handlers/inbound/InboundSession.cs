@@ -210,7 +210,7 @@ namespace ModFreeSwitch.Handlers.inbound
             bool eventLock)
         {
             var command = new SendMsgCommand(InboundCall.CallerGuid,
-                SendMsgCommand.CALL_COMMAND,
+                SendMsgCommand.CallCommand,
                 application,
                 arguments,
                 eventLock);
@@ -223,7 +223,7 @@ namespace ModFreeSwitch.Handlers.inbound
             bool eventLock)
         {
             var command = new SendMsgCommand(InboundCall.CallerGuid,
-                SendMsgCommand.CALL_COMMAND,
+                SendMsgCommand.CallCommand,
                 application,
                 arguments,
                 eventLock,

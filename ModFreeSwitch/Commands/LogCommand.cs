@@ -19,19 +19,18 @@ using ModFreeSwitch.Common;
 namespace ModFreeSwitch.Commands
 {
     /// <summary>
-    ///     FreeSwitch log
+    /// FreeSwitch log 
     /// </summary>
     public sealed class LogCommand : BaseCommand
     {
         /// <summary>
-        ///     Log level
+        /// Log level 
         /// </summary>
         private readonly EslLogLevels _logLevel;
 
-        public LogCommand(EslLogLevels logLevel) { _logLevel = logLevel; }
-
-        public override string Command => "log";
+        public LogCommand(EslLogLevels logLevel) => _logLevel = logLevel;
 
         public override string Argument => _logLevel.ToString();
+        public override string Command => "log";
     }
 }

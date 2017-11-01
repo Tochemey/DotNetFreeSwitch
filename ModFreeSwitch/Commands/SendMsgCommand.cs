@@ -19,11 +19,11 @@ using System;
 namespace ModFreeSwitch.Commands
 {
     /// <summary>
-    ///     SendMSG command. Help execute an application for a specific FreeSwitch channel
+    /// SendMSG command. Help execute an application for a specific FreeSwitch channel 
     /// </summary>
     public sealed class SendMsgCommand : BaseCommand
     {
-        public const string CALL_COMMAND = "execute";
+        public const string CallCommand = "execute";
         private readonly string _callCommand;
         private readonly bool _eventLock;
         private readonly int _loop;
@@ -85,7 +85,6 @@ namespace ModFreeSwitch.Commands
             _uuid = Guid.Empty;
         }
 
-
         public SendMsgCommand(string applicationName,
             string applicationArgs,
             bool eventLock)
@@ -93,26 +92,26 @@ namespace ModFreeSwitch.Commands
             ApplicationName = applicationName;
             ApplicationArgs = applicationArgs;
             _eventLock = eventLock;
-            _callCommand = CALL_COMMAND;
+            _callCommand = CallCommand;
             _loop = 1;
             _uuid = Guid.Empty;
         }
+
+        public string ApplicationArgs { get; }
+
+        public string ApplicationName { get; }
+
+        public override string Argument => string.Empty;
 
         public override string Command
         {
             get
             {
                 var cmd = $"sendmsg  {_uuid}\ncall-command: {_callCommand}\nexecute-app-name: {ApplicationName}\nexecute-app-arg: {ApplicationArgs}\nloops: {_loop}";
-                if (_eventLock) cmd += $"\nevent-lock: {"true"}";
-                else cmd += $"\nevent-lock: {"false"}";
+                if (_eventLock) cmd += "\nevent-lock: true";
+                else cmd += "\nevent-lock: false";
                 return cmd;
             }
         }
-
-        public override string Argument => string.Empty;
-
-        public string ApplicationName { get; }
-
-        public string ApplicationArgs { get; }
     }
 }

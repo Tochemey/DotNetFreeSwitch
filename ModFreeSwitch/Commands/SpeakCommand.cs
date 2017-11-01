@@ -17,8 +17,7 @@
 namespace ModFreeSwitch.Commands
 {
     /// <summary>
-    ///     Speak command
-    ///     Speaks a string or file of text to the channel using the defined speech engine.
+    /// Speak command Speaks a string or file of text to the channel using the defined speech engine. 
     /// </summary>
     public sealed class SpeakCommand : BaseCommand
     {
@@ -28,28 +27,28 @@ namespace ModFreeSwitch.Commands
             Voice = "kal";
         }
 
+        public override string Argument => Engine + "|" + Voice + "|" + Text + (!string.IsNullOrEmpty(TimerName) ? "|" + TimerName : "");
+
+        public override string Command => "speak";
+
         /// <summary>
-        ///     Engine
+        /// Engine 
         /// </summary>
         public string Engine { set; get; }
 
         /// <summary>
-        ///     Voice
-        /// </summary>
-        public string Voice { set; get; }
-
-        /// <summary>
-        ///     The actual to read
+        /// The actual to read 
         /// </summary>
         public string Text { set; get; }
 
         /// <summary>
-        ///     Timer
+        /// Timer 
         /// </summary>
         public string TimerName { set; get; }
 
-        public override string Command => "speak";
-
-        public override string Argument => Engine + "|" + Voice + "|" + Text + (!string.IsNullOrEmpty(TimerName) ? "|" + TimerName : "");
+        /// <summary>
+        /// Voice 
+        /// </summary>
+        public string Voice { set; get; }
     }
 }

@@ -17,12 +17,11 @@
 namespace ModFreeSwitch.Commands
 {
     /// <summary>
-    ///     Resume command
+    /// Resume command 
     /// </summary>
     public sealed class ResumeCommand : BaseCommand
     {
-        public override string Command => "resume";
-
         public override string Argument => string.Empty;
+        public override string Command => "resume";
     }
 }

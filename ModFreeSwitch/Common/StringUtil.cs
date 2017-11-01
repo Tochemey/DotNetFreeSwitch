@@ -40,9 +40,10 @@ namespace ModFreeSwitch.Common
         public static bool IsValidSoundProtocol(this string string0)
         {
             if (string0.IsEmpty()) return false;
-            var regex = string.Format(@"^({0})",
-                string.Join("|",
-                    ValidSoundProtocol));
+            var regex = $@"^({
+                    string.Join("|",
+                        ValidSoundProtocol)
+                })";
             return new Regex(regex).IsMatch(string0);
         }
 
@@ -217,14 +218,11 @@ namespace ModFreeSwitch.Common
             string currencyPosition)
         {
             // When the string is null return false
-            if (!string0.IsEmpty())
-            {
-                const string moneyRegex = "(?!0,?\\d)(?:\\d{1,3}(?:([,\\.])\\d{3})?(?:\\1\\d{3})*|(?:\\d+))((?!\\1)[,\\.]\\d{2})?";
-                var regex = "^(?!\\x{00a2})\\p{Sc}?" + moneyRegex + "$";
-                if (IsEmpty(currencyPosition) && currencyPosition.Equals("right")) regex = "^" + moneyRegex + "(?<!\\x{00a2})\\p{Sc}?$";
-                return new Regex(regex).IsMatch(string0.Trim());
-            }
-            return false;
+            if (string0.IsEmpty()) return false;
+            const string moneyRegex = "(?!0,?\\d)(?:\\d{1,3}(?:([,\\.])\\d{3})?(?:\\1\\d{3})*|(?:\\d+))((?!\\1)[,\\.]\\d{2})?";
+            var regex = "^(?!\\x{00a2})\\p{Sc}?" + moneyRegex + "$";
+            if (IsEmpty(currencyPosition) && currencyPosition.Equals("right")) regex = "^" + moneyRegex + "(?<!\\x{00a2})\\p{Sc}?$";
+            return new Regex(regex).IsMatch(string0.Trim());
         }
 
         /// <summary>
@@ -248,10 +246,8 @@ namespace ModFreeSwitch.Common
             PopulateIpPatterns();
 
             // Get the IPv4 pattern regex
-            string pattern;
-            if (IpPatterns.TryGetValue("IPv4",
-                out pattern)) return new Regex(pattern).IsMatch(string0);
-            return false;
+            return IpPatterns.TryGetValue("IPv4",
+                       out var pattern) && new Regex(pattern).IsMatch(string0);
         }
 
         /// <summary>
@@ -265,10 +261,8 @@ namespace ModFreeSwitch.Common
             PopulateIpPatterns();
 
             // Get the IPv4 pattern regex
-            string pattern;
-            if (IpPatterns.TryGetValue("IPv6",
-                out pattern)) return new Regex(pattern).IsMatch(string0);
-            return false;
+            return IpPatterns.TryGetValue("IPv6",
+                       out var pattern) && new Regex(pattern).IsMatch(string0);
         }
 
         /// <summary>
@@ -385,28 +379,26 @@ namespace ModFreeSwitch.Common
             }
             else
             {
-                if (!string0.IsEmpty())
-                {
-                    // Based upon the format given the check will be done accordingly
-                    var regex = "";
-                    if (string.Equals(format.Trim(),
-                        "dmy")) regex = "^(?:(?:31(\\/|-|\\.|\\x20)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.|\\x20)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.|\\x20)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.|\\x20)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$";
-                    if (string.Equals(format.Trim(),
-                        "mdy")) regex = "^(?:(?:(?:0?[13578]|1[02])(\\/|-|\\.|\\x20)31)\\1|(?:(?:0?[13-9]|1[0-2])(\\/|-|\\.|\\x20)(?:29|30)\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:0?2(\\/|-|\\.|\\x20)29\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:(?:0?[1-9])|(?:1[0-2]))(\\/|-|\\.|\\x20)(?:0?[1-9]|1\\d|2[0-8])\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$";
-                    if (string.Equals(format.Trim(),
-                        "ymd")) regex = "^(?:(?:(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\\/|-|\\.|\\x20)(?:0?2\\1(?:29)))|(?:(?:(?:1[6-9]|[2-9]\\d)?\\d{2})(\\/|-|\\.|\\x20)(?:(?:(?:0?[13578]|1[02])\\2(?:31))|(?:(?:0?[1,3-9]|1[0-2])\\2(29|30))|(?:(?:0?[1-9])|(?:1[0-2]))\\2(?:0?[1-9]|1\\d|2[0-8]))))$";
-                    if (string.Equals(format.Trim(),
-                        "dMy")) regex = "^((31(?!\\ (Feb(ruary)?|Apr(il)?|June?|(Sep(?=\\b|t)t?|Nov)(ember)?)))|((30|29)(?!\\ Feb(ruary)?))|(29(?=\\ Feb(ruary)?\\ (((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))))|(0?[1-9])|1\\d|2[0-8])\\ (Jan(uary)?|Feb(ruary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep(?=\\b|t)t?|Nov|Dec)(ember)?)\\ ((1[6-9]|[2-9]\\d)\\d{2})$";
-                    if (string.Equals(format.Trim(),
-                        "Mdy")) regex = "^(?:(((Jan(uary)?|Ma(r(ch)?|y)|Jul(y)?|Aug(ust)?|Oct(ober)?|Dec(ember)?)\\ 31)|((Jan(uary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep)(tember)?|(Nov|Dec)(ember)?)\\ (0?[1-9]|([12]\\d)|30))|(Feb(ruary)?\\ (0?[1-9]|1\\d|2[0-8]|(29(?=,?\\ ((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))))))\\,?\\ ((1[6-9]|[2-9]\\d)\\d{2}))$";
-                    if (string.Equals(format.Trim(),
-                        "My")) regex = "^(Jan(uary)?|Feb(ruary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep(?=\\b|t)t?|Nov|Dec)(ember)?)[ /]((1[6-9]|[2-9]\\d)\\d{2})$";
-                    if (string.Equals(format.Trim(),
-                        "my")) regex = "^(((0[123456789]|10|11|12)([- /\\.])(([1][9][0-9][0-9])|([2][0-9][0-9][0-9]))))$";
+                if (string0.IsEmpty()) return false;
+                // Based upon the format given the check will be done accordingly
+                var regex = "";
+                if (string.Equals(format.Trim(),
+                    "dmy")) regex = "^(?:(?:31(\\/|-|\\.|\\x20)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.|\\x20)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.|\\x20)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.|\\x20)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$";
+                if (string.Equals(format.Trim(),
+                    "mdy")) regex = "^(?:(?:(?:0?[13578]|1[02])(\\/|-|\\.|\\x20)31)\\1|(?:(?:0?[13-9]|1[0-2])(\\/|-|\\.|\\x20)(?:29|30)\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:0?2(\\/|-|\\.|\\x20)29\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:(?:0?[1-9])|(?:1[0-2]))(\\/|-|\\.|\\x20)(?:0?[1-9]|1\\d|2[0-8])\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$";
+                if (string.Equals(format.Trim(),
+                    "ymd")) regex = "^(?:(?:(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\\/|-|\\.|\\x20)(?:0?2\\1(?:29)))|(?:(?:(?:1[6-9]|[2-9]\\d)?\\d{2})(\\/|-|\\.|\\x20)(?:(?:(?:0?[13578]|1[02])\\2(?:31))|(?:(?:0?[1,3-9]|1[0-2])\\2(29|30))|(?:(?:0?[1-9])|(?:1[0-2]))\\2(?:0?[1-9]|1\\d|2[0-8]))))$";
+                if (string.Equals(format.Trim(),
+                    "dMy")) regex = "^((31(?!\\ (Feb(ruary)?|Apr(il)?|June?|(Sep(?=\\b|t)t?|Nov)(ember)?)))|((30|29)(?!\\ Feb(ruary)?))|(29(?=\\ Feb(ruary)?\\ (((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))))|(0?[1-9])|1\\d|2[0-8])\\ (Jan(uary)?|Feb(ruary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep(?=\\b|t)t?|Nov|Dec)(ember)?)\\ ((1[6-9]|[2-9]\\d)\\d{2})$";
+                if (string.Equals(format.Trim(),
+                    "Mdy")) regex = "^(?:(((Jan(uary)?|Ma(r(ch)?|y)|Jul(y)?|Aug(ust)?|Oct(ober)?|Dec(ember)?)\\ 31)|((Jan(uary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep)(tember)?|(Nov|Dec)(ember)?)\\ (0?[1-9]|([12]\\d)|30))|(Feb(ruary)?\\ (0?[1-9]|1\\d|2[0-8]|(29(?=,?\\ ((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))))))\\,?\\ ((1[6-9]|[2-9]\\d)\\d{2}))$";
+                if (string.Equals(format.Trim(),
+                    "My")) regex = "^(Jan(uary)?|Feb(ruary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep(?=\\b|t)t?|Nov|Dec)(ember)?)[ /]((1[6-9]|[2-9]\\d)\\d{2})$";
+                if (string.Equals(format.Trim(),
+                    "my")) regex = "^(((0[123456789]|10|11|12)([- /\\.])(([1][9][0-9][0-9])|([2][0-9][0-9][0-9]))))$";
 
-                    // Perform the check and return the output
-                    return new Regex(regex).IsMatch(string0.Trim());
-                }
+                // Perform the check and return the output
+                return new Regex(regex).IsMatch(string0.Trim());
             }
             return false;
         }
@@ -448,18 +440,16 @@ namespace ModFreeSwitch.Common
             var parts = string0.Split(' ');
 
             // check the parts 
-            if (parts.Length > 1)
-            {
-                // Get the time part
-                var time = parts[parts.Length - 1];
+            if (parts.Length <= 1) return false;
+            // Get the time part
+            var time = parts[parts.Length - 1];
 
-                // Reconstruct the date part
-                var date = parts[0];
-                for (var i = 1; i < parts.Length - 2; i++) date += " " + parts[i];
+            // Reconstruct the date part
+            var date = parts[0];
+            for (var i = 1; i < parts.Length - 2; i++) date += " " + parts[i];
 
-                // Perform the validation check
-                valid = date.IsValidDate(format) && time.IsValidTime();
-            }
+            // Perform the validation check
+            valid = date.IsValidDate(format) && time.IsValidTime();
             return valid;
         }
 
@@ -470,10 +460,7 @@ namespace ModFreeSwitch.Common
         /// <param name="networkPrefix"></param>
         /// <returns>bool</returns>
         public static bool IsValidGhMsisdn(this string string0,
-            string networkPrefix)
-        {
-            return new Regex("^[0]?" + networkPrefix + "[0-9]{6,14}$").IsMatch(string0);
-        }
+            string networkPrefix) => new Regex("^[0]?" + networkPrefix + "[0-9]{6,14}$").IsMatch(string0);
 
         /// <summary>
         ///     Checks if both strings are equal to each other.  Safely handles the case
@@ -490,14 +477,15 @@ namespace ModFreeSwitch.Common
             string string1,
             bool caseSensitive)
         {
-            if (string0 == null && string1 == null) return true;
-            if (string0 == null && !string.IsNullOrEmpty(string1)) return false;
-            if (!string.IsNullOrEmpty(string0) && string1 == null) return false;
+            switch (string0)
+            {
+                case null when string1 == null:
+                    return true;
+                case null when !string.IsNullOrEmpty(string1):
+                    return false;
+            }
 
-            if (caseSensitive)
-                return string.Equals(string0,
-                    string1);
-            return false;
+            return caseSensitive && false;
         }
 
         /// <summary>
@@ -511,11 +499,8 @@ namespace ModFreeSwitch.Common
         /// <param name="string1">The string compared to</param>
         /// <returns>bool</returns>
         public static bool IsEqual(this string string0,
-            string string1)
-        {
-            return string0.IsEqual(string1,
-                true);
-        }
+            string string1) => string0.IsEqual(string1,
+            true);
 
         /// <summary>
         ///     Get 7-bit ASCII character array from input String. The lower 7 bits of each character in the input string is
@@ -523,22 +508,16 @@ namespace ModFreeSwitch.Common
         /// </summary>
         /// <param name="string0"></param>
         /// <returns>byte[]</returns>
-        public static byte[] GetAsciiBytes(this string string0)
-        {
-            return Encoding.ASCII.GetBytes(string0);
-        }
+        public static byte[] GetAsciiBytes(this string string0) => Encoding.ASCII.GetBytes(string0);
 
         /// <summary>
         ///     Get string value of an array byte
         /// </summary>
         /// <param name="input">Byte array whose string value is needed</param>
         /// <returns>string</returns>
-        public static string GetAsciiString(this byte[] input)
-        {
-            return Encoding.ASCII.GetString(input);
-        }
+        public static string GetAsciiString(this byte[] input) => Encoding.ASCII.GetString(input);
 
-        public static string GetString(this byte[] input) { return Encoding.UTF8.GetString(input); }
+        public static string GetString(this byte[] input) => Encoding.UTF8.GetString(input);
 
 
         /// <summary>
@@ -547,10 +526,7 @@ namespace ModFreeSwitch.Common
         /// </summary>
         /// <param name="obj">Object to check</param>
         /// <returns>string</returns>
-        public static string ToStringWithNullAsEmpty(this object obj)
-        {
-            return obj == null ? "" : obj.ToString();
-        }
+        public static string ToStringWithNullAsEmpty(this object obj) => obj?.ToString() ?? "";
 
         /// <summary>
         ///     Safely capitalizes a string by converting the first character to upper
@@ -563,16 +539,13 @@ namespace ModFreeSwitch.Common
         public static string Capitalize(this string string0)
         {
             // When the string is not null
-            if (!string0.IsEmpty())
-            {
-                if (string0.Length == 1) return string0.ToUpper();
-                var sb = new StringBuilder(string0.Length);
-                sb.Append(string0.Substring(0,
-                    1).ToUpper());
-                sb.Append(string0.Substring(1));
-                return sb.ToString();
-            }
-            return string0;
+            if (string0.IsEmpty()) return string0;
+            if (string0.Length == 1) return string0.ToUpper();
+            var sb = new StringBuilder(string0.Length);
+            sb.Append(string0.Substring(0,
+                1).ToUpper());
+            sb.Append(string0.Substring(1));
+            return sb.ToString();
         }
 
 
@@ -600,10 +573,7 @@ namespace ModFreeSwitch.Common
         /// </summary>
         /// <param name="check"></param>
         /// <returns></returns>
-        public static bool IsUuid(this string check)
-        {
-            return new Regex("/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$/").IsMatch(check);
-        }
+        public static bool IsUuid(this string check) => new Regex("/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$/").IsMatch(check);
 
         /// <summary>
         ///     Cheks whether a string is a valid UUID or GUID

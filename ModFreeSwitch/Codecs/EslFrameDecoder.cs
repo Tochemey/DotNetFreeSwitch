@@ -121,7 +121,7 @@ namespace ModFreeSwitch.Codecs
             return true;
         }
 
-        private void CompleteDecoding(List<object> output)
+        private void CompleteDecoding(ICollection<object> output)
         {
             // complete the decoding. Get ready for the next message
             Checkpoint(DecoderState.ReadHeader);
