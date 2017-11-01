@@ -1,13 +1,13 @@
-.NET FreeSwitch Framework
+.NET FreeSwitch Library
 ========================================
 
 ## **Overview**
-This framework helps interact with the FreeSwitch via its mod_event_socket. For more information about the mod_event_socket refer to [FreeSwitch web site](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket). 
+This library helps interact with the FreeSwitch via its mod_event_socket. For more information about the mod_event_socket refer to [FreeSwitch web site](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket). 
 The framework is written using [DotNetty](https://github.com/Azure/DotNetty).
 In its current state it can help build IVR applications more quickly. 
 
 ## **Features**
-The framework in its current state can be used to interact with FreeSwitch easily in:
+The library in its current state can be used to interact with FreeSwitch easily in:
 * Inbound mode [Event_Socket_Inbound](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket#mod_event_socket-Inbound)
 * Outbound mode [Event_Socket_Outbound](https://wiki.freeswitch.org/wiki/Event_Socket_Outbound)
 * One good thing it has is that you can implement your own FreeSwitch message encoder and decoder if you do not want to use the built-in ones
