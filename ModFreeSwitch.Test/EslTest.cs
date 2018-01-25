@@ -56,11 +56,9 @@ namespace ModFreeSwitch.Test
             var body = EslHeaderParser.SplitHeader(bodyLines.First());
             Assert.Equal("Event-Name",
                 body[0]);
-            Assert.Equal(true,
-                message.HasHeader(EslHeaders.ContentLength));
+            Assert.True(message.HasHeader(EslHeaders.ContentLength));
             var last = bodyLines.Last().TrimEnd('\n');
-            Assert.Equal(true,
-                last.Contains("OK"));
+            Assert.Contains("OK", last);
             Assert.Equal("+OK b317e530-1991-43d3-a03d-79a460a048c1",
                 last);
         }
@@ -79,8 +77,7 @@ namespace ModFreeSwitch.Test
                 message);
             Assert.Equal("+OK",
                 commandReply.ReplyText);
-            Assert.Equal(true,
-                commandReply.IsOk);
+            Assert.True(commandReply.IsOk);
             Assert.Equal("command/reply",
                 commandReply.ContentType);
         }
@@ -95,8 +92,7 @@ namespace ModFreeSwitch.Test
             channel.WriteInbound(byteBuffer);
 
             var message = channel.ReadInbound<EslMessage>();
-            Assert.Equal(true,
-                message.HasHeader("Event-Name"));
+            Assert.True(message.HasHeader("Event-Name"));
             Assert.Equal("CHANNEL_DATA",
                 message.Headers["Event-Name"]);
         }
@@ -112,26 +108,17 @@ namespace ModFreeSwitch.Test
                 port,
                 password);
             await client.ConnectAsync();
-            Assert.Equal(true,
-                client.IsActive());
+            Assert.True(client.IsActive());
             Thread.Sleep(100); // this is due to the asynchronous pattern of the framework
 
-            Assert.Equal(true,
-                client.CanSend());
-            Assert.Equal(true,
-                client.CanSend());
-            Assert.Equal(true,
-                client.CanSend());
-            Assert.Equal(true,
-                client.CanSend());
-            Assert.Equal(true,
-                client.CanSend());
-            Assert.Equal(true,
-                client.CanSend());
-            Assert.Equal(true,
-                client.CanSend());
-            Assert.Equal(true,
-                client.CanSend());
+            Assert.True(client.CanSend());
+            Assert.True(client.CanSend());
+            Assert.True(client.CanSend());
+            Assert.True(client.CanSend());
+            Assert.True(client.CanSend());
+            Assert.True(client.CanSend());
+            Assert.True(client.CanSend());
+            Assert.True(client.CanSend());
         }
 
         [Fact]
@@ -150,8 +137,7 @@ namespace ModFreeSwitch.Test
             var body = EslHeaderParser.SplitHeader(bodyLines.First());
             Assert.Equal("Event-Name",
                 body[0]);
-            Assert.Equal(true,
-                buf.HasHeader(EslHeaders.ContentLength));
+            Assert.True(buf.HasHeader(EslHeaders.ContentLength));
         }
 
         [Fact]
@@ -293,8 +279,7 @@ namespace ModFreeSwitch.Test
             var @event = "plain ALL";
             var subscribed = await client.SubscribeAsync(@event);
 
-            Assert.Equal(true,
-                subscribed);
+            Assert.True(subscribed);
         }
     }
 }

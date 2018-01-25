@@ -25,15 +25,8 @@ namespace ModFreeSwitch.Events
 
         public char Digit => Convert.ToChar(this["DTMF-Digit"]);
 
-        public int Duration
-        {
-            get
-            {
-                int duration;
-                return int.TryParse(this["DTMF-Duration"],
-                    out duration) ? duration : 0;
-            }
-        }
+        public int Duration => int.TryParse(this["DTMF-Duration"],
+            out var duration) ? duration : 0;
 
         public override string ToString() { return "Dtmf(" + Digit + ")."; }
     }

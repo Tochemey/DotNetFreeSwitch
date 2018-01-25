@@ -27,15 +27,11 @@ namespace ModFreeSwitch.Events
         private readonly EslMessage _response;
 
         public EslEvent(EslMessage response,
-            bool ignoreBody)
+            bool ignoreBody = false)
         {
             _response = response;
             _ignoreBody = ignoreBody;
         }
-
-        public EslEvent(EslMessage response) : this(response,
-            false)
-        { }
 
         public Guid CallerGuid => Guid.Parse(this["Caller-Unique-ID"]);
 
