@@ -1,5 +1,7 @@
 .NET FreeSwitch Library
 ========================================
+[![Build status](https://ci.appveyor.com/api/projects/status/gtd0537ge5jtfmxr?svg=true)](https://ci.appveyor.com/project/Tochemey/modfreeswitch)
+
 
 ## **Overview**
 This library helps interact with the FreeSwitch via its mod_event_socket. For more information about the mod_event_socket refer to [FreeSwitch web site](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket). 
