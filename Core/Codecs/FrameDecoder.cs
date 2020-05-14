@@ -35,7 +35,7 @@ namespace Core.Codecs
     ///     Loop until receive buffer size is >= Content-length
     ///     Extract content-length bytes from buffer and process
     /// </summary>
-    public sealed class EslFrameDecoder : ReplayingDecoder<EslFrameDecoder.DecoderState>
+    public sealed class FrameDecoder : ReplayingDecoder<FrameDecoder.DecoderState>
     {
         /// <summary>
         ///     EslFrameDecoder State. This help us to decode the FreeSwitch message based upon the different parts.
@@ -60,13 +60,13 @@ namespace Core.Codecs
 
         private FsMessage _actualMessage;
 
-        public EslFrameDecoder() : this(false) { }
+        public FrameDecoder() : this(false) { }
 
-        public EslFrameDecoder(bool treatUnknownHeadersAsBody) : this(DecoderState.ReadHeader,
+        public FrameDecoder(bool treatUnknownHeadersAsBody) : this(DecoderState.ReadHeader,
             treatUnknownHeadersAsBody)
         { }
 
-        public EslFrameDecoder(DecoderState initialState,
+        public FrameDecoder(DecoderState initialState,
             bool treatUnknownHeadersAsBody) : base(initialState)
         {
             _treatUnknownHeadersAsBody = treatUnknownHeadersAsBody;

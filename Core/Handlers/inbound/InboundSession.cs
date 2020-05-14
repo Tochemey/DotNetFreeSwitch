@@ -36,7 +36,7 @@ namespace Core.Handlers.inbound
         /// <summary>
         ///     This property holds any additional data that it is required by the InboundSession to run smoothly
         /// </summary>
-        public Dictionary<object, object> AdditonalData = new Dictionary<object, object>();
+        public Dictionary<object, object> Meta = new Dictionary<object, object>();
 
         protected IChannel Channel;
         protected InboundCall InboundCall;
@@ -66,21 +66,20 @@ namespace Core.Handlers.inbound
 
         public async Task OnError(Exception exception)
         {
-            if (exception is DecoderException)
+            switch (exception)
             {
-                _logger.Warn($"Encountered an issue during encoding: {exception}. shutting down...");
-                await Channel.CloseAsync();
-                return;
+                case DecoderException _:
+                    _logger.Warn($"Encountered an issue during encoding: {exception}. shutting down...");
+                    await Channel.CloseAsync();
+                    return;
+                case SocketException _:
+                    _logger.Warn($"Encountered an issue on the channel: {exception}. shutting down...");
+                    await Channel.CloseAsync();
+                    return;
+                default:
+                    _logger.Error($"Encountered an issue : {exception}");
+                    break;
             }
-
-            if (exception is SocketException)
-            {
-                _logger.Warn($"Encountered an issue on the channel: {exception}. shutting down...");
-                await Channel.CloseAsync();
-                return;
-            }
-
-            _logger.Error($"Encountered an issue : {exception}");
         }
 
         public void OnEventReceived(FsMessage fsMessage)
@@ -197,7 +196,7 @@ namespace Core.Handlers.inbound
 
         public bool CanHandleEvent(FsEvent @event) { return @event.UniqueId == InboundCall.UniqueId && @event.CallerGuid == InboundCall.CallerGuid; }
 
-        public bool CanSend() { return Channel != null && Channel.Active; }
+        public bool IsChannelReady() { return Channel != null && Channel.Active; }
 
         public async Task DivertEventsAsync(bool flag)
         {
@@ -305,7 +304,7 @@ namespace Core.Handlers.inbound
 
         public async Task<ApiResponse> SendApiAsync(ApiCommand apiCommand)
         {
-            if (!CanSend()) return null;
+            if (!IsChannelReady()) return null;
             var handler = (InboundSessionHandler) Channel.Pipeline.Last();
             var response = await handler.SendApiAsync(apiCommand,
                 Channel);
@@ -314,7 +313,7 @@ namespace Core.Handlers.inbound
 
         public async Task<Guid> SendBgApiAsync(BgApiCommand bgApiCommand)
         {
-            if (!CanSend()) return Guid.Empty;
+            if (!IsChannelReady()) return Guid.Empty;
             var handler = (InboundSessionHandler) Channel.Pipeline.Last();
             return await handler.SendBgApiAsync(bgApiCommand,
                 Channel);
@@ -322,7 +321,7 @@ namespace Core.Handlers.inbound
 
         public async Task<CommandReply> SendCommandAsync(BaseCommand command)
         {
-            if (!CanSend()) return null;
+            if (!IsChannelReady()) return null;
             var handler = (InboundSessionHandler) Channel.Pipeline.Last();
             var reply = await handler.SendCommandAsync(command,
                 Channel);

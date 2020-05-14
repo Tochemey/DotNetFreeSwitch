@@ -29,15 +29,15 @@ namespace Core.Codecs
     ///     Helps to encode the command that will be sent to freeSwitch via the mod_event_socket. All it does is to append
     ///     double Line Feed character at the end every command that goes against freeSwitch.
     /// </summary>
-    public sealed class EslFrameEncoder : MessageToMessageEncoder<BaseCommand>
+    public sealed class FrameEncoder : MessageToMessageEncoder<BaseCommand>
     {
         private const string MessageEndString = "\n\n";
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly Encoding encoding;
 
-        public EslFrameEncoder(Encoding encoding) { this.encoding = encoding; }
+        public FrameEncoder(Encoding encoding) { this.encoding = encoding; }
 
-        public EslFrameEncoder() : this(Encoding.GetEncoding(0)) { }
+        public FrameEncoder() : this(Encoding.GetEncoding(0)) { }
 
         public override bool IsSharable => true;
 

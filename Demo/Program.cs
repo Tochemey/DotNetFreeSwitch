@@ -26,7 +26,7 @@ namespace Demo
             Thread.Sleep(1000);
 
             Console.WriteLine("Connected and Authenticated {0}",
-                client.CanSend());
+                client.IsSessionReady());
             var @event = "plain CHANNEL_HANGUP CHANNEL_HANGUP_COMPLETE";
             var subscribed = client.SubscribeAsync(@event).ConfigureAwait(false);
 

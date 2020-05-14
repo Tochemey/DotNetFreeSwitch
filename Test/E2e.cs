@@ -56,14 +56,14 @@ namespace ModFreeSwitch.Test
             Assert.True(client.IsActive());
             Thread.Sleep(100); // this is due to the asynchronous pattern of the framework
 
-            Assert.True(client.CanSend());
-            Assert.True(client.CanSend());
-            Assert.True(client.CanSend());
-            Assert.True(client.CanSend());
-            Assert.True(client.CanSend());
-            Assert.True(client.CanSend());
-            Assert.True(client.CanSend());
-            Assert.True(client.CanSend());
+            Assert.True(client.IsSessionReady());
+            Assert.True(client.IsSessionReady());
+            Assert.True(client.IsSessionReady());
+            Assert.True(client.IsSessionReady());
+            Assert.True(client.IsSessionReady());
+            Assert.True(client.IsSessionReady());
+            Assert.True(client.IsSessionReady());
+            Assert.True(client.IsSessionReady());
         }
 
 
@@ -73,7 +73,7 @@ namespace ModFreeSwitch.Test
         {
             var authentication = new AuthCommand("ClueCon");
             var handlers = new IChannelHandler[2];
-            handlers[0] = new EslFrameEncoder();
+            handlers[0] = new FrameEncoder();
             handlers[1] = new StringEncoder();
             var channel = new EmbeddedChannel(handlers);
 

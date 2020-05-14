@@ -107,22 +107,21 @@ namespace Core.Handlers.outbound
 
         public async Task OnError(Exception exception)
         {
-            // disconnect when we have encountered system related errors
-            if (exception is DecoderException)
+            switch (exception)
             {
-                _logger.Warn($"Encountered an issue during encoding: {exception}. shutting down...");
-                await DisconnectAsync();
-                return;
+                // disconnect when we have encountered system related errors
+                case DecoderException _:
+                    _logger.Warn($"Encountered an issue during encoding: {exception}. shutting down...");
+                    await DisconnectAsync();
+                    return;
+                case SocketException _:
+                    _logger.Warn($"Encountered an issue on the channel: {exception}. shutting down...");
+                    await DisconnectAsync();
+                    return;
+                default:
+                    _logger.Error($"Encountered an issue : {exception}");
+                    break;
             }
-
-            if (exception is SocketException)
-            {
-                _logger.Warn($"Encountered an issue on the channel: {exception}. shutting down...");
-                await DisconnectAsync();
-                return;
-            }
-
-            _logger.Error($"Encountered an issue : {exception}");
         }
 
         public void OnEventReceived(FsMessage fsMessage)
@@ -148,7 +147,7 @@ namespace Core.Handlers.outbound
             await CleanUpAsync();
         }
 
-        public bool CanSend() { return Authenticated && IsActive(); }
+        public bool IsSessionReady() { return Authenticated && IsActive(); }
 
         public async Task CleanUpAsync()
         {
@@ -173,7 +172,7 @@ namespace Core.Handlers.outbound
 
         public async Task<ApiResponse> SendApiAsync(ApiCommand apiCommand)
         {
-            if (!CanSend()) return null;
+            if (!IsSessionReady()) return null;
             var handler = (OutboundSessionHandler) _channel.Pipeline.Last();
             var response = await handler.SendApiAsync(apiCommand,
                 _channel);
@@ -182,7 +181,7 @@ namespace Core.Handlers.outbound
 
         public async Task<Guid> SendBgApiAsync(BgApiCommand bgApiCommand)
         {
-            if (!CanSend()) return Guid.Empty;
+            if (!IsSessionReady()) return Guid.Empty;
             var handler = (OutboundSessionHandler) _channel.Pipeline.Last();
             return await handler.SendBgApiAsync(bgApiCommand,
                 _channel);
@@ -190,7 +189,7 @@ namespace Core.Handlers.outbound
 
         public async Task<CommandReply> SendCommandAsync(BaseCommand command)
         {
-            if (!CanSend()) return null;
+            if (!IsSessionReady()) return null;
             var handler = (OutboundSessionHandler) _channel.Pipeline.Last();
             var reply = await handler.SendCommandAsync(command,
                 _channel);
@@ -199,7 +198,7 @@ namespace Core.Handlers.outbound
 
         public async Task<bool> SubscribeAsync(string events)
         {
-            if (!CanSend()) return false;
+            if (!IsSessionReady()) return false;
             var handler = (OutboundSessionHandler) _channel.Pipeline.Last();
             var command = new EventCommand(events);
             var reply = await handler.SendCommandAsync(command,

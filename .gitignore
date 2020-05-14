@@ -156,3 +156,9 @@ $RECYCLE.BIN/
 .DS_Store
 /NDependOut
 /.vs/ModFreeSwitch/v15/Server/sqlite3
+/.idea/.idea.ModFreeSwitch/.idea/.gitignore
+/.idea/.idea.ModFreeSwitch/.idea/encodings.xml
+/.idea/.idea.ModFreeSwitch/.idea/indexLayout.xml
+/.idea/.idea.ModFreeSwitch/.idea/misc.xml
+/.idea/.idea.ModFreeSwitch/riderModule.iml
+/.idea/.idea.ModFreeSwitch/.idea/vcs.xml

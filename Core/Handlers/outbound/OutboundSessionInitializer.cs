@@ -32,10 +32,10 @@ namespace Core.Handlers.outbound
         {
             // get the channel pipeline
             var pipeline = channel.Pipeline;
-            pipeline.AddLast("EslFrameDecoder",
-                new EslFrameDecoder());
-            pipeline.AddLast("EslFrameEncoder",
-                new EslFrameEncoder());
+            pipeline.AddLast("FrameDecoder",
+                new FrameDecoder());
+            pipeline.AddLast("FrameEncoder",
+                new FrameEncoder());
             pipeline.AddLast("StringEncoder",
                 new StringEncoder());
             pipeline.AddLast("DebugLogging",

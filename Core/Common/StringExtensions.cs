@@ -22,10 +22,9 @@ using System.Text.RegularExpressions;
 
 namespace Core.Common
 {
-    public static class StringUtil
+    public static class StringExtensions
     {
-        private const string SAFE = ":~!@#$%^&*()-_+=/\\,.[]{}|?<>";
-        private const string PRINTABLE = ": ~`!@#$%^&*()-_+=/\\,.[]{}|?<>\"'";
+        private const string Safe = ":~!@#$%^&*()-_+=/\\,.[]{}|?<>";
 
         private static readonly Dictionary<string, string> IpPatterns = new Dictionary<string, string>(0);
 
@@ -69,7 +68,7 @@ namespace Core.Common
         }
 
         /// <summary>
-        ///     This function sanitze string against SQL Injections
+        ///     This function sanitise string against SQL Injections
         /// </summary>
         /// <param name="string0">The String to sanitize</param>
         /// <returns></returns>
@@ -84,7 +83,8 @@ namespace Core.Common
                 .RegexReplace(@"[*/]+",
                     string.Empty)
                 // removes / and * used also to comment in sql scripts
-                .RegexReplace(@"(;|\s)(exec|execute|select|insert|update|delete|create|alter|drop|rename|truncate|backup|restore)\s",
+                .RegexReplace(
+                    @"(;|\s)(exec|execute|select|insert|update|delete|create|alter|drop|rename|truncate|backup|restore)\s",
                     string.Empty,
                     RegexOptions.IgnoreCase);
         }
@@ -96,7 +96,9 @@ namespace Core.Common
         /// <returns>true when valid and false on the contrary</returns>
         public static bool IsValidUrl(this string url)
         {
-            return new Regex("^(?:(?:(ht|f)tps?|file|news|gopher)://)?(([\\w!~*'()\\.&=+$%-]+: )?[\\w!~*'()\\.&=+$%-]+@)?(([0-9]{1,3}\\.){3}[0-9]{1,3}|([\\w!~*'()-]+\\.)*([\\w^-][\\w-]{0,61})?[\\w]\\.[a-z]{2,6})(:[0-9]{1,4})?((/*)|(/+[\\w!~*'()\\.;?:@&=+$,%#-]+)+/*)$").IsMatch(url);
+            return new Regex(
+                    "^(?:(?:(ht|f)tps?|file|news|gopher)://)?(([\\w!~*'()\\.&=+$%-]+: )?[\\w!~*'()\\.&=+$%-]+@)?(([0-9]{1,3}\\.){3}[0-9]{1,3}|([\\w!~*'()-]+\\.)*([\\w^-][\\w-]{0,61})?[\\w]\\.[a-z]{2,6})(:[0-9]{1,4})?((/*)|(/+[\\w!~*'()\\.;?:@&=+$,%#-]+)+/*)$")
+                .IsMatch(url);
         }
 
         /// <summary>
@@ -119,7 +121,9 @@ namespace Core.Common
             bool platformIndependent)
         {
             var sPattern = @"^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d|\..*)(\..+)?$)[^\x00-\x1f\\?*:\"";|/]+$";
-            if (platformIndependent) sPattern = @"^(([a-zA-Z]:|\\)\\)?(((\.)|(\.\.)|([^\\/:\*\?""\|<>\. ](([^\\/:\*\?""\|<>\. ])|([^\\/:\*\?""\|<>]*[^\\/:\*\?""\|<>\. ]))?))\\)*[^\\/:\*\?""\|<>\. ](([^\\/:\*\?""\|<>\. ])|([^\\/:\*\?""\|<>]*[^\\/:\*\?""\|<>\. ]))?$";
+            if (platformIndependent)
+                sPattern =
+                    @"^(([a-zA-Z]:|\\)\\)?(((\.)|(\.\.)|([^\\/:\*\?""\|<>\. ](([^\\/:\*\?""\|<>\. ])|([^\\/:\*\?""\|<>]*[^\\/:\*\?""\|<>\. ]))?))\\)*[^\\/:\*\?""\|<>\. ](([^\\/:\*\?""\|<>\. ])|([^\\/:\*\?""\|<>]*[^\\/:\*\?""\|<>\. ]))?$";
             return Regex.IsMatch(filename,
                 sPattern,
                 RegexOptions.CultureInvariant);
@@ -162,7 +166,7 @@ namespace Core.Common
 
             // loop through the SAFE string 
             // When the character matches one of the character in that SAFE string we exit
-            var safeArray = SAFE.ToCharArray();
+            var safeArray = Safe.ToCharArray();
             return safeArray.Any(t => ch.CompareTo(t) == 0);
         }
 
@@ -180,7 +184,9 @@ namespace Core.Common
         {
             // convert the string into characters array and loop through the array
             var stringArray = string0.ToCharArray();
-            for (var i = 0; i < stringArray.Length; i++) if (!stringArray[i].IsSafeChar()) return false;
+            for (var i = 0; i < stringArray.Length; i++)
+                if (!stringArray[i].IsSafeChar())
+                    return false;
             return true;
         }
 
@@ -219,9 +225,11 @@ namespace Core.Common
         {
             // When the string is null return false
             if (string0.IsEmpty()) return false;
-            const string moneyRegex = "(?!0,?\\d)(?:\\d{1,3}(?:([,\\.])\\d{3})?(?:\\1\\d{3})*|(?:\\d+))((?!\\1)[,\\.]\\d{2})?";
+            const string moneyRegex =
+                "(?!0,?\\d)(?:\\d{1,3}(?:([,\\.])\\d{3})?(?:\\1\\d{3})*|(?:\\d+))((?!\\1)[,\\.]\\d{2})?";
             var regex = "^(?!\\x{00a2})\\p{Sc}?" + moneyRegex + "$";
-            if (IsEmpty(currencyPosition) && currencyPosition.Equals("right")) regex = "^" + moneyRegex + "(?<!\\x{00a2})\\p{Sc}?$";
+            if (IsEmpty(currencyPosition) && currencyPosition.Equals("right"))
+                regex = "^" + moneyRegex + "(?<!\\x{00a2})\\p{Sc}?$";
             return new Regex(regex).IsMatch(string0.Trim());
         }
 
@@ -232,7 +240,9 @@ namespace Core.Common
         /// <returns>bool. True when it is avlid email address and false on the contrary</returns>
         public static bool IsValidEmail(this string string0)
         {
-            return new Regex("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)$").IsMatch(string0);
+            return new Regex(
+                    "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)$")
+                .IsMatch(string0);
         }
 
         /// <summary>
@@ -247,7 +257,7 @@ namespace Core.Common
 
             // Get the IPv4 pattern regex
             return IpPatterns.TryGetValue("IPv4",
-                       out var pattern) && new Regex(pattern).IsMatch(string0);
+                out var pattern) && new Regex(pattern).IsMatch(string0);
         }
 
         /// <summary>
@@ -262,7 +272,7 @@ namespace Core.Common
 
             // Get the IPv4 pattern regex
             return IpPatterns.TryGetValue("IPv6",
-                       out var pattern) && new Regex(pattern).IsMatch(string0);
+                out var pattern) && new Regex(pattern).IsMatch(string0);
         }
 
         /// <summary>
@@ -317,7 +327,9 @@ namespace Core.Common
         /// <returns>bool</returns>
         public static bool IsValidTime(this string string0)
         {
-            return new Regex("^((([0]?[1-9]|1[0-2])(:|\\.)[0-5][0-9]((:|\\.)[0-5][0-9])?( )?(AM|am|aM|Am|PM|pm|pM|Pm))|(([0]?[0-9]|1[0-9]|2[0-3])(:|\\.)[0-5][0-9]((:|\\.)[0-5][0-9])?))$").IsMatch(string0);
+            return new Regex(
+                    "^((([0]?[1-9]|1[0-2])(:|\\.)[0-5][0-9]((:|\\.)[0-5][0-9])?( )?(AM|am|aM|Am|PM|pm|pM|Pm))|(([0]?[0-9]|1[0-9]|2[0-3])(:|\\.)[0-5][0-9]((:|\\.)[0-5][0-9])?))$")
+                .IsMatch(string0);
         }
 
         /// <summary>
@@ -336,7 +348,8 @@ namespace Core.Common
         {
             const string standardFormat = "^\\+(?:[0-9] ?){6,14}[0-9]$";
             //ITU-T E.164 standard
-            if (!IsEmpty(standard) && standard.Equals("EPP")) return new Regex("^\\+[0-9]{1,3}\\.[0-9]{4,14}(?:x\\.+)?$").IsMatch(string0);
+            if (!IsEmpty(standard) && standard.Equals("EPP"))
+                return new Regex("^\\+[0-9]{1,3}\\.[0-9]{4,14}(?:x\\.+)?$").IsMatch(string0);
             return new Regex(standardFormat).IsMatch(string0);
         }
 
@@ -375,7 +388,10 @@ namespace Core.Common
             if (format.IsEmpty())
             {
                 // When the string to check is not null 
-                if (!string0.IsEmpty()) return new Regex("^(?:(?:(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\\/|-|\\.|\\x20)(?:0?2\\1(?:29)))|(?:(?:(?:1[6-9]|[2-9]\\d)?\\d{2})(\\/|-|\\.|\\x20)(?:(?:(?:0?[13578]|1[02])\\2(?:31))|(?:(?:0?[1,3-9]|1[0-2])\\2(29|30))|(?:(?:0?[1-9])|(?:1[0-2]))\\2(?:0?[1-9]|1\\d|2[0-8]))))$").IsMatch(string0.Trim());
+                if (!string0.IsEmpty())
+                    return new Regex(
+                            "^(?:(?:(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\\/|-|\\.|\\x20)(?:0?2\\1(?:29)))|(?:(?:(?:1[6-9]|[2-9]\\d)?\\d{2})(\\/|-|\\.|\\x20)(?:(?:(?:0?[13578]|1[02])\\2(?:31))|(?:(?:0?[1,3-9]|1[0-2])\\2(29|30))|(?:(?:0?[1-9])|(?:1[0-2]))\\2(?:0?[1-9]|1\\d|2[0-8]))))$")
+                        .IsMatch(string0.Trim());
             }
             else
             {
@@ -383,23 +399,36 @@ namespace Core.Common
                 // Based upon the format given the check will be done accordingly
                 var regex = "";
                 if (string.Equals(format.Trim(),
-                    "dmy")) regex = "^(?:(?:31(\\/|-|\\.|\\x20)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.|\\x20)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.|\\x20)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.|\\x20)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$";
+                    "dmy"))
+                    regex =
+                        "^(?:(?:31(\\/|-|\\.|\\x20)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.|\\x20)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.|\\x20)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.|\\x20)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$";
                 if (string.Equals(format.Trim(),
-                    "mdy")) regex = "^(?:(?:(?:0?[13578]|1[02])(\\/|-|\\.|\\x20)31)\\1|(?:(?:0?[13-9]|1[0-2])(\\/|-|\\.|\\x20)(?:29|30)\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:0?2(\\/|-|\\.|\\x20)29\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:(?:0?[1-9])|(?:1[0-2]))(\\/|-|\\.|\\x20)(?:0?[1-9]|1\\d|2[0-8])\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$";
+                    "mdy"))
+                    regex =
+                        "^(?:(?:(?:0?[13578]|1[02])(\\/|-|\\.|\\x20)31)\\1|(?:(?:0?[13-9]|1[0-2])(\\/|-|\\.|\\x20)(?:29|30)\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:0?2(\\/|-|\\.|\\x20)29\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:(?:0?[1-9])|(?:1[0-2]))(\\/|-|\\.|\\x20)(?:0?[1-9]|1\\d|2[0-8])\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$";
                 if (string.Equals(format.Trim(),
-                    "ymd")) regex = "^(?:(?:(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\\/|-|\\.|\\x20)(?:0?2\\1(?:29)))|(?:(?:(?:1[6-9]|[2-9]\\d)?\\d{2})(\\/|-|\\.|\\x20)(?:(?:(?:0?[13578]|1[02])\\2(?:31))|(?:(?:0?[1,3-9]|1[0-2])\\2(29|30))|(?:(?:0?[1-9])|(?:1[0-2]))\\2(?:0?[1-9]|1\\d|2[0-8]))))$";
+                    "ymd"))
+                    regex =
+                        "^(?:(?:(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\\/|-|\\.|\\x20)(?:0?2\\1(?:29)))|(?:(?:(?:1[6-9]|[2-9]\\d)?\\d{2})(\\/|-|\\.|\\x20)(?:(?:(?:0?[13578]|1[02])\\2(?:31))|(?:(?:0?[1,3-9]|1[0-2])\\2(29|30))|(?:(?:0?[1-9])|(?:1[0-2]))\\2(?:0?[1-9]|1\\d|2[0-8]))))$";
                 if (string.Equals(format.Trim(),
-                    "dMy")) regex = "^((31(?!\\ (Feb(ruary)?|Apr(il)?|June?|(Sep(?=\\b|t)t?|Nov)(ember)?)))|((30|29)(?!\\ Feb(ruary)?))|(29(?=\\ Feb(ruary)?\\ (((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))))|(0?[1-9])|1\\d|2[0-8])\\ (Jan(uary)?|Feb(ruary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep(?=\\b|t)t?|Nov|Dec)(ember)?)\\ ((1[6-9]|[2-9]\\d)\\d{2})$";
+                    "dMy"))
+                    regex =
+                        "^((31(?!\\ (Feb(ruary)?|Apr(il)?|June?|(Sep(?=\\b|t)t?|Nov)(ember)?)))|((30|29)(?!\\ Feb(ruary)?))|(29(?=\\ Feb(ruary)?\\ (((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))))|(0?[1-9])|1\\d|2[0-8])\\ (Jan(uary)?|Feb(ruary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep(?=\\b|t)t?|Nov|Dec)(ember)?)\\ ((1[6-9]|[2-9]\\d)\\d{2})$";
                 if (string.Equals(format.Trim(),
-                    "Mdy")) regex = "^(?:(((Jan(uary)?|Ma(r(ch)?|y)|Jul(y)?|Aug(ust)?|Oct(ober)?|Dec(ember)?)\\ 31)|((Jan(uary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep)(tember)?|(Nov|Dec)(ember)?)\\ (0?[1-9]|([12]\\d)|30))|(Feb(ruary)?\\ (0?[1-9]|1\\d|2[0-8]|(29(?=,?\\ ((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))))))\\,?\\ ((1[6-9]|[2-9]\\d)\\d{2}))$";
+                    "Mdy"))
+                    regex =
+                        "^(?:(((Jan(uary)?|Ma(r(ch)?|y)|Jul(y)?|Aug(ust)?|Oct(ober)?|Dec(ember)?)\\ 31)|((Jan(uary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep)(tember)?|(Nov|Dec)(ember)?)\\ (0?[1-9]|([12]\\d)|30))|(Feb(ruary)?\\ (0?[1-9]|1\\d|2[0-8]|(29(?=,?\\ ((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))))))\\,?\\ ((1[6-9]|[2-9]\\d)\\d{2}))$";
                 if (string.Equals(format.Trim(),
-                    "My")) regex = "^(Jan(uary)?|Feb(ruary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep(?=\\b|t)t?|Nov|Dec)(ember)?)[ /]((1[6-9]|[2-9]\\d)\\d{2})$";
+                    "My"))
+                    regex =
+                        "^(Jan(uary)?|Feb(ruary)?|Ma(r(ch)?|y)|Apr(il)?|Ju((ly?)|(ne?))|Aug(ust)?|Oct(ober)?|(Sep(?=\\b|t)t?|Nov|Dec)(ember)?)[ /]((1[6-9]|[2-9]\\d)\\d{2})$";
                 if (string.Equals(format.Trim(),
                     "my")) regex = "^(((0[123456789]|10|11|12)([- /\\.])(([1][9][0-9][0-9])|([2][0-9][0-9][0-9]))))$";
 
                 // Perform the check and return the output
                 return new Regex(regex).IsMatch(string0.Trim());
             }
+
             return false;
         }
 
@@ -412,7 +441,8 @@ namespace Core.Common
         /// <returns>bool</returns>
         public static bool IsValidTimeAs24H(this string string0)
         {
-            return new Regex("^((0?[1-9]|1[012])(:[0-5]\\d){0,2} ?([AP]M|[ap]m))$|^([01]\\d|2[0-3])(:[0-5]\\d){0,2}$").IsMatch(string0);
+            return new Regex("^((0?[1-9]|1[012])(:[0-5]\\d){0,2} ?([AP]M|[ap]m))$|^([01]\\d|2[0-3])(:[0-5]\\d){0,2}$")
+                .IsMatch(string0);
         }
 
         /// <summary>
@@ -434,7 +464,6 @@ namespace Core.Common
             string format)
         {
             // variable holding the end result
-            var valid = false;
 
             // Get the various parts of the string0
             var parts = string0.Split(' ');
@@ -442,14 +471,14 @@ namespace Core.Common
             // check the parts 
             if (parts.Length <= 1) return false;
             // Get the time part
-            var time = parts[parts.Length - 1];
+            var time = parts[^1];
 
             // Reconstruct the date part
             var date = parts[0];
             for (var i = 1; i < parts.Length - 2; i++) date += " " + parts[i];
 
             // Perform the validation check
-            valid = date.IsValidDate(format) && time.IsValidTime();
+            var valid = date.IsValidDate(format) && time.IsValidTime();
             return valid;
         }
 
@@ -477,15 +506,12 @@ namespace Core.Common
             string string1,
             bool caseSensitive)
         {
-            switch (string0)
+            return string0 switch
             {
-                case null when string1 == null:
-                    return true;
-                case null when !string.IsNullOrEmpty(string1):
-                    return false;
-            }
-
-            return caseSensitive && false;
+                null when string1 == null => true,
+                null when !string.IsNullOrEmpty(string1) => false,
+                _ => false
+            };
         }
 
         /// <summary>
@@ -573,10 +599,12 @@ namespace Core.Common
         /// </summary>
         /// <param name="check"></param>
         /// <returns></returns>
-        public static bool IsUuid(this string check) => new Regex("/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$/").IsMatch(check);
+        public static bool IsUuid(this string check) =>
+            new Regex("/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$/")
+                .IsMatch(check);
 
         /// <summary>
-        ///     Cheks whether a string is a valid UUID or GUID
+        ///     Checks whether a string is a valid UUID or GUID
         /// </summary>
         /// <param name="check"></param>
         /// <returns></returns>
@@ -586,10 +614,14 @@ namespace Core.Common
             //return Guid.TryParse(check, out guid);
             try
             {
-                var guid = new Guid(check);
+                new Guid(check);
                 return true;
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+                // ignored
+            }
+
             return false;
         }
 
@@ -622,16 +654,18 @@ namespace Core.Common
         internal static void PopulateIpPatterns()
         {
             // variable holding the pattern
-            var pattern = "";
+            string pattern;
 
-            // check whether the dictionnary contains the key IPv6
+            // check whether the dictionary contains the key IPv6
             if (!IpPatterns.ContainsKey("IPv6"))
             {
                 pattern = "((([0-9A-Fa-f]{1,4}:){7}(([0-9A-Fa-f]{1,4})|:))|(([0-9A-Fa-f]{1,4}:){6}";
                 pattern += "(:|((25[0-5]|2[0-4]\\d|[01]?\\d{1,2})(\\.(25[0-5]|2[0-4]\\d|[01]?\\d{1,2})){3})";
                 pattern += "|(:[0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){5}((:((25[0-5]|2[0-4]\\d|[01]?\\d{1,2})";
-                pattern += "(\\.(25[0-5]|2[0-4]\\d|[01]?\\d{1,2})){3})?)|((:[0-9A-Fa-f]{1,4}){1,2})))|(([0-9A-Fa-f]{1,4}:)";
-                pattern += "{4}(:[0-9A-Fa-f]{1,4}){0,1}((:((25[0-5]|2[0-4]\\d|[01]?\\d{1,2})(\\.(25[0-5]|2[0-4]\\d|[01]?\\d{1,2}))";
+                pattern +=
+                    "(\\.(25[0-5]|2[0-4]\\d|[01]?\\d{1,2})){3})?)|((:[0-9A-Fa-f]{1,4}){1,2})))|(([0-9A-Fa-f]{1,4}:)";
+                pattern +=
+                    "{4}(:[0-9A-Fa-f]{1,4}){0,1}((:((25[0-5]|2[0-4]\\d|[01]?\\d{1,2})(\\.(25[0-5]|2[0-4]\\d|[01]?\\d{1,2}))";
                 pattern += "{3})?)|((:[0-9A-Fa-f]{1,4}){1,2})))|(([0-9A-Fa-f]{1,4}:){3}(:[0-9A-Fa-f]{1,4}){0,2}";
                 pattern += "((:((25[0-5]|2[0-4]\\d|[01]?\\d{1,2})(\\.(25[0-5]|2[0-4]\\d|[01]?\\d{1,2})){3})?)|";
                 pattern += "((:[0-9A-Fa-f]{1,4}){1,2})))|(([0-9A-Fa-f]{1,4}:){2}(:[0-9A-Fa-f]{1,4}){0,3}";
@@ -640,7 +674,8 @@ namespace Core.Common
                 pattern += "{0,4}((:((25[0-5]|2[0-4]\\d|[01]?\\d{1,2})(\\.(25[0-5]|2[0-4]\\d|[01]?\\d{1,2})){3})?)";
                 pattern += "|((:[0-9A-Fa-f]{1,4}){1,2})))|(:(:[0-9A-Fa-f]{1,4}){0,5}((:((25[0-5]|2[0-4]";
                 pattern += "\\d|[01]?\\d{1,2})(\\.(25[0-5]|2[0-4]\\d|[01]?\\d{1,2})){3})?)|((:[0-9A-Fa-f]{1,4})";
-                pattern += "{1,2})))|(((25[0-5]|2[0-4]\\d|[01]?\\d{1,2})(\\.(25[0-5]|2[0-4]\\d|[01]?\\d{1,2})){3})))(%.+)?";
+                pattern +=
+                    "{1,2})))|(((25[0-5]|2[0-4]\\d|[01]?\\d{1,2})(\\.(25[0-5]|2[0-4]\\d|[01]?\\d{1,2})){3})))(%.+)?";
 
                 // add to the dictionary the IPv6 pattern
                 IpPatterns.Add("IPv6",
@@ -648,12 +683,12 @@ namespace Core.Common
             }
 
             // check whether the dictionary contains the key IPv4
-            if (!IpPatterns.ContainsKey("IPv4"))
-            {
-                pattern = "(?:(?:25[0-5]|2[0-4][0-9]|(?:(?:1[0-9])?|[1-9]?)[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|(?:(?:1[0-9])?|[1-9]?)[0-9])";
-                IpPatterns.Add("IPv4",
-                    pattern);
-            }
+            if (IpPatterns.ContainsKey("IPv4")) return;
+
+            pattern =
+                "(?:(?:25[0-5]|2[0-4][0-9]|(?:(?:1[0-9])?|[1-9]?)[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|(?:(?:1[0-9])?|[1-9]?)[0-9])";
+            IpPatterns.Add("IPv4",
+                pattern);
         }
 
         #endregion

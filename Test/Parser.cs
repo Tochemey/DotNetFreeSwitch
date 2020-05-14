@@ -29,7 +29,7 @@ namespace ModFreeSwitch.Test
             var eventData = AppDomain.CurrentDomain.BaseDirectory + @"/Messages/BackgroundJob.txt";
             var backgroundJobBytes = File.ReadAllBytes(eventData);
             var byteBuffer = Unpooled.CopiedBuffer(backgroundJobBytes);
-            var channel = new EmbeddedChannel(new EslFrameDecoder());
+            var channel = new EmbeddedChannel(new FrameDecoder());
             channel.WriteInbound(byteBuffer);
 
             var message = channel.ReadInbound<FsMessage>();
@@ -50,7 +50,7 @@ namespace ModFreeSwitch.Test
             var eventData = AppDomain.CurrentDomain.BaseDirectory + @"/Messages/ChannelData.txt";
             var backgroundJobBytes = File.ReadAllBytes(eventData);
             var byteBuffer = Unpooled.CopiedBuffer(backgroundJobBytes);
-            var channel = new EmbeddedChannel(new EslFrameDecoder());
+            var channel = new EmbeddedChannel(new FrameDecoder());
             channel.WriteInbound(byteBuffer);
 
             var message = channel.ReadInbound<FsMessage>();
@@ -69,7 +69,7 @@ namespace ModFreeSwitch.Test
             var eventData = AppDomain.CurrentDomain.BaseDirectory + @"/Messages/ChannelData.txt";
             var backgroundJobBytes = File.ReadAllBytes(eventData);
             var byteBuffer = Unpooled.CopiedBuffer(backgroundJobBytes);
-            var channel = new EmbeddedChannel(new EslFrameDecoder());
+            var channel = new EmbeddedChannel(new FrameDecoder());
             channel.WriteInbound(byteBuffer);
 
             var message = channel.ReadInbound<FsMessage>();
@@ -86,7 +86,7 @@ namespace ModFreeSwitch.Test
             var charBytes = File.ReadAllBytes(@event);
             var msg = Unpooled.CopiedBuffer(charBytes);
             // Let us read the file
-            var channel = new EmbeddedChannel(new EslFrameDecoder());
+            var channel = new EmbeddedChannel(new FrameDecoder());
             channel.WriteInbound(msg);
             var buf = channel.ReadInbound<FsMessage>();
             var bodyLines = buf.BodyLines;
@@ -117,7 +117,7 @@ namespace ModFreeSwitch.Test
             var @event = AppDomain.CurrentDomain.BaseDirectory + @"/Messages/Gateways.txt";
             var charBytes = File.ReadAllBytes(@event);
             var message = Unpooled.CopiedBuffer(charBytes);
-            var channel = new EmbeddedChannel(new EslFrameDecoder());
+            var channel = new EmbeddedChannel(new FrameDecoder());
             channel.WriteInbound(message);
             var buf = channel.ReadInbound<FsMessage>();
 
