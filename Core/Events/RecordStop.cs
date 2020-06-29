@@ -22,11 +22,16 @@ namespace Core.Events
 {
     public class RecordStop : FsEvent
     {
-        public RecordStop(FsMessage message) : base(message) { }
+        public RecordStop(FsMessage message) : base(message)
+        {
+        }
+
         public string RecordFilePath => this["Record-File-Path"];
 
-        public int RecordMilliSeconds => string.IsNullOrEmpty(this["record_ms"]) ? 0 : this["record_ms"].IsNumeric() ? Convert.ToInt32(this["record_ms"]) : 0;
+        public int RecordMilliSeconds => string.IsNullOrEmpty(this["record_ms"]) ? 0 :
+            this["record_ms"].IsNumeric() ? Convert.ToInt32(this["record_ms"]) : 0;
 
-        public int RecordSeconds => string.IsNullOrEmpty(this["record_seconds"]) ? 0 : this["record_seconds"].IsNumeric() ? Convert.ToInt32(this["record_seconds"]) : 0;
+        public int RecordSeconds => string.IsNullOrEmpty(this["record_seconds"]) ? 0 :
+            this["record_seconds"].IsNumeric() ? Convert.ToInt32(this["record_seconds"]) : 0;
     }
 }

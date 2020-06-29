@@ -24,7 +24,10 @@ namespace Core.Handlers.inbound
 {
     public class InboundSessionInitializer : ChannelInitializer<ISocketChannel>
     {
-        public InboundSessionInitializer(IInboundListener inboundListener) { InboundListener = inboundListener; }
+        public InboundSessionInitializer(IInboundListener inboundListener)
+        {
+            InboundListener = inboundListener;
+        }
 
         public IInboundListener InboundListener { get; }
 

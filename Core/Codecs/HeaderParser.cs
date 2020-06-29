@@ -42,6 +42,7 @@ namespace Core.Codecs
 
             var nameStart = FindNonWhitespace(sb,
                 0);
+            
             for (nameEnd = nameStart; nameEnd < len; nameEnd++)
             {
                 var ch = sb[nameEnd];
@@ -57,6 +58,7 @@ namespace Core.Codecs
 
             var valueStart = FindNonWhitespace(sb,
                 colonEnd);
+            
             return valueStart == len ? new[]
             {
                 sb.Substring(nameStart,

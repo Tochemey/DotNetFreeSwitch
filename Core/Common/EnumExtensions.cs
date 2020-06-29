@@ -22,13 +22,10 @@ namespace Core.Common
     {
         public static T Parse<T>(string name) where T : struct
         {
-            T t;
             Enum.TryParse(name,
                 true,
-                out t);
+                out T t);
             return t;
-
-            //return (T) Enum.Parse(typeof (T), name, true);
         }
     }
 }

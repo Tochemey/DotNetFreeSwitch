@@ -22,7 +22,7 @@ using Core.Messages;
 namespace Core.Events
 {
     /// <summary>
-    /// freeSWITCH event
+    ///     freeSWITCH event
     /// </summary>
     public class FsEvent
     {
@@ -69,7 +69,8 @@ namespace Core.Events
                 if (_ignoreBody)
                 {
                     if (_response.HasHeader(headerName)) return _response.HeaderValue(headerName);
-                    if (_response.HasHeader("variable_" + headerName)) return _response.HeaderValue("variable_" + headerName);
+                    if (_response.HasHeader("variable_" + headerName))
+                        return _response.HeaderValue("variable_" + headerName);
                 }
 
                 var map = _response.ParseBodyLines();

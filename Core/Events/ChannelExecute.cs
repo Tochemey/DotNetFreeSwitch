@@ -23,7 +23,9 @@ namespace Core.Events
     /// </summary>
     public class ChannelExecute : FsEvent
     {
-        public ChannelExecute(FsMessage message) : base(message) { }
+        public ChannelExecute(FsMessage message) : base(message)
+        {
+        }
 
         /// <summary>
         ///     Gets application to execute.
@@ -40,6 +42,9 @@ namespace Core.Events
         /// </summary>
         protected string ApplicationResponse => this["Application-Response"];
 
-        public override string ToString() { return "ChannelExecute(" + Application + ", '" + ApplicationData + "')"; }
+        public override string ToString()
+        {
+            return "ChannelExecute(" + Application + ", '" + ApplicationData + "')";
+        }
     }
 }

@@ -19,7 +19,7 @@ using System;
 namespace Core.Commands
 {
     /// <summary>
-    /// SendMSG command. Help execute an application for a specific FreeSwitch channel 
+    ///     SendMSG command. Help execute an application for a specific FreeSwitch channel
     /// </summary>
     public sealed class SendMsgCommand : BaseCommand
     {
@@ -101,13 +101,15 @@ namespace Core.Commands
 
         public string ApplicationName { get; }
 
-        public override string Argument => string.Empty;
+        protected override string Argument => string.Empty;
 
         public override string Command
         {
             get
             {
-                var cmd = $"sendmsg  {_uuid}\ncall-command: {_callCommand}\nexecute-app-name: {ApplicationName}\nexecute-app-arg: {ApplicationArgs}\nloops: {_loop}";
+                var cmd =
+                    $"sendmsg  {_uuid}\ncall-command: {_callCommand}\nexecute-app-name: {ApplicationName}\nexecute-app-arg: {ApplicationArgs}\nloops: {_loop}";
+               
                 if (_eventLock) cmd += "\nevent-lock: true";
                 else cmd += "\nevent-lock: false";
                 return cmd;

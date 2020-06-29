@@ -17,19 +17,22 @@
 namespace Core.Commands
 {
     /// <summary>
-    /// FreeSwitch API command. 
+    ///     FreeSwitch API command.
     /// </summary>
     public sealed class ApiCommand : BaseCommand
     {
-        public ApiCommand(string apiCommand) => Argument = apiCommand;
+        public ApiCommand(string apiCommand)
+        {
+            Argument = apiCommand;
+        }
 
         /// <summary>
-        /// The api command argument 
+        ///     The api command argument
         /// </summary>
-        public override string Argument { get; }
+        protected override string Argument { get; }
 
         /// <summary>
-        /// The api command itself 
+        ///     The api command itself
         /// </summary>
         public override string Command => "api";
     }

@@ -23,6 +23,8 @@ namespace Core.Events
     /// </summary>
     public class ChannelProgress : ChannelStateEvent
     {
-        public ChannelProgress(FsMessage message) : base(message) { }
+        public ChannelProgress(FsMessage message) : base(message)
+        {
+        }
     }
 }

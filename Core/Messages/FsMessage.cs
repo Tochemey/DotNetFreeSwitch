@@ -82,9 +82,10 @@ namespace Core.Messages
         {
             if (!HasContentLength()) return 0;
             var len = Headers[Messages.Headers.ContentLength];
-            int contentLength;
             return int.TryParse(len,
-                out contentLength) ? contentLength : 0;
+                out var contentLength)
+                ? contentLength
+                : 0;
         }
 
         /// <summary>
@@ -102,7 +103,8 @@ namespace Core.Messages
         /// <returns></returns>
         public bool HasThirdPart()
         {
-            return BodyLines.Select(EslHeaderParser.SplitHeader).Any(bodyParts => bodyParts[0].Equals(Messages.Headers.ContentLength));
+            return BodyLines.Select(EslHeaderParser.SplitHeader)
+                .Any(bodyParts => bodyParts[0].Equals(Messages.Headers.ContentLength));
         }
 
         /// <summary>
@@ -111,13 +113,12 @@ namespace Core.Messages
         /// <returns></returns>
         public int ThirdPartContentLength()
         {
-            foreach (var bodyParts in BodyLines.Select(EslHeaderParser.SplitHeader).Where(bodyParts => bodyParts[0].Equals(Messages.Headers.ContentLength)))
-            {
-                int len;
-
+            foreach (var bodyParts in BodyLines.Select(EslHeaderParser.SplitHeader)
+                .Where(bodyParts => bodyParts[0].Equals(Messages.Headers.ContentLength)))
                 return int.TryParse(bodyParts[1],
-                    out len) ? len : 0;
-            }
+                    out var len)
+                    ? len
+                    : 0;
             return 0;
         }
 
@@ -128,13 +129,19 @@ namespace Core.Messages
             {
                 var parsedLines = EslHeaderParser.SplitHeader(bodyLine);
                 if (parsedLines == null) continue;
-                if (parsedLines.Length == 2)
-                    resp.Add(parsedLines[0],
-                        parsedLines[1]);
-                if (parsedLines.Length == 1)
-                    resp.Add("__CONTENT__",
-                        bodyLine);
+                switch (parsedLines.Length)
+                {
+                    case 2:
+                        resp.Add(parsedLines[0],
+                            parsedLines[1]);
+                        break;
+                    case 1:
+                        resp.Add("__CONTENT__",
+                            bodyLine);
+                        break;
+                }
             }
+
             return resp;
         }
 

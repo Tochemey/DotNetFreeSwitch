@@ -18,7 +18,7 @@ using System;
 
 namespace Core.Common
 {
-    public class GuidFactory
+    public sealed class GuidFactory
     {
         private static GuidFactory _instance = new GuidFactory();
 
@@ -37,14 +37,14 @@ namespace Core.Common
         /// <returns>Guid of some sort.</returns>
         public static Guid Create()
         {
-            return _instance.CreateInternal();
+            return CreateInternal();
         }
 
         /// <summary>
         ///     Generate a new GUID using the assign implementation
         /// </summary>
         /// <returns>Guid of some sort</returns>
-        protected virtual Guid CreateInternal()
+        private static Guid CreateInternal()
         {
             return Guid.NewGuid();
         }

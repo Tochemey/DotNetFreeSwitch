@@ -19,19 +19,19 @@ using System;
 namespace Core.Commands
 {
     /// <summary>
-    /// Helps to send an explicit hangup to a call with a specific reason. 
+    ///     Helps to send an explicit hangup to a call with a specific reason.
     /// </summary>
     public sealed class HangupCommand : BaseCommand
     {
         public const string CallCommand = "hangup";
 
         /// <summary>
-        /// The hangup cause 
+        ///     The hangup cause
         /// </summary>
         private readonly string _reason;
 
         /// <summary>
-        /// The call id 
+        ///     The call id
         /// </summary>
         private readonly Guid _uuid;
 
@@ -42,7 +42,7 @@ namespace Core.Commands
             _reason = reason;
         }
 
-        public override string Argument => string.Empty;
+        protected override string Argument => string.Empty;
 
         public override string Command => $"sendmsg  {_uuid}\ncall-command: {CallCommand}\nhangup-cause: {_reason}";
     }

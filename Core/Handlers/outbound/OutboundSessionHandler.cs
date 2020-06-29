@@ -30,7 +30,10 @@ namespace Core.Handlers.outbound
 
         private readonly IOutboundListener _outboundListener;
 
-        public OutboundSessionHandler(IOutboundListener outboundListener) { _outboundListener = outboundListener; }
+        public OutboundSessionHandler(IOutboundListener outboundListener)
+        {
+            _outboundListener = outboundListener;
+        }
 
         public override async void ExceptionCaught(IChannelHandlerContext context,
             Exception exception)
@@ -77,6 +80,7 @@ namespace Core.Handlers.outbound
                                 msg.ContentType());
                             break;
                     }
+
                     break;
                 default:
                     // Unexpected freeSwitch message

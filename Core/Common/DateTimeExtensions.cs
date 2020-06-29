@@ -27,7 +27,9 @@ namespace Core.Common
         public static DateTime FromUnixTime(this string value)
         {
             return long.TryParse(value,
-                out var time) ? UnixEpoch.AddMilliseconds(Convert.ToDouble(time) / 1000) : DateTime.MinValue;
+                out var time)
+                ? UnixEpoch.AddMilliseconds(Convert.ToDouble(time) / 1000)
+                : DateTime.MinValue;
         }
     }
 }

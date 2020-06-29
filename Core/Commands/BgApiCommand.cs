@@ -19,7 +19,7 @@ using System;
 namespace Core.Commands
 {
     /// <summary>
-    /// BgApi Command. It helps to execute other command in a background job on FreeSwitch 
+    ///     BgApi Command. It helps to execute other command in a background job on FreeSwitch
     /// </summary>
     public sealed class BgApiCommand : BaseCommand
     {
@@ -31,20 +31,20 @@ namespace Core.Commands
         }
 
         /// <summary>
-        /// The BgApi command argument 
+        ///     The BgApi command argument
         /// </summary>
-        public override string Argument => $"{CommandName} {CommandArgs}";
+        protected override string Argument => $"{CommandName} {CommandArgs}";
 
         /// <summary>
-        /// The BgApi command 
+        ///     The BgApi command
         /// </summary>
         public override string Command => "bgapi";
 
         public string CommandArgs { get; }
 
         /// <summary>
-        /// Each command send by BgApi will have a trackable Id that will helps identify which one
-        /// has sent a response.
+        ///     Each command send by BgApi will have a trackable Id that will helps identify which one
+        ///     has sent a response.
         /// </summary>
         public Guid CommandId { get; set; }
 

@@ -17,13 +17,16 @@
 namespace Core.Commands
 {
     /// <summary>
-    /// Event command 
+    ///     Event command
     /// </summary>
     public sealed class EventCommand : BaseCommand
     {
-        public EventCommand(string events) => Argument = events;
+        public EventCommand(string events)
+        {
+            Argument = events;
+        }
 
-        public override string Argument { get; }
+        protected override string Argument { get; }
 
         public override string Command => "event";
     }

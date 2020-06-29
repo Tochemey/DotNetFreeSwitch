@@ -19,18 +19,21 @@ using Core.Common;
 namespace Core.Commands
 {
     /// <summary>
-    /// FreeSwitch log 
+    ///     FreeSwitch log
     /// </summary>
     public sealed class LogCommand : BaseCommand
     {
         /// <summary>
-        /// Log level 
+        ///     Log level
         /// </summary>
         private readonly LogLevels _logLevel;
 
-        public LogCommand(LogLevels logLevel) => _logLevel = logLevel;
+        public LogCommand(LogLevels logLevel)
+        {
+            _logLevel = logLevel;
+        }
 
-        public override string Argument => _logLevel.ToString();
+        protected override string Argument => _logLevel.ToString();
         public override string Command => "log";
     }
 }

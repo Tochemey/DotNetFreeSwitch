@@ -33,13 +33,13 @@ namespace Core.Handlers.inbound
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
+        protected IChannel Channel;
+        protected InboundCall InboundCall;
+
         /// <summary>
         ///     This property holds any additional data that it is required by the InboundSession to run smoothly
         /// </summary>
         public Dictionary<object, object> Meta = new Dictionary<object, object>();
-
-        protected IChannel Channel;
-        protected InboundCall InboundCall;
 
         public async Task OnConnected(InboundCall connectedInfo,
             IChannel channel)
@@ -160,10 +160,11 @@ namespace Core.Handlers.inbound
                     eslEvent = new FsEvent(fsMessage);
                     break;
                 default:
-                     OnUnhandledEvents(new FsEvent(fsMessage));
+                    OnUnhandledEvents(new FsEvent(fsMessage));
                     break;
             }
-             HandleEvents(eslEvent,
+
+            HandleEvents(eslEvent,
                 eventType);
         }
 
@@ -194,9 +195,15 @@ namespace Core.Handlers.inbound
                 eventLock);
         }
 
-        public bool CanHandleEvent(FsEvent @event) { return @event.UniqueId == InboundCall.UniqueId && @event.CallerGuid == InboundCall.CallerGuid; }
+        public bool CanHandleEvent(FsEvent @event)
+        {
+            return @event.UniqueId == InboundCall.UniqueId && @event.CallerGuid == InboundCall.CallerGuid;
+        }
 
-        public bool IsChannelReady() { return Channel != null && Channel.Active; }
+        public bool IsChannelReady()
+        {
+            return Channel != null && Channel.Active;
+        }
 
         public async Task DivertEventsAsync(bool flag)
         {
@@ -250,9 +257,15 @@ namespace Core.Handlers.inbound
         protected abstract Task HandleEvents(FsEvent @event,
             EventType eventType);
 
-        public async Task LingerAsync() { await SendCommandAsync(new LingerCommand()); }
+        public async Task LingerAsync()
+        {
+            await SendCommandAsync(new LingerCommand());
+        }
 
-        public async Task MyEventsAsync() { await SendCommandAsync(new MyEventsCommand(InboundCall.CallerGuid)); }
+        public async Task MyEventsAsync()
+        {
+            await SendCommandAsync(new MyEventsCommand(InboundCall.CallerGuid));
+        }
 
         protected virtual Task OnUnhandledEvents(FsEvent fsEvent)
         {
@@ -269,11 +282,17 @@ namespace Core.Handlers.inbound
                 eventLock);
         }
 
-        public async Task PreAnswerAsync() { await ExecuteAsync("pre_answer"); }
+        public async Task PreAnswerAsync()
+        {
+            await ExecuteAsync("pre_answer");
+        }
 
         protected abstract Task PreHandleAsync();
 
-        public async Task ResumeAsync() { await SendCommandAsync(new ResumeCommand()); }
+        public async Task ResumeAsync()
+        {
+            await SendCommandAsync(new ResumeCommand());
+        }
 
         public async Task RingReadyAsync()
         {

@@ -18,9 +18,12 @@ namespace Core.Commands
 {
     public sealed class EventsCommand : BaseCommand
     {
-        public EventsCommand(string events) => Argument = events;
+        public EventsCommand(string events)
+        {
+            Argument = events;
+        }
 
-        public override string Argument { get; }
+        protected override string Argument { get; }
 
         public override string Command => "events";
     }

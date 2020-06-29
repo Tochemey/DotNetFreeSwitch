@@ -20,6 +20,8 @@ namespace Core.Events
 {
     public class ChannelBridge : FsEvent
     {
-        public ChannelBridge(FsMessage message) : base(message) { }
+        public ChannelBridge(FsMessage message) : base(message)
+        {
+        }
     }
 }

@@ -44,11 +44,11 @@ namespace Core.Codecs
         /// </summary>
         public enum DecoderState
         {
-            ReadHeader,
-            ReadBody
+            READ_HEADER,
+            READ_BODY
         }
 
-        private const char LINE_FEED_CHAR = '\n';
+        private const char LineFeedChar = '\n';
 
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -60,11 +60,14 @@ namespace Core.Codecs
 
         private FsMessage _actualMessage;
 
-        public FrameDecoder() : this(false) { }
+        public FrameDecoder() : this(false)
+        {
+        }
 
-        public FrameDecoder(bool treatUnknownHeadersAsBody) : this(DecoderState.ReadHeader,
+        public FrameDecoder(bool treatUnknownHeadersAsBody) : this(DecoderState.READ_HEADER,
             treatUnknownHeadersAsBody)
-        { }
+        {
+        }
 
         public FrameDecoder(DecoderState initialState,
             bool treatUnknownHeadersAsBody) : base(initialState)
@@ -83,10 +86,7 @@ namespace Core.Codecs
 
             switch (State)
             {
-                /**
-                 * Let us read the message head.
-                 */
-                case DecoderState.ReadHeader:
+                case DecoderState.READ_HEADER:
                     // Let us initialize the actual message to decode
                     SetActualMessage();
 
@@ -96,27 +96,25 @@ namespace Core.Codecs
                     // have read all headers - check whether we can read the message body or not
                     if (!CanReadBody()) CompleteDecoding(output);
                     break;
-                case DecoderState.ReadBody:
-                    /**
-                     * At this stage we are reading the message body based upon the content length in the header.
-                     */
+                
+                case DecoderState.READ_BODY:
                     ReadBody(input,
                         output);
-
                     break;
+                
                 default: throw new DecoderException("Illegal state: [" + State + ']');
             }
         }
 
         private void SetActualMessage()
         {
-            if (_actualMessage == null) _actualMessage = new FsMessage();
+            _actualMessage ??= new FsMessage();
         }
 
         private bool CanReadBody()
         {
             if (!_actualMessage.HasContentLength()) return false;
-            Checkpoint(DecoderState.ReadBody);
+            Checkpoint(DecoderState.READ_BODY);
             if (_logger.IsDebugEnabled) _logger.Debug("have content-length, decoding body ..");
             return true;
         }
@@ -124,14 +122,14 @@ namespace Core.Codecs
         private void CompleteDecoding(ICollection<object> output)
         {
             // complete the decoding. Get ready for the next message
-            Checkpoint(DecoderState.ReadHeader);
+            Checkpoint(DecoderState.READ_HEADER);
             // send message upstream
             output.Add(_actualMessage);
             _actualMessage = null;
         }
 
         private void ReadBody(IByteBuffer buffer,
-            List<object> output)
+            ICollection<object> output)
         {
             var maxlength = _actualMessage.ContentLength();
             // Let us check whether we do not have another message on he line
@@ -143,17 +141,21 @@ namespace Core.Codecs
             {
                 // read the body bytes
                 var bodyBytes = buffer.ReadBytes(maxlength);
+                
                 if (_logger.IsDebugEnabled)
                     _logger.Debug("read [{0}] body bytes",
                         bodyBytes.WriterIndex);
+                
                 // most bodies are line based, so split on LF
                 while (bodyBytes.IsReadable())
                 {
                     var bodyLine = ReadLine(bodyBytes,
                         maxlength);
+                    
                     if (_logger.IsDebugEnabled)
                         _logger.Debug("read body line [{0}]",
                             bodyLine);
+                    
                     _actualMessage.BodyLines.Add(bodyLine);
                 }
 
@@ -172,22 +174,31 @@ namespace Core.Codecs
             while (!reachedDoubleLf)
             {
                 var headerLine = ReadLine(buffer);
+                
                 if (_logger.IsDebugEnabled)
                     _logger.Debug("read header line [{0}]",
                         headerLine);
+                
                 if (!string.IsNullOrEmpty(headerLine))
                 {
                     var headerParts = EslHeaderParser.SplitHeader(headerLine);
+                    
                     if (headerParts == null || headerParts.Length == 0) continue;
+                    
                     var headerName = headerParts[0];
+                    
                     if (string.IsNullOrEmpty(headerName))
                         if (_treatUnknownHeadersAsBody) _actualMessage.BodyLines.Add(headerLine);
                         else throw new DecoderException("Unhandled FreeSwitch message header[" + headerParts[0] + ']');
 
-                    _actualMessage.Headers.Add(headerName.Trim(LINE_FEED_CHAR),
-                        Uri.UnescapeDataString(headerParts[1]).Trim(LINE_FEED_CHAR));
+                    _actualMessage.Headers.Add(headerName.Trim(LineFeedChar),
+                        Uri.UnescapeDataString(headerParts[1]).Trim(LineFeedChar));
                 }
-                else { reachedDoubleLf = true; }
+                else
+                {
+                    reachedDoubleLf = true;
+                }
+
                 Checkpoint();
             }
         }
@@ -198,9 +209,10 @@ namespace Core.Codecs
             while (buffer.IsReadable())
             {
                 var nextByte = buffer.ReadByte();
-                if ((char) nextByte == LINE_FEED_CHAR) return sb.ToString();
+                if ((char) nextByte == LineFeedChar) return sb.ToString();
                 sb.Append((char) nextByte);
             }
+
             return sb.ToString();
         }
 
@@ -212,11 +224,16 @@ namespace Core.Codecs
             {
                 // this read should always succeed
                 var nextByte = buffer.ReadByte();
-                if ((char) nextByte == LINE_FEED_CHAR) return sb.ToString();
+                
+                if ((char) nextByte == LineFeedChar) return sb.ToString();
+                
                 // Abort decoding if the decoded line is too large.
-                if (sb.Length >= maxLineLength) throw new TooLongFrameException("FreeSwitch message line is longer than " + maxLineLength + " bytes.");
+                if (sb.Length >= maxLineLength)
+                    throw new TooLongFrameException("FreeSwitch message line is longer than " + maxLineLength +
+                                                    " bytes.");
                 sb.Append((char) nextByte);
             }
+
             return sb.ToString();
         }
     }

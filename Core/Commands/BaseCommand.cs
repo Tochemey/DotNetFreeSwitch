@@ -22,30 +22,33 @@ namespace Core.Commands
 {
     public abstract class BaseCommand : IEquatable<BaseCommand>
     {
-        protected BaseCommand() => Sequence = GuidFactory.Create().ToString();
+        protected BaseCommand()
+        {
+            Sequence = GuidFactory.Create().ToString();
+        }
 
         /// <summary>
-        /// The command argument 
+        ///     The command argument
         /// </summary>
-        public abstract string Argument { get; }
+        protected abstract string Argument { get; }
 
         /// <summary>
-        /// The command name 
+        ///     The command name
         /// </summary>
         public abstract string Command { get; }
 
         /// <summary>
-        /// Command Reply Message. Some command needs reply 
+        ///     Command Reply Message. Some command needs reply
         /// </summary>
         public FsMessage CommandReply { set; get; }
 
         /// <summary>
-        /// Additional Data to add to the command 
+        ///     Additional Data to add to the command
         /// </summary>
         public object Optional { set; get; }
 
         /// <summary>
-        /// Command sequence number 
+        ///     Command sequence number
         /// </summary>
         public string Sequence { get; }
 
@@ -55,6 +58,9 @@ namespace Core.Commands
             return ToString().Equals(other.ToString()) && Sequence == other.Sequence;
         }
 
-        public override string ToString() => $"{Command} {Argument}";
+        public override string ToString()
+        {
+            return $"{Command} {Argument}";
+        }
     }
 }

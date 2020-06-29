@@ -489,7 +489,10 @@ namespace Core.Common
         /// <param name="networkPrefix"></param>
         /// <returns>bool</returns>
         public static bool IsValidGhMsisdn(this string string0,
-            string networkPrefix) => new Regex("^[0]?" + networkPrefix + "[0-9]{6,14}$").IsMatch(string0);
+            string networkPrefix)
+        {
+            return new Regex("^[0]?" + networkPrefix + "[0-9]{6,14}$").IsMatch(string0);
+        }
 
         /// <summary>
         ///     Checks if both strings are equal to each other.  Safely handles the case
@@ -525,8 +528,11 @@ namespace Core.Common
         /// <param name="string1">The string compared to</param>
         /// <returns>bool</returns>
         public static bool IsEqual(this string string0,
-            string string1) => string0.IsEqual(string1,
-            true);
+            string string1)
+        {
+            return string0.IsEqual(string1,
+                true);
+        }
 
         /// <summary>
         ///     Get 7-bit ASCII character array from input String. The lower 7 bits of each character in the input string is
@@ -534,16 +540,25 @@ namespace Core.Common
         /// </summary>
         /// <param name="string0"></param>
         /// <returns>byte[]</returns>
-        public static byte[] GetAsciiBytes(this string string0) => Encoding.ASCII.GetBytes(string0);
+        public static byte[] GetAsciiBytes(this string string0)
+        {
+            return Encoding.ASCII.GetBytes(string0);
+        }
 
         /// <summary>
         ///     Get string value of an array byte
         /// </summary>
         /// <param name="input">Byte array whose string value is needed</param>
         /// <returns>string</returns>
-        public static string GetAsciiString(this byte[] input) => Encoding.ASCII.GetString(input);
+        public static string GetAsciiString(this byte[] input)
+        {
+            return Encoding.ASCII.GetString(input);
+        }
 
-        public static string GetString(this byte[] input) => Encoding.UTF8.GetString(input);
+        public static string GetString(this byte[] input)
+        {
+            return Encoding.UTF8.GetString(input);
+        }
 
 
         /// <summary>
@@ -552,7 +567,10 @@ namespace Core.Common
         /// </summary>
         /// <param name="obj">Object to check</param>
         /// <returns>string</returns>
-        public static string ToStringWithNullAsEmpty(this object obj) => obj?.ToString() ?? "";
+        public static string ToStringWithNullAsEmpty(this object obj)
+        {
+            return obj?.ToString() ?? "";
+        }
 
         /// <summary>
         ///     Safely capitalizes a string by converting the first character to upper
@@ -599,9 +617,12 @@ namespace Core.Common
         /// </summary>
         /// <param name="check"></param>
         /// <returns></returns>
-        public static bool IsUuid(this string check) =>
-            new Regex("/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$/")
+        public static bool IsUuid(this string check)
+        {
+            return new Regex(
+                    "/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$/")
                 .IsMatch(check);
+        }
 
         /// <summary>
         ///     Checks whether a string is a valid UUID or GUID

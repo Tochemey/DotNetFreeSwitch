@@ -23,6 +23,8 @@ namespace Core.Events
     /// </summary>
     public class ChannelProgressMedia : FsEvent
     {
-        public ChannelProgressMedia(FsMessage message) : base(message) { }
+        public ChannelProgressMedia(FsMessage message) : base(message)
+        {
+        }
     }
 }

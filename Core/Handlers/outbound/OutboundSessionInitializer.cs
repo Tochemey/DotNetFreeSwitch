@@ -24,7 +24,10 @@ namespace Core.Handlers.outbound
 {
     public class OutboundSessionInitializer : ChannelInitializer<ISocketChannel>
     {
-        public OutboundSessionInitializer(IOutboundListener outboundListener) { OutboundListener = outboundListener; }
+        public OutboundSessionInitializer(IOutboundListener outboundListener)
+        {
+            OutboundListener = outboundListener;
+        }
 
         public IOutboundListener OutboundListener { get; }
 

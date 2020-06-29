@@ -26,7 +26,10 @@ namespace Core.Handlers.inbound
     {
         private readonly FsEvent _event;
 
-        public InboundCall(FsEvent @event) { _event = @event; }
+        public InboundCall(FsEvent @event)
+        {
+            _event = @event;
+        }
 
         public Guid CallerGuid => Guid.Parse(_event["Caller-Unique-ID"]);
         public string CallerId => _event["Caller-Caller-ID-Number"];

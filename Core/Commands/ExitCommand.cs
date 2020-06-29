@@ -18,7 +18,7 @@ namespace Core.Commands
 {
     public sealed class ExitCommand : BaseCommand
     {
-        public override string Argument => string.Empty;
+        protected override string Argument => string.Empty;
         public override string Command => "exit";
     }
 }

@@ -41,6 +41,9 @@ namespace Core.Common
         /// </summary>
         public Task<object> Task => _source.Task;
 
-        public void Complete(object response) { _source.TrySetResult(response); }
+        public void Complete(object response)
+        {
+            _source.TrySetResult(response);
+        }
     }
 }

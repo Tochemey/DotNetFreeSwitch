@@ -28,7 +28,10 @@ namespace Core.Handlers.inbound
         private readonly IInboundListener _inboundListener;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public InboundSessionHandler(IInboundListener inboundListener) { _inboundListener = inboundListener; }
+        public InboundSessionHandler(IInboundListener inboundListener)
+        {
+            _inboundListener = inboundListener;
+        }
 
         public override async void ExceptionCaught(IChannelHandlerContext context,
             Exception exception)
@@ -88,6 +91,7 @@ namespace Core.Handlers.inbound
                                 msg.ContentType());
                             break;
                     }
+
                     break;
                 default:
                     // Unexpected freeSwitch message

@@ -17,7 +17,7 @@
 namespace Core.Commands
 {
     /// <summary>
-    /// Helps Schedule some command to be executed. 
+    ///     Helps Schedule some command to be executed.
     /// </summary>
     public sealed class SchedApiCommand : BaseCommand
     {
@@ -40,7 +40,7 @@ namespace Core.Commands
             _asynchronous = asynchronous;
         }
 
-        public override string Argument
+        protected override string Argument
         {
             get
             {

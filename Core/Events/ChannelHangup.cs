@@ -21,7 +21,9 @@ namespace Core.Events
 {
     public class ChannelHangup : FsEvent
     {
-        public ChannelHangup(FsMessage message) : base(message) { }
+        public ChannelHangup(FsMessage message) : base(message)
+        {
+        }
 
         public HangupCause Cause => EnumExtensions.Parse<HangupCause>(this["Hangup-Cause"]);
     }

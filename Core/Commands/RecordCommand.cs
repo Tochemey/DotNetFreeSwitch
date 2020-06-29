@@ -17,7 +17,7 @@
 namespace Core.Commands
 {
     /// <summary>
-    /// Record command. Record is used for recording messages, like in a voicemail system 
+    ///     Record command. Record is used for recording messages, like in a voicemail system
     /// </summary>
     public sealed class RecordCommand : BaseCommand
     {
@@ -26,28 +26,28 @@ namespace Core.Commands
             SilenceHit = 3;
         }
 
-        public override string Argument => $"{RecordFile} {TimeLimit} {SilenceTreshold} {SilenceHit}";
+        protected override string Argument => $"{RecordFile} {TimeLimit} {SilenceThreshold} {SilenceHit}";
 
         public override string Command => "record";
 
         /// <summary>
-        /// File to record 
+        ///     File to record
         /// </summary>
         public string RecordFile { set; get; }
 
         /// <summary>
-        /// how many seconds of audio below silence_thresh will be tolerated before the recording
-        /// stops. When omitted, the default value is 3.
+        ///     how many seconds of audio below silence_thresh will be tolerated before the recording
+        ///     stops. When omitted, the default value is 3.
         /// </summary>
         public long SilenceHit { set; get; }
 
         /// <summary>
-        /// the energy level below which is considered silence. 
+        ///     the energy level below which is considered silence.
         /// </summary>
-        public long SilenceTreshold { set; get; }
+        public long SilenceThreshold { set; get; }
 
         /// <summary>
-        /// the maximum duration of the recording in seconds. 
+        ///     the maximum duration of the recording in seconds.
         /// </summary>
         public long TimeLimit { set; get; }
     }

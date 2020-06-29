@@ -32,10 +32,10 @@ namespace Core.Codecs
     public sealed class FrameEncoder : MessageToMessageEncoder<BaseCommand>
     {
         private const string MessageEndString = "\n\n";
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly Encoding encoding;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly Encoding _encoding;
 
-        public FrameEncoder(Encoding encoding) { this.encoding = encoding; }
+        public FrameEncoder(Encoding encoding) { _encoding = encoding; }
 
         public FrameEncoder() : this(Encoding.GetEncoding(0)) { }
 
@@ -47,16 +47,19 @@ namespace Core.Codecs
         {
             // Let us get the string representation of the message sent
             if (string.IsNullOrEmpty(message?.ToString())) return;
+            
             var msg = message.ToString().Trim();
 
-            if (!msg.Trim().EndsWith(MessageEndString, StringComparison.Ordinal)) msg += MessageEndString;
-            if (logger.IsDebugEnabled)
-                logger.Debug("Encoded message sent [{0}]",
+            if (!msg.Trim().EndsWith(MessageEndString, StringComparison.Ordinal)) 
+                msg += MessageEndString;
+            
+            if (Logger.IsDebugEnabled)
+                Logger.Debug("Encoded message sent [{0}]",
                     msg.Trim());
 
             output.Add(ByteBufferUtil.EncodeString(context.Allocator,
                 msg,
-                encoding));
+                _encoding));
         }
     }
 }

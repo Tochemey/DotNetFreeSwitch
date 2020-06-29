@@ -17,11 +17,11 @@
 namespace Core.Commands
 {
     /// <summary>
-    /// Resume command 
+    ///     Resume command
     /// </summary>
     public sealed class ResumeCommand : BaseCommand
     {
-        public override string Argument => string.Empty;
+        protected override string Argument => string.Empty;
         public override string Command => "resume";
     }
 }

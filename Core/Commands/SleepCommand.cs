@@ -17,20 +17,23 @@
 namespace Core.Commands
 {
     /// <summary>
-    /// sleep. Pause the channel for a given number of milliseconds, consuming the audio for that
-    /// period of time. Calling sleep also will consume any outstanding RTP on the operating system's
-    /// input queue, which can be very useful in situations where audio becomes backlogged.
+    ///     sleep. Pause the channel for a given number of milliseconds, consuming the audio for that
+    ///     period of time. Calling sleep also will consume any outstanding RTP on the operating system's
+    ///     input queue, which can be very useful in situations where audio becomes backlogged.
     /// </summary>
     public sealed class SleepCommand : BaseCommand
     {
-        public SleepCommand(long duration) => Duration = duration;
+        public SleepCommand(long duration)
+        {
+            Duration = duration;
+        }
 
-        public override string Argument => Duration.ToString();
+        protected override string Argument => Duration.ToString();
 
         public override string Command => "sleep";
 
         /// <summary>
-        /// How long to pause the channel 
+        ///     How long to pause the channel
         /// </summary>
         public long Duration { get; }
     }

@@ -17,12 +17,12 @@
 namespace Core.Commands
 {
     /// <summary>
-    /// SetVar helps set a variable for a specific FreeSwitch channel using the ApiCommand 
+    ///     SetVar helps set a variable for a specific FreeSwitch channel using the ApiCommand
     /// </summary>
     public sealed class SetVarCommand : BaseCommand
     {
         /// <summary>
-        /// Channel Id 
+        ///     Channel Id
         /// </summary>
         private readonly string _uuid;
 
@@ -35,17 +35,17 @@ namespace Core.Commands
             Value = value;
         }
 
-        public override string Argument => $"{_uuid} {Name} {Value}";
+        protected override string Argument => $"{_uuid} {Name} {Value}";
 
         public override string Command => "uuid_setvar";
 
         /// <summary>
-        /// Variable name 
+        ///     Variable name
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Variable value 
+        ///     Variable value
         /// </summary>
         public string Value { get; }
     }

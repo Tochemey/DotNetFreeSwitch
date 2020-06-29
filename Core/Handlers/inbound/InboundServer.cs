@@ -49,7 +49,8 @@ namespace Core.Handlers.inbound
             InboundSession inboundSession) : this(port,
             100,
             inboundSession)
-        { }
+        {
+        }
 
         public int Backlog { get; }
         public int Port { get; }

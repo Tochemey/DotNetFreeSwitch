@@ -20,7 +20,9 @@ namespace Core.Events
 {
     public class ChannelExecuteComplete : FsEvent
     {
-        public ChannelExecuteComplete(FsMessage message) : base(message) { }
+        public ChannelExecuteComplete(FsMessage message) : base(message)
+        {
+        }
 
         public string Application => this["Application"];
 
@@ -31,6 +33,9 @@ namespace Core.Events
         /// </summary>
         public string ApplicationResponse => this["Application-Response"];
 
-        public override string ToString() { return "ExecuteComplete(" + Application + ", '" + ApplicationData + "')." + base.ToString(); }
+        public override string ToString()
+        {
+            return "ExecuteComplete(" + Application + ", '" + ApplicationData + "')." + base.ToString();
+        }
     }
 }

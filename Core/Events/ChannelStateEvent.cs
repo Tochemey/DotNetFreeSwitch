@@ -21,7 +21,9 @@ namespace Core.Events
 {
     public class ChannelStateEvent : FsEvent
     {
-        public ChannelStateEvent(FsMessage message) : base(message) { }
+        public ChannelStateEvent(FsMessage message) : base(message)
+        {
+        }
 
         public string AnswerState => this["Answer-State"];
 
@@ -50,7 +52,9 @@ namespace Core.Events
             get
             {
                 var pcd = this["Presence-Call-Direction"];
-                return string.IsNullOrEmpty(pcd) ? ChannelDirection.UNKNOWN : EnumExtensions.Parse<ChannelDirection>(this["Presence-Call-Direction"]);
+                return string.IsNullOrEmpty(pcd)
+                    ? ChannelDirection.UNKNOWN
+                    : EnumExtensions.Parse<ChannelDirection>(this["Presence-Call-Direction"]);
             }
         }
     }

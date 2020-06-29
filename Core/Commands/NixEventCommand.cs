@@ -17,13 +17,16 @@
 namespace Core.Commands
 {
     /// <summary>
-    /// Used to disable an event on FreeSwitch 
+    ///     Used to disable an event on FreeSwitch
     /// </summary>
     public sealed class NixEventCommand : BaseCommand
     {
-        public NixEventCommand(string eventName) => Argument = eventName;
+        public NixEventCommand(string eventName)
+        {
+            Argument = eventName;
+        }
 
-        public override string Argument { get; }
+        protected override string Argument { get; }
 
         public override string Command => "nixevent";
     }

@@ -17,17 +17,17 @@
 namespace Core.Commands
 {
     /// <summary>
-    /// GetVar helps retrieve a FreeSwitch Channel Variable using the api command. 
+    ///     GetVar helps retrieve a FreeSwitch Channel Variable using the api command.
     /// </summary>
     public sealed class GetVarCommand : BaseCommand
     {
         /// <summary>
-        /// The variable name 
+        ///     The variable name
         /// </summary>
         private readonly string _name;
 
         /// <summary>
-        /// FreeSwitch Channel Id 
+        ///     FreeSwitch Channel Id
         /// </summary>
         private readonly string _uuid;
 
@@ -38,7 +38,7 @@ namespace Core.Commands
             _name = name;
         }
 
-        public override string Argument => $"{_uuid} {_name}";
+        protected override string Argument => $"{_uuid} {_name}";
 
         public override string Command => "uuid_getvar";
     }

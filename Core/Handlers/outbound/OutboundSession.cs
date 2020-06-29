@@ -78,13 +78,15 @@ namespace Core.Handlers.outbound
         public OutboundSession() : this("localhost",
             8021,
             "ClueCon")
-        { }
+        {
+        }
 
         public OutboundSession(TimeSpan timeout) : this("localhost",
             8021,
             "ClueCon",
             timeout)
-        { }
+        {
+        }
 
         public string Address { get; }
         public bool Authenticated { get; private set; }
@@ -93,7 +95,10 @@ namespace Core.Handlers.outbound
         public int Port { get; }
         public IObservable<EventStream> EventReceived => _eventReceived.AsObservable();
 
-        public async Task OnAuthentication() { await AuthenticateAsync(); }
+        public async Task OnAuthentication()
+        {
+            await AuthenticateAsync();
+        }
 
         public async Task OnDisconnectNotice(FsMessage fsMessage,
             EndPoint channelEndPoint)
@@ -147,7 +152,10 @@ namespace Core.Handlers.outbound
             await CleanUpAsync();
         }
 
-        public bool IsSessionReady() { return Authenticated && IsActive(); }
+        public bool IsSessionReady()
+        {
+            return Authenticated && IsActive();
+        }
 
         public async Task CleanUpAsync()
         {
@@ -168,7 +176,10 @@ namespace Core.Handlers.outbound
             if (_eventLoopGroup != null) await _eventLoopGroup.ShutdownGracefullyAsync();
         }
 
-        public bool IsActive() { return _channel != null && _channel.Active; }
+        public bool IsActive()
+        {
+            return _channel != null && _channel.Active;
+        }
 
         public async Task<ApiResponse> SendApiAsync(ApiCommand apiCommand)
         {

@@ -21,13 +21,20 @@ namespace Core.Events
 {
     public class Dtmf : FsEvent
     {
-        public Dtmf(FsMessage message) : base(message) { }
+        public Dtmf(FsMessage message) : base(message)
+        {
+        }
 
         public char Digit => Convert.ToChar(this["DTMF-Digit"]);
 
         public int Duration => int.TryParse(this["DTMF-Duration"],
-            out var duration) ? duration : 0;
+            out var duration)
+            ? duration
+            : 0;
 
-        public override string ToString() { return "Dtmf(" + Digit + ")."; }
+        public override string ToString()
+        {
+            return "Dtmf(" + Digit + ").";
+        }
     }
 }

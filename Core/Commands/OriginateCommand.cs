@@ -22,7 +22,7 @@ using Core.Common;
 namespace Core.Commands
 {
     /// <summary>
-    /// originate 
+    ///     originate
     /// </summary>
     public sealed class OriginateCommand : BaseCommand
     {
@@ -65,7 +65,7 @@ namespace Core.Commands
             _timeout = 0;
         }
 
-        public override string Argument
+        protected override string Argument
         {
             get
             {
@@ -75,31 +75,37 @@ namespace Core.Commands
                     "true");
                 SetChannelVariable("enable_heartbeat_events",
                     Heartbeat.ToString());
-                var variables = _channelVariables != null && _channelVariables.Count > 0 ? _channelVariables.Aggregate(string.Empty,
-                    (current,
-                        variable) => current + (variable + ",")) : string.Empty;
-                if (variables.Length <= 0) return $"{variables}{_caller.ToDialString()} {_destination.ToDialString()} {_dialplan} {_context} {_callerIdName} {_callerIdNumber} {_timeout}";
+                var variables = _channelVariables != null && _channelVariables.Count > 0
+                    ? _channelVariables.Aggregate(string.Empty,
+                        (current,
+                            variable) => current + (variable + ","))
+                    : string.Empty;
+                
+                if (variables.Length <= 0)
+                    return
+                        $"{variables}{_caller.ToDialString()} {_destination.ToDialString()} {_dialplan} {_context} {_callerIdName} {_callerIdNumber} {_timeout}";
                 if (string.IsNullOrEmpty(Option))
                     variables = "{" + variables.Remove(variables.Length - 1,
-                                    1) + "}";
+                        1) + "}";
                 else
                     variables = "{" + Option + ", " + variables.Remove(variables.Length - 1,
-                                    1) + "}";
-                return $"{variables}{_caller.ToDialString()} {_destination.ToDialString()} {_dialplan} {_context} {_callerIdName} {_callerIdNumber} {_timeout}";
+                        1) + "}";
+                return
+                    $"{variables}{_caller.ToDialString()} {_destination.ToDialString()} {_dialplan} {_context} {_callerIdName} {_callerIdNumber} {_timeout}";
             }
         }
 
         public override string Command => "originate";
 
         /// <summary>
-        /// Call session heartbeat 
+        ///     Call session heartbeat
         /// </summary>
         public int Heartbeat { set; get; }
 
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Optional attribute like sip headers. 
+        ///     Optional attribute like sip headers.
         /// </summary>
         public string Option { set; get; }
 
