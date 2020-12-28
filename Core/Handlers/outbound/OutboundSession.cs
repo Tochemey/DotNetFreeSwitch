@@ -100,11 +100,11 @@ namespace Core.Handlers.outbound
             await AuthenticateAsync();
         }
 
-        public async Task OnDisconnectNotice(FsMessage fsMessage,
+        public async Task OnDisconnectNotice(Message message,
             EndPoint channelEndPoint)
         {
             _logger.Debug("received disconnection message : {0}",
-                fsMessage);
+                message);
             _logger.Warn("channel {0} disconnected",
                 channelEndPoint);
             await CleanUpAsync();
@@ -129,11 +129,11 @@ namespace Core.Handlers.outbound
             }
         }
 
-        public void OnEventReceived(FsMessage fsMessage)
+        public void OnEventReceived(Message message)
         {
             try
             {
-                var eslEvent = new FsEvent(fsMessage);
+                var eslEvent = new FsEvent(message);
                 var eventType = EnumExtensions.Parse<EventType>(eslEvent.EventName);
                 _eventReceived.OnNext(new EventStream(eslEvent,
                     eventType));

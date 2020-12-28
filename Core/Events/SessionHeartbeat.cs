@@ -20,7 +20,7 @@ namespace Core.Events
 {
     public class SessionHeartbeat : FsEvent
     {
-        public SessionHeartbeat(FsMessage message) : base(message)
+        public SessionHeartbeat(Message message) : base(message)
         {
         }
     }

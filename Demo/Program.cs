@@ -16,7 +16,7 @@ namespace Demo
             const string address = "192.168.74.128";
             const string password = "ClueCon";
             const int port = 8021;
-            const int ServerPort = 10000;
+            const int serverPort = 10000;
 
             var client = new OutboundSession(address,
                 port,
@@ -36,7 +36,7 @@ namespace Demo
             Console.WriteLine("Api Response {0}",
                 response.GetAwaiter().GetResult().ReplyText);
 
-            var inboundServer = new InboundServer(ServerPort,
+            var inboundServer = new InboundServer(serverPort,
                 new DefaultInboundSession());
             inboundServer.StartAsync().Wait(500);
             var callCommand =

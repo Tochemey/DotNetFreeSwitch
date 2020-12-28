@@ -23,7 +23,7 @@ namespace Core.Events
     /// </summary>
     public class BackgroundJob : FsEvent
     {
-        public BackgroundJob(FsMessage message) : base(message)
+        public BackgroundJob(Message message) : base(message)
         {
         }
 

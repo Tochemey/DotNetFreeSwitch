@@ -1,25 +1,13 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using Core.Codecs;
-using Core.Commands;
-using Core.Common;
-using Core.Events;
-using Core.Handlers.inbound;
-using Core.Handlers.outbound;
 using Core.Messages;
 using DotNetty.Buffers;
-using DotNetty.Codecs;
-using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Embedded;
-using Microsoft.Extensions.FileProviders;
-using NLog;
 using Xunit;
 
-namespace ModFreeSwitch.Test
+namespace Test
 {
     public class Parser : IDisposable
     {
@@ -32,7 +20,7 @@ namespace ModFreeSwitch.Test
             var channel = new EmbeddedChannel(new FrameDecoder());
             channel.WriteInbound(byteBuffer);
 
-            var message = channel.ReadInbound<FsMessage>();
+            var message = channel.ReadInbound<Message>();
             var bodyLines = message.BodyLines;
             var body = EslHeaderParser.SplitHeader(bodyLines.First());
             Assert.Equal("Event-Name",
@@ -53,7 +41,7 @@ namespace ModFreeSwitch.Test
             var channel = new EmbeddedChannel(new FrameDecoder());
             channel.WriteInbound(byteBuffer);
 
-            var message = channel.ReadInbound<FsMessage>();
+            var message = channel.ReadInbound<Message>();
             var commandReply = new CommandReply("connect",
                 message);
             Assert.Equal("+OK",
@@ -72,7 +60,7 @@ namespace ModFreeSwitch.Test
             var channel = new EmbeddedChannel(new FrameDecoder());
             channel.WriteInbound(byteBuffer);
 
-            var message = channel.ReadInbound<FsMessage>();
+            var message = channel.ReadInbound<Message>();
             Assert.True(message.HasHeader("Event-Name"));
             Assert.Equal("CHANNEL_DATA",
                 message.Headers["Event-Name"]);
@@ -88,7 +76,7 @@ namespace ModFreeSwitch.Test
             // Let us read the file
             var channel = new EmbeddedChannel(new FrameDecoder());
             channel.WriteInbound(msg);
-            var buf = channel.ReadInbound<FsMessage>();
+            var buf = channel.ReadInbound<Message>();
             var bodyLines = buf.BodyLines;
 
             // Let us parse the first body line
@@ -119,7 +107,7 @@ namespace ModFreeSwitch.Test
             var message = Unpooled.CopiedBuffer(charBytes);
             var channel = new EmbeddedChannel(new FrameDecoder());
             channel.WriteInbound(message);
-            var buf = channel.ReadInbound<FsMessage>();
+            var buf = channel.ReadInbound<Message>();
 
             var body = string.Join("",
                 buf.BodyLines);

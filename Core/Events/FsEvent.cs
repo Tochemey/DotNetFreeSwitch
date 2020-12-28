@@ -27,9 +27,9 @@ namespace Core.Events
     public class FsEvent
     {
         private readonly bool _ignoreBody;
-        private readonly FsMessage _response;
+        private readonly Message _response;
 
-        public FsEvent(FsMessage response,
+        public FsEvent(Message response,
             bool ignoreBody = false)
         {
             _response = response;

@@ -22,7 +22,7 @@ namespace Core.Messages
     public sealed class CommandReply
     {
         public CommandReply(string command,
-            FsMessage response)
+            Message response)
         {
             Command = command;
             Response = response;
@@ -32,7 +32,7 @@ namespace Core.Messages
 
         public string Command { get; }
 
-        public FsMessage Response { get; }
+        public Message Response { get; }
 
         /// <summary>
         ///     Actual reply text

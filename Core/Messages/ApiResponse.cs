@@ -21,7 +21,7 @@ namespace Core.Messages
     public sealed class ApiResponse
     {
         public ApiResponse(string command,
-            FsMessage response)
+            Message response)
         {
             Command = command;
             var response1 = response;

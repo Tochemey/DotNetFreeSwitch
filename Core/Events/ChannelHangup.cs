@@ -21,7 +21,7 @@ namespace Core.Events
 {
     public class ChannelHangup : FsEvent
     {
-        public ChannelHangup(FsMessage message) : base(message)
+        public ChannelHangup(Message message) : base(message)
         {
         }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Codecs;
@@ -9,17 +7,15 @@ using Core.Common;
 using Core.Events;
 using Core.Handlers.inbound;
 using Core.Handlers.outbound;
-using Core.Messages;
 using DotNetty.Buffers;
 using DotNetty.Codecs;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Embedded;
-using NLog;
 using Xunit;
 
-namespace ModFreeSwitch.Test
+namespace Test
 {
-    public class E2e : IDisposable
+    public class Integration : IDisposable
     {
         public void Dispose() { _event = null; }
 

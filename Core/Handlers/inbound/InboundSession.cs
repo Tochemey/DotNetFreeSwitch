@@ -54,11 +54,11 @@ namespace Core.Handlers.inbound
             await HandleAsync();
         }
 
-        public Task OnDisconnectNotice(FsMessage fsMessage,
+        public Task OnDisconnectNotice(Message message,
             EndPoint channelEndPoint)
         {
             _logger.Debug("received disconnection message : {0}",
-                fsMessage);
+                message);
             _logger.Warn("channel {0} disconnected",
                 channelEndPoint);
             return Task.CompletedTask;
@@ -82,85 +82,85 @@ namespace Core.Handlers.inbound
             }
         }
 
-        public void OnEventReceived(FsMessage fsMessage)
+        public void OnEventReceived(Message message)
         {
-            var eslEvent = new FsEvent(fsMessage);
+            var eslEvent = new FsEvent(message);
             var eventName = eslEvent.EventName;
             var eventType = EnumExtensions.Parse<EventType>(eventName);
             switch (eventType)
             {
                 case EventType.BACKGROUND_JOB:
-                    var backgroundJob = new BackgroundJob(fsMessage);
+                    var backgroundJob = new BackgroundJob(message);
                     eslEvent = backgroundJob;
                     break;
                 case EventType.CALL_UPDATE:
-                    var callUpdate = new CallUpdate(fsMessage);
+                    var callUpdate = new CallUpdate(message);
                     eslEvent = callUpdate;
                     break;
                 case EventType.CHANNEL_BRIDGE:
-                    var channelBridge = new ChannelBridge(fsMessage);
+                    var channelBridge = new ChannelBridge(message);
                     eslEvent = channelBridge;
                     break;
                 case EventType.CHANNEL_HANGUP:
                 case EventType.CHANNEL_HANGUP_COMPLETE:
-                    var channelHangup = new ChannelHangup(fsMessage);
+                    var channelHangup = new ChannelHangup(message);
                     eslEvent = channelHangup;
                     break;
                 case EventType.CHANNEL_PROGRESS:
-                    var channelProgress = new ChannelProgress(fsMessage);
+                    var channelProgress = new ChannelProgress(message);
                     eslEvent = channelProgress;
                     break;
                 case EventType.CHANNEL_PROGRESS_MEDIA:
-                    var channelProgressMedia = new ChannelProgressMedia(fsMessage);
+                    var channelProgressMedia = new ChannelProgressMedia(message);
                     eslEvent = channelProgressMedia;
                     break;
                 case EventType.CHANNEL_EXECUTE:
-                    var channelExecute = new ChannelExecute(fsMessage);
+                    var channelExecute = new ChannelExecute(message);
                     eslEvent = channelExecute;
                     break;
                 case EventType.CHANNEL_EXECUTE_COMPLETE:
-                    var channelExecuteComplete = new ChannelExecuteComplete(fsMessage);
+                    var channelExecuteComplete = new ChannelExecuteComplete(message);
                     eslEvent = channelExecuteComplete;
                     break;
                 case EventType.CHANNEL_UNBRIDGE:
-                    var channelUnbridge = new ChannelUnbridge(fsMessage);
+                    var channelUnbridge = new ChannelUnbridge(message);
                     eslEvent = channelUnbridge;
                     break;
                 case EventType.SESSION_HEARTBEAT:
-                    var sessionHeartbeat = new SessionHeartbeat(fsMessage);
+                    var sessionHeartbeat = new SessionHeartbeat(message);
                     eslEvent = sessionHeartbeat;
                     break;
                 case EventType.DTMF:
-                    var dtmf = new Dtmf(fsMessage);
+                    var dtmf = new Dtmf(message);
                     eslEvent = dtmf;
                     break;
                 case EventType.RECORD_STOP:
-                    var recordStop = new RecordStop(fsMessage);
+                    var recordStop = new RecordStop(message);
                     eslEvent = recordStop;
                     break;
                 case EventType.CUSTOM:
-                    var custom = new Custom(fsMessage);
+                    var custom = new Custom(message);
                     eslEvent = custom;
                     break;
                 case EventType.CHANNEL_STATE:
-                    var channelState = new ChannelStateEvent(fsMessage);
+                    var channelState = new ChannelStateEvent(message);
                     eslEvent = channelState;
                     break;
                 case EventType.CHANNEL_ANSWER:
-                    eslEvent = new FsEvent(fsMessage);
+                    eslEvent = new FsEvent(message);
                     break;
                 case EventType.CHANNEL_ORIGINATE:
-                    eslEvent = new FsEvent(fsMessage);
+                    eslEvent = new FsEvent(message);
                     break;
                 case EventType.CHANNEL_PARK:
-                    var channelPark = new ChannelPark(fsMessage);
+                    var channelPark = new ChannelPark(message);
                     eslEvent = channelPark;
                     break;
                 case EventType.CHANNEL_UNPARK:
-                    eslEvent = new FsEvent(fsMessage);
+                    eslEvent = new FsEvent(message);
                     break;
                 default:
-                    OnUnhandledEvents(new FsEvent(fsMessage));
+                    OnUnhandledEvents(new FsEvent(message));
                     break;
             }
 

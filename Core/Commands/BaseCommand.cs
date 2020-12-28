@@ -40,7 +40,7 @@ namespace Core.Commands
         /// <summary>
         ///     Command Reply Message. Some command needs reply
         /// </summary>
-        public FsMessage CommandReply { set; get; }
+        public Message CommandReply { set; get; }
 
         /// <summary>
         ///     Additional Data to add to the command

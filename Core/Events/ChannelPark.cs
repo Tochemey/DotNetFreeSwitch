@@ -20,7 +20,7 @@ namespace Core.Events
 {
     public class ChannelPark : FsEvent
     {
-        public ChannelPark(FsMessage message) : base(message)
+        public ChannelPark(Message message) : base(message)
         {
         }
     }

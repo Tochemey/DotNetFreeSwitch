@@ -21,7 +21,7 @@ namespace Core.Events
 {
     public class ChannelStateEvent : FsEvent
     {
-        public ChannelStateEvent(FsMessage message) : base(message)
+        public ChannelStateEvent(Message message) : base(message)
         {
         }
 

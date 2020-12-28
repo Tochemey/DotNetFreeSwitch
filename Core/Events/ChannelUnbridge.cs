@@ -20,7 +20,7 @@ namespace Core.Events
 {
     public class ChannelUnbridge : FsEvent
     {
-        public ChannelUnbridge(FsMessage message) : base(message)
+        public ChannelUnbridge(Message message) : base(message)
         {
         }
     }

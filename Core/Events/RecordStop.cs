@@ -22,7 +22,7 @@ namespace Core.Events
 {
     public class RecordStop : FsEvent
     {
-        public RecordStop(FsMessage message) : base(message)
+        public RecordStop(Message message) : base(message)
         {
         }
 

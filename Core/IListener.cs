@@ -26,15 +26,15 @@ namespace Core
         /// <summary>
         ///     This event is raised when a freeSwitch event is received on the channel
         /// </summary>
-        /// <param name="fsMessage"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
-        void OnEventReceived(FsMessage fsMessage);
+        void OnEventReceived(Message message);
 
         /// <summary>
         ///     This event is raised when disconnect/notice message is received on the channel
         /// </summary>
         /// <returns></returns>
-        Task OnDisconnectNotice(FsMessage message,
+        Task OnDisconnectNotice(Message message,
             EndPoint channelEndPoint);
 
         /// <summary>

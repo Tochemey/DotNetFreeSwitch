@@ -20,7 +20,7 @@ namespace Core.Events
 {
     public class Custom : FsEvent
     {
-        public Custom(FsMessage message) : base(message)
+        public Custom(Message message) : base(message)
         {
         }
     }

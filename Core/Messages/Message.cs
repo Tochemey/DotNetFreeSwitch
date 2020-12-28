@@ -25,11 +25,11 @@ namespace Core.Messages
     /// <summary>
     ///     FreeSwitch decoded message.
     /// </summary>
-    public class FsMessage
+    public class Message
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public FsMessage()
+        public Message()
         {
             Headers = new Dictionary<string, string>();
             BodyLines = new List<string>();

@@ -21,7 +21,7 @@ namespace Core.Events
 {
     public class Dtmf : FsEvent
     {
-        public Dtmf(FsMessage message) : base(message)
+        public Dtmf(Message message) : base(message)
         {
         }
 

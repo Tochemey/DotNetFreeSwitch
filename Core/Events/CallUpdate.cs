@@ -20,7 +20,7 @@ namespace Core.Events
 {
     public class CallUpdate : FsEvent
     {
-        public CallUpdate(FsMessage message) : base(message)
+        public CallUpdate(Message message) : base(message)
         {
         }
     }

@@ -48,7 +48,7 @@ namespace Core.Handlers.outbound
         {
             switch (message)
             {
-                case FsMessage msg when !string.IsNullOrEmpty(msg?.ContentType()):
+                case Message msg when !string.IsNullOrEmpty(msg?.ContentType()):
                     switch (msg.ContentType())
                     {
                         case HeadersValues.AuthRequest:

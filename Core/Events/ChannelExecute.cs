@@ -23,7 +23,7 @@ namespace Core.Events
     /// </summary>
     public class ChannelExecute : FsEvent
     {
-        public ChannelExecute(FsMessage message) : base(message)
+        public ChannelExecute(Message message) : base(message)
         {
         }
 

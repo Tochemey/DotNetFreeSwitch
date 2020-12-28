@@ -58,7 +58,7 @@ namespace Core.Codecs
         /// </summary>
         private readonly bool _treatUnknownHeadersAsBody;
 
-        private FsMessage _actualMessage;
+        private Message _actualMessage;
 
         public FrameDecoder() : this(false)
         {
@@ -108,7 +108,7 @@ namespace Core.Codecs
 
         private void SetActualMessage()
         {
-            _actualMessage ??= new FsMessage();
+            _actualMessage ??= new Message();
         }
 
         private bool CanReadBody()
