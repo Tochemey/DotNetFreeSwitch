@@ -1,6 +1,7 @@
 .NET FreeSwitch Library
 ========================================
 [![Build status](https://ci.appveyor.com/api/projects/status/gtd0537ge5jtfmxr?svg=true)](https://ci.appveyor.com/project/Tochemey/modfreeswitch)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 
 ## **Overview**
