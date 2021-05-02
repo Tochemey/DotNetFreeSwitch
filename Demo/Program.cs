@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Commands;
-using Core.Common;
-using Core.Events;
-using Core.Handlers.inbound;
-using Core.Handlers.outbound;
+using DotNetFreeSwitch.Commands;
+using DotNetFreeSwitch.Common;
+using DotNetFreeSwitch.Events;
+using DotNetFreeSwitch.Handlers.inbound;
+using DotNetFreeSwitch.Handlers.outbound;
 
 namespace Demo
 {

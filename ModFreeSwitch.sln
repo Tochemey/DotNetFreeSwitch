@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{33672B9E-BBF1-488F-9E5C-7D5ABFD64CFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetFreeSwitch", "DotNetFreeSwitch\DotNetFreeSwitch.csproj", "{33672B9E-BBF1-488F-9E5C-7D5ABFD64CFD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{01F5DD0D-658C-43F1-8214-05CB01BAC9DC}"
 EndProject

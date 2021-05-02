@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using System.Linq;
-using Core.Codecs;
-using Core.Messages;
+using DotNetFreeSwitch.Codecs;
+using DotNetFreeSwitch.Messages;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels.Embedded;
 using Xunit;
