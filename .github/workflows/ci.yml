@@ -11,8 +11,7 @@ env:
   # Disable sending usage data to Microsoft
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   # Project name to pack and publish
-  PROJECT_NAME: ModFreeSwitch
-  PACKAGE_NAME: DotNetFreeSwitch
+  PROJECT_NAME: DotNetFreeSwitch
   # GitHub Packages Feed settings
   GITHUB_FEED: https://nuget.pkg.github.com/DotNetFreeSwitch/
   GITHUB_USER: Tochemey
