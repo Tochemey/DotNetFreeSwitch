@@ -3,6 +3,7 @@ DotNetFreeSwitch
 
 [![build](https://github.com/Tochemey/ModFreeSwitch/actions/workflows/ci.yml/badge.svg)](https://github.com/Tochemey/ModFreeSwitch/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![NuGet Badge](https://buildstats.info/nuget/DotNetFreeSwitch)](https://www.nuget.org/packages/DotNetFreeSwitch/)
 
 
 ## **Introduction**
