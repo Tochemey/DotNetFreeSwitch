@@ -4,6 +4,14 @@
         <RootNamespace>DotNetFreeSwitch</RootNamespace>
         <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
         <AssemblyName>DotNetFreeSwitch</AssemblyName>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageVersion>0.0.1</PackageVersion>
+        <Copyright>Tochemey 2016</Copyright>
+        <PackageProjectUrl>https://github.com/Tochemey/DotNetFreeSwitch</PackageProjectUrl>
+        <PackageLicenseUrl>https://opensource.org/licenses/Apache-2.0</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/Tochemey/DotNetFreeSwitch</RepositoryUrl>
+        <PackageTags>ivr voice telephony freeswitch voip</PackageTags>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 
     <ItemGroup>
