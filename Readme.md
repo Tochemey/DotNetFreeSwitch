@@ -1,14 +1,14 @@
-.NET FreeSwitch Library
+DotNetFreeSwitch
 ========================================
 
 [![build](https://github.com/Tochemey/ModFreeSwitch/actions/workflows/ci.yml/badge.svg)](https://github.com/Tochemey/ModFreeSwitch/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 
-## **Overview**
+## **Introduction**
 
-This library helps interact with the FreeSwitch via its mod_event_socket. For more information about the mod_event_socket refer to [FreeSwitch web site](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket). 
-The library is written using [DotNetty](https://github.com/Azure/DotNetty). It can be used both on .NET Core 3.1 and 5.0. In its current state it can help build IVR applications more quickly. 
+DotNetFreeSwitch is a socket library that helps interact with the FreeSwitch via its [mod_event_socket]((https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket)). 
+It has been written to run both on dotnet core 3.1 and 5.0 as well. The library is written using [DotNetty](https://github.com/Azure/DotNetty).
 
 ## **Features**
 
