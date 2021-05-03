@@ -7,7 +7,7 @@ DotNetFreeSwitch
 
 ## **Introduction**
 
-DotNetFreeSwitch is a socket library that helps interact with the FreeSwitch via its [mod_event_socket]((https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket)). 
+DotNetFreeSwitch is a socket library that helps interact with the FreeSwitch via its [mod_event_socket](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket). 
 It has been written to run both on dotnet core 3.1 and 5.0 as well. The library is written using [DotNetty](https://github.com/Azure/DotNetty).
 
 ## **Features**
