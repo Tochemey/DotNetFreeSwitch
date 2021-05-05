@@ -63,12 +63,12 @@ namespace DotNetFreeSwitch.Codecs
             {
                 sb.Substring(nameStart,
                     nameEnd).Trim(),
-                ""
+                string.Empty
             } : new[]
             {
                 sb.Substring(nameStart,
                     nameEnd).Trim(),
-                sb.Substring(valueStart).Trim()
+                sb[valueStart..].Trim()
             };
         }
 
