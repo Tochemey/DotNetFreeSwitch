@@ -190,9 +190,11 @@ namespace DotNetFreeSwitch.Codecs
                     if (string.IsNullOrEmpty(headerName))
                         if (_treatUnknownHeadersAsBody) _actualMessage.BodyLines.Add(headerLine);
                         else throw new DecoderException("Unhandled FreeSwitch message header[" + headerParts[0] + ']');
-
-                    _actualMessage.Headers.Add(headerName.Trim(LineFeedChar),
-                        Uri.UnescapeDataString(headerParts[1]).Trim(LineFeedChar));
+                    else
+                    {
+                        _actualMessage.Headers.Add(headerName.Trim(LineFeedChar),
+                            Uri.UnescapeDataString(headerParts[1]).Trim(LineFeedChar));
+                    }
                 }
                 else
                 {
