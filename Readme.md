@@ -1,9 +1,9 @@
 DotNetFreeSwitch
 ========================================
 
-[![build](https://github.com/Tochemey/ModFreeSwitch/actions/workflows/ci.yml/badge.svg)](https://github.com/Tochemey/ModFreeSwitch/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![NuGet Badge](https://buildstats.info/nuget/DotNetFreeSwitch)](https://www.nuget.org/packages/DotNetFreeSwitch/)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/Tochemey/DotNetFreeSwitch/build/trunk?style=for-the-badge)](https://github.com/Tochemey/ModFreeSwitch/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](https://opensource.org/licenses/Apache-2.0)
+[![Nuget](https://img.shields.io/nuget/v/DotNetFreeSwitch?style=for-the-badge)](https://www.nuget.org/packages/DotNetFreeSwitch/)
 
 
 ## **Introduction**
