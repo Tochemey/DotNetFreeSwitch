@@ -1,7 +1,7 @@
 DotNetFreeSwitch
 ========================================
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/distrost/DotNetFreeSwitch/build/trunk?style=flat-square)](https://github.com/distrost/ModFreeSwitch/actions/workflows/ci.yml)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/Tochemey/DotNetFreeSwitch/build/trunk?style=flat-square)](https://github.com/Tochemey/ModFreeSwitch/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 [![Nuget](https://img.shields.io/nuget/v/DotNetFreeSwitch?style=flat-square)](https://www.nuget.org/packages/DotNetFreeSwitch/)
 
