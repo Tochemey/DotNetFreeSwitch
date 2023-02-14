@@ -27,11 +27,12 @@ jobs:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 5.0.100
+          dotnet-version: '6.0.x'
+          dotnet-quality: 'ga'
       - name: Restore
         run: dotnet restore
       - name: Build
@@ -40,7 +41,7 @@ jobs:
 #        run: dotnet test -c Release
       - name: Pack
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet pack -v normal -c Release --no-restore --include-symbols --include-source -p:PackageVersion=$GITHUB_RUN_ID $PROJECT_NAME/$PROJECT_NAME.csproj
+        run: dotnet pack -v normal -c Release --no-restore --include-symbols --include-source -p:PackageVersion=0.0.0 $PROJECT_NAME/$PROJECT_NAME.csproj
       - name: Upload Artifact
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v2
@@ -52,11 +53,13 @@ jobs:
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 5.0.100
+          dotnet-version: '6.0.x'
+          dotnet-quality: 'ga'
       - name: Restore
         run: dotnet restore
       - name: Build
