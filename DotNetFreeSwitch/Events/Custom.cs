@@ -18,10 +18,10 @@ using DotNetFreeSwitch.Messages;
 
 namespace DotNetFreeSwitch.Events
 {
-    public class Custom : FsEvent
-    {
-        public Custom(Message message) : base(message)
-        {
-        }
-    }
+   public class Custom : Event
+   {
+      public Custom(Message message) : base(message)
+      {
+      }
+   }
 }

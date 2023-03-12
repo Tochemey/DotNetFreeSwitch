@@ -16,19 +16,19 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     DivertEvent
-    /// </summary>
-    public sealed class DivertEventsCommand : BaseCommand
-    {
-        private readonly bool _flag;
+   /// <summary>
+   ///     DivertEvent
+   /// </summary>
+   public sealed class DivertEventsCommand : BaseCommand
+   {
+      private readonly bool _flag;
 
-        public DivertEventsCommand(bool flag)
-        {
-            _flag = flag;
-        }
+      public DivertEventsCommand(bool flag)
+      {
+         _flag = flag;
+      }
 
-        protected override string Argument => _flag ? "on" : "off";
-        public override string Command => "divert_events";
-    }
+      protected override string Argument => _flag ? "on" : "off";
+      public override string CommandName => "divert_events";
+   }
 }

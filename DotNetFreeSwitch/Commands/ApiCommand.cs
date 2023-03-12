@@ -16,24 +16,24 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     FreeSwitch API command.
-    /// </summary>
-    public sealed class ApiCommand : BaseCommand
-    {
-        public ApiCommand(string apiCommand)
-        {
-            Argument = apiCommand;
-        }
+   /// <summary>
+   ///     FreeSwitch API command.
+   /// </summary>
+   public sealed class ApiCommand : BaseCommand
+   {
+      public ApiCommand(string apiCommand)
+      {
+         Argument = apiCommand;
+      }
 
-        /// <summary>
-        ///     The api command argument
-        /// </summary>
-        protected override string Argument { get; }
+      /// <summary>
+      ///     The api command argument
+      /// </summary>
+      protected override string Argument { get; }
 
-        /// <summary>
-        ///     The api command itself
-        /// </summary>
-        public override string Command => "api";
-    }
+      /// <summary>
+      ///     The api command itself
+      /// </summary>
+      public override string CommandName => "api";
+   }
 }

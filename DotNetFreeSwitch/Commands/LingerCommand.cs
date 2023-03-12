@@ -16,9 +16,9 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    public class LingerCommand : BaseCommand
-    {
-        protected override string Argument => string.Empty;
-        public override string Command => "linger";
-    }
+   public class LingerCommand : BaseCommand
+   {
+      protected override string Argument => string.Empty;
+      public override string CommandName => "linger";
+   }
 }

@@ -18,24 +18,24 @@ using DotNetFreeSwitch.Messages;
 
 namespace DotNetFreeSwitch.Events
 {
-    public class ChannelExecuteComplete : FsEvent
-    {
-        public ChannelExecuteComplete(Message message) : base(message)
-        {
-        }
+   public class ChannelExecuteComplete : Event
+   {
+      public ChannelExecuteComplete(Message message) : base(message)
+      {
+      }
 
-        public string Application => this["Application"];
+      public string Application => this["Application"];
 
-        public string ApplicationData => this["Application-Data"];
+      public string ApplicationData => this["Application-Data"];
 
-        /// <summary>
-        ///     Gets reponse from the application
-        /// </summary>
-        public string ApplicationResponse => this["Application-Response"];
+      /// <summary>
+      ///     Gets reponse from the application
+      /// </summary>
+      public string ApplicationResponse => this["Application-Response"];
 
-        public override string ToString()
-        {
-            return "ExecuteComplete(" + Application + ", '" + ApplicationData + "')." + base.ToString();
-        }
-    }
+      public override string ToString()
+      {
+         return "ExecuteComplete(" + Application + ", '" + ApplicationData + "')." + base.ToString();
+      }
+   }
 }

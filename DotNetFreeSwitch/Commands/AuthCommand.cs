@@ -16,24 +16,24 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     The auth command helps to authenticate against FreeSwitch Event Socket module.
-    /// </summary>
-    public sealed class AuthCommand : BaseCommand
-    {
-        public AuthCommand(string password)
-        {
-            Argument = password;
-        }
+   /// <summary>
+   ///     The auth command helps to authenticate against FreeSwitch Event Socket module.
+   /// </summary>
+   public sealed class AuthCommand : BaseCommand
+   {
+      public AuthCommand(string password)
+      {
+         Argument = password;
+      }
 
-        /// <summary>
-        ///     Auth command argument
-        /// </summary>
-        protected override string Argument { get; }
+      /// <summary>
+      ///     Auth command argument
+      /// </summary>
+      protected override string Argument { get; }
 
-        /// <summary>
-        ///     Auth Command
-        /// </summary>
-        public override string Command => "auth";
-    }
+      /// <summary>
+      ///     Auth Command
+      /// </summary>
+      public override string CommandName => "auth";
+   }
 }

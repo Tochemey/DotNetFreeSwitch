@@ -18,10 +18,10 @@ using DotNetFreeSwitch.Messages;
 
 namespace DotNetFreeSwitch.Events
 {
-    public class SessionHeartbeat : FsEvent
-    {
-        public SessionHeartbeat(Message message) : base(message)
-        {
-        }
-    }
+   public class SessionHeartbeat : Event
+   {
+      public SessionHeartbeat(Message message) : base(message)
+      {
+      }
+   }
 }

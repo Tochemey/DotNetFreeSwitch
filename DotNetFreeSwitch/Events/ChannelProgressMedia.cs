@@ -18,13 +18,13 @@ using DotNetFreeSwitch.Messages;
 
 namespace DotNetFreeSwitch.Events
 {
-    /// <summary>
-    ///     A channel has started early media
-    /// </summary>
-    public class ChannelProgressMedia : FsEvent
-    {
-        public ChannelProgressMedia(Message message) : base(message)
-        {
-        }
-    }
+   /// <summary>
+   ///     A channel has started early media
+   /// </summary>
+   public class ChannelProgressMedia : Event
+   {
+      public ChannelProgressMedia(Message message) : base(message)
+      {
+      }
+   }
 }

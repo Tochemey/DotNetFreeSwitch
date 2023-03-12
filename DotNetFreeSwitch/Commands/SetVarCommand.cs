@@ -16,37 +16,37 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     SetVar helps set a variable for a specific FreeSwitch channel using the ApiCommand
-    /// </summary>
-    public sealed class SetVarCommand : BaseCommand
-    {
-        /// <summary>
-        ///     Channel Id
-        /// </summary>
-        private readonly string _uuid;
+   /// <summary>
+   ///     SetVar helps set a variable for a specific FreeSwitch channel using the ApiCommand
+   /// </summary>
+   public sealed class SetVarCommand : BaseCommand
+   {
+      /// <summary>
+      ///     Channel Id
+      /// </summary>
+      private readonly string _uuid;
 
-        public SetVarCommand(string uuid,
-            string name,
-            string value)
-        {
-            _uuid = uuid;
-            Name = name;
-            Value = value;
-        }
+      public SetVarCommand(string uuid,
+          string name,
+          string value)
+      {
+         _uuid = uuid;
+         Name = name;
+         Value = value;
+      }
 
-        protected override string Argument => $"{_uuid} {Name} {Value}";
+      protected override string Argument => $"{_uuid} {Name} {Value}";
 
-        public override string Command => "uuid_setvar";
+      public override string CommandName => "uuid_setvar";
 
-        /// <summary>
-        ///     Variable name
-        /// </summary>
-        public string Name { get; }
+      /// <summary>
+      ///     Variable name
+      /// </summary>
+      public string Name { get; }
 
-        /// <summary>
-        ///     Variable value
-        /// </summary>
-        public string Value { get; }
-    }
+      /// <summary>
+      ///     Variable value
+      /// </summary>
+      public string Value { get; }
+   }
 }

@@ -19,22 +19,22 @@ using DotNetFreeSwitch.Messages;
 
 namespace DotNetFreeSwitch.Events
 {
-    public class Dtmf : FsEvent
-    {
-        public Dtmf(Message message) : base(message)
-        {
-        }
+   public class Dtmf : Event
+   {
+      public Dtmf(Message message) : base(message)
+      {
+      }
 
-        public char Digit => Convert.ToChar(this["DTMF-Digit"]);
+      public char Digit => Convert.ToChar(this["DTMF-Digit"]);
 
-        public int Duration => int.TryParse(this["DTMF-Duration"],
-            out var duration)
-            ? duration
-            : 0;
+      public int Duration => int.TryParse(this["DTMF-Duration"],
+          out var duration)
+          ? duration
+          : 0;
 
-        public override string ToString()
-        {
-            return "Dtmf(" + Digit + ").";
-        }
-    }
+      public override string ToString()
+      {
+         return "Dtmf(" + Digit + ").";
+      }
+   }
 }

@@ -2,16 +2,16 @@
 
 namespace DotNetFreeSwitch.Common
 {
-    public class EventStream
-    {
-        public EventStream(FsEvent fsEvent,
-            EventType eventType)
-        {
-            FsEvent = fsEvent;
-            EventType = eventType;
-        }
+   public class EventStream
+   {
+      public EventStream(Event fsEvent,
+          EventType eventType)
+      {
+         FsEvent = fsEvent;
+         EventType = eventType;
+      }
 
-        public FsEvent FsEvent { get; }
-        public EventType EventType { get; }
-    }
+      public Event FsEvent { get; }
+      public EventType EventType { get; }
+   }
 }

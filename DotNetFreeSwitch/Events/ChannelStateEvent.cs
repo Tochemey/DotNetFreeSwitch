@@ -19,43 +19,43 @@ using DotNetFreeSwitch.Messages;
 
 namespace DotNetFreeSwitch.Events
 {
-    public class ChannelStateEvent : FsEvent
-    {
-        public ChannelStateEvent(Message message) : base(message)
-        {
-        }
+   public class ChannelStateEvent : Event
+   {
+      public ChannelStateEvent(Message message) : base(message)
+      {
+      }
 
-        public string AnswerState => this["Answer-State"];
+      public string AnswerState => this["Answer-State"];
 
-        public ChannelDirection CallDirection => EnumExtensions.Parse<ChannelDirection>(this["Call-Direction"]);
+      public ChannelDirection CallDirection => EnumExtensions.Parse<ChannelDirection>(this["Call-Direction"]);
 
-        public ChannelState ChannelState
-        {
-            get
-            {
-                var ch = this["Channel-State"];
-                return string.IsNullOrEmpty(ch) ? ChannelState.UNKNOWN : EnumExtensions.Parse<ChannelState>(ch.Trim());
-            }
-        }
+      public ChannelState ChannelState
+      {
+         get
+         {
+            var ch = this["Channel-State"];
+            return string.IsNullOrEmpty(ch) ? ChannelState.UNKNOWN : EnumExtensions.Parse<ChannelState>(ch.Trim());
+         }
+      }
 
-        public CallState CallState
-        {
-            get
-            {
-                var cs = this["Channel-Call-State"];
-                return string.IsNullOrEmpty(cs) ? CallState.DOWN : EnumExtensions.Parse<CallState>(cs);
-            }
-        }
+      public CallState CallState
+      {
+         get
+         {
+            var cs = this["Channel-Call-State"];
+            return string.IsNullOrEmpty(cs) ? CallState.DOWN : EnumExtensions.Parse<CallState>(cs);
+         }
+      }
 
-        public ChannelDirection PresenceCallDirection
-        {
-            get
-            {
-                var pcd = this["Presence-Call-Direction"];
-                return string.IsNullOrEmpty(pcd)
-                    ? ChannelDirection.UNKNOWN
-                    : EnumExtensions.Parse<ChannelDirection>(this["Presence-Call-Direction"]);
-            }
-        }
-    }
+      public ChannelDirection PresenceCallDirection
+      {
+         get
+         {
+            var pcd = this["Presence-Call-Direction"];
+            return string.IsNullOrEmpty(pcd)
+                ? ChannelDirection.UNKNOWN
+                : EnumExtensions.Parse<ChannelDirection>(this["Presence-Call-Direction"]);
+         }
+      }
+   }
 }

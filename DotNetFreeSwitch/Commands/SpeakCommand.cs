@@ -16,40 +16,40 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     Speak command Speaks a string or file of text to the channel using the defined speech engine.
-    /// </summary>
-    public sealed class SpeakCommand : BaseCommand
-    {
-        public SpeakCommand()
-        {
-            Engine = "flite";
-            Voice = "kal";
-        }
+   /// <summary>
+   ///     Speak command Speaks a string or file of text to the channel using the defined speech engine.
+   /// </summary>
+   public sealed class SpeakCommand : BaseCommand
+   {
+      public SpeakCommand()
+      {
+         Engine = "flite";
+         Voice = "kal";
+      }
 
-        protected override string Argument => Engine + "|" + Voice + "|" + Text +
-                                              (!string.IsNullOrEmpty(TimerName) ? "|" + TimerName : "");
+      protected override string Argument => Engine + "|" + Voice + "|" + Text +
+                                            (!string.IsNullOrEmpty(TimerName) ? "|" + TimerName : "");
 
-        public override string Command => "speak";
+      public override string CommandName => "speak";
 
-        /// <summary>
-        ///     Engine
-        /// </summary>
-        public string Engine { set; get; }
+      /// <summary>
+      ///     Engine
+      /// </summary>
+      public string Engine { set; get; }
 
-        /// <summary>
-        ///     The actual to read
-        /// </summary>
-        public string Text { set; get; }
+      /// <summary>
+      ///     The actual to read
+      /// </summary>
+      public string Text { set; get; }
 
-        /// <summary>
-        ///     Timer
-        /// </summary>
-        public string TimerName { set; get; }
+      /// <summary>
+      ///     Timer
+      /// </summary>
+      public string TimerName { set; get; }
 
-        /// <summary>
-        ///     Voice
-        /// </summary>
-        public string Voice { set; get; }
-    }
+      /// <summary>
+      ///     Voice
+      /// </summary>
+      public string Voice { set; get; }
+   }
 }
