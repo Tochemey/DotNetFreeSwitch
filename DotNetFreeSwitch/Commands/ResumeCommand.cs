@@ -16,12 +16,12 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     Resume command
-    /// </summary>
-    public sealed class ResumeCommand : BaseCommand
-    {
-        protected override string Argument => string.Empty;
-        public override string Command => "resume";
-    }
+   /// <summary>
+   ///     Resume command
+   /// </summary>
+   public sealed class ResumeCommand : BaseCommand
+   {
+      protected override string Argument => string.Empty;
+      public override string CommandName => "resume";
+   }
 }

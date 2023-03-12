@@ -21,69 +21,69 @@ using DotNetFreeSwitch.Common;
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     Playback wrapper
-    /// </summary>
-    public sealed class PlaybackCommand : BaseCommand
-    {
-        public PlaybackCommand(string audioFile,
-            IList<ChannelVariable> variables,
-            long loop)
-        {
-            if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException(nameof(audioFile));
-            AudioFile = audioFile;
-            Variables = variables;
-            Loop = loop;
-        }
+   /// <summary>
+   ///     Playback wrapper
+   /// </summary>
+   public sealed class PlaybackCommand : BaseCommand
+   {
+      public PlaybackCommand(string audioFile,
+          IList<ChannelVariable> variables,
+          long loop)
+      {
+         if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException(nameof(audioFile));
+         AudioFile = audioFile;
+         Variables = variables;
+         Loop = loop;
+      }
 
-        public PlaybackCommand(string audioFile,
-            IList<ChannelVariable> variables)
-        {
-            if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException(nameof(audioFile));
-            AudioFile = audioFile;
-            Variables = variables;
-            Loop = 1;
-        }
+      public PlaybackCommand(string audioFile,
+          IList<ChannelVariable> variables)
+      {
+         if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException(nameof(audioFile));
+         AudioFile = audioFile;
+         Variables = variables;
+         Loop = 1;
+      }
 
-        public PlaybackCommand(string audioFile)
-        {
-            if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException(nameof(audioFile));
-            AudioFile = audioFile;
-            Variables = new List<ChannelVariable>();
-            Loop = 1;
-        }
+      public PlaybackCommand(string audioFile)
+      {
+         if (string.IsNullOrEmpty(audioFile)) throw new ArgumentNullException(nameof(audioFile));
+         AudioFile = audioFile;
+         Variables = new List<ChannelVariable>();
+         Loop = 1;
+      }
 
-        protected override string Argument => ToString();
+      protected override string Argument => ToString();
 
-        /// <summary>
-        ///     Audio file to play
-        /// </summary>
-        public string AudioFile { get; }
+      /// <summary>
+      ///     Audio file to play
+      /// </summary>
+      public string AudioFile { get; }
 
-        public override string Command => "playback";
+      public override string CommandName => "playback";
 
-        /// <summary>
-        ///     The number of time to play the audio file. Please bear in mind that we will be using
-        ///     sendmsg to play audio file. This one will be very helpful.
-        /// </summary>
-        public long Loop { get; }
+      /// <summary>
+      ///     The number of time to play the audio file. Please bear in mind that we will be using
+      ///     sendmsg to play audio file. This one will be very helpful.
+      /// </summary>
+      public long Loop { get; }
 
-        /// <summary>
-        ///     Playback additional variables to add to the channel while playing the audio file
-        /// </summary>
-        public IList<ChannelVariable> Variables { get; }
+      /// <summary>
+      ///     Playback additional variables to add to the channel while playing the audio file
+      /// </summary>
+      public IList<ChannelVariable> Variables { get; }
 
-        public override string ToString()
-        {
-            var variables = Variables != null && Variables.Count > 0
-                ? Variables.Aggregate(string.Empty,
-                    (current,
-                        variable) => current + (variable + ","))
-                : string.Empty;
-            if (variables.Length > 0)
-                variables = "{" + variables.Remove(variables.Length - 1,
-                    1) + "}";
-            return $"{variables}{AudioFile}";
-        }
-    }
+      public override string ToString()
+      {
+         var variables = Variables != null && Variables.Count > 0
+             ? Variables.Aggregate(string.Empty,
+                 (current,
+                     variable) => current + (variable + ","))
+             : string.Empty;
+         if (variables.Length > 0)
+            variables = "{" + variables.Remove(variables.Length - 1,
+                1) + "}";
+         return $"{variables}{AudioFile}";
+      }
+   }
 }

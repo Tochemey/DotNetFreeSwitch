@@ -19,24 +19,24 @@ using DotNetFreeSwitch.Events;
 
 namespace DotNetFreeSwitch.Handlers.inbound
 {
-    /// <summary>
-    ///     Holds the details of the connected call
-    /// </summary>
-    public class InboundCall
-    {
-        private readonly FsEvent _event;
+   /// <summary>
+   ///     Holds the details of the connected call
+   /// </summary>
+   public class InboundCall
+   {
+      private readonly Event _event;
 
-        public InboundCall(FsEvent @event)
-        {
-            _event = @event;
-        }
+      public InboundCall(Event @event)
+      {
+         _event = @event;
+      }
 
-        public Guid CallerGuid => Guid.Parse(_event["Caller-Unique-ID"]);
-        public string CallerId => _event["Caller-Caller-ID-Number"];
-        public string ChannelName => _event["Channel-Name"];
-        public string DestinationNumber => _event["Channel-Destination-Number"];
-        public Guid UniqueId => Guid.Parse(_event["Unique-ID"]);
-        public string UserContext => _event["user_context"];
-        public string this[string name] => _event[name];
-    }
+      public Guid CallerGuid => Guid.Parse(_event["Caller-Unique-ID"]);
+      public string CallerId => _event["Caller-Caller-ID-Number"];
+      public string ChannelName => _event["Channel-Name"];
+      public string DestinationNumber => _event["Channel-Destination-Number"];
+      public Guid UniqueId => Guid.Parse(_event["Unique-ID"]);
+      public string UserContext => _event["user_context"];
+      public string this[string name] => _event[name];
+   }
 }

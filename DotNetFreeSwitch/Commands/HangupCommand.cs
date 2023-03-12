@@ -18,32 +18,32 @@ using System;
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     Helps to send an explicit hangup to a call with a specific reason.
-    /// </summary>
-    public sealed class HangupCommand : BaseCommand
-    {
-        public const string CallCommand = "hangup";
+   /// <summary>
+   ///     Helps to send an explicit hangup to a call with a specific reason.
+   /// </summary>
+   public sealed class HangupCommand : BaseCommand
+   {
+      public const string CallCommand = "hangup";
 
-        /// <summary>
-        ///     The hangup cause
-        /// </summary>
-        private readonly string _reason;
+      /// <summary>
+      ///     The hangup cause
+      /// </summary>
+      private readonly string _reason;
 
-        /// <summary>
-        ///     The call id
-        /// </summary>
-        private readonly Guid _uuid;
+      /// <summary>
+      ///     The call id
+      /// </summary>
+      private readonly Guid _uuid;
 
-        public HangupCommand(Guid uuid,
-            string reason)
-        {
-            _uuid = uuid;
-            _reason = reason;
-        }
+      public HangupCommand(Guid uuid,
+          string reason)
+      {
+         _uuid = uuid;
+         _reason = reason;
+      }
 
-        protected override string Argument => string.Empty;
+      protected override string Argument => string.Empty;
 
-        public override string Command => $"sendmsg  {_uuid}\ncall-command: {CallCommand}\nhangup-cause: {_reason}";
-    }
+      public override string CommandName => $"sendmsg  {_uuid}\ncall-command: {CallCommand}\nhangup-cause: {_reason}";
+   }
 }

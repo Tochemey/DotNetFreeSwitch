@@ -16,18 +16,18 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     Event command
-    /// </summary>
-    public sealed class EventCommand : BaseCommand
-    {
-        public EventCommand(string events)
-        {
-            Argument = events;
-        }
+   /// <summary>
+   ///     Event command
+   /// </summary>
+   public sealed class EventCommand : BaseCommand
+   {
+      public EventCommand(string events)
+      {
+         Argument = events;
+      }
 
-        protected override string Argument { get; }
+      protected override string Argument { get; }
 
-        public override string Command => "event";
-    }
+      public override string CommandName => "event";
+   }
 }

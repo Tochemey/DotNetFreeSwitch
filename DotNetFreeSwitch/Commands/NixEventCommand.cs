@@ -16,18 +16,18 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     Used to disable an event on FreeSwitch
-    /// </summary>
-    public sealed class NixEventCommand : BaseCommand
-    {
-        public NixEventCommand(string eventName)
-        {
-            Argument = eventName;
-        }
+   /// <summary>
+   ///     Used to disable an event on FreeSwitch
+   /// </summary>
+   public sealed class NixEventCommand : BaseCommand
+   {
+      public NixEventCommand(string eventName)
+      {
+         Argument = eventName;
+      }
 
-        protected override string Argument { get; }
+      protected override string Argument { get; }
 
-        public override string Command => "nixevent";
-    }
+      public override string CommandName => "nixevent";
+   }
 }

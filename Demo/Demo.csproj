@@ -6,11 +6,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="NLog" Version="5.1.1" />
+      <PackageReference Include="NLog" Version="5.1.2" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\DotNetFreeSwitch\DotNetFreeSwitch.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="docker\" />
+      <None Remove="docker\configs\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="docker\" />
+      <Folder Include="docker\configs\" />
+    </ItemGroup>
 </Project>

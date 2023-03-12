@@ -131,16 +131,16 @@ namespace DotNetFreeSwitch.Codecs
         private void ReadBody(IByteBuffer buffer,
             ICollection<object> output)
         {
-            var maxlength = _actualMessage.ContentLength();
+            var maxLength = _actualMessage.ContentLength();
             // Let us check whether we do not have another message on he line
             var currentReaderIndex = buffer.ReaderIndex;
             var writerIndex = buffer.WriterIndex;
-            var len = maxlength + currentReaderIndex;
+            var len = maxLength + currentReaderIndex;
 
             if (len <= writerIndex)
             {
                 // read the body bytes
-                var bodyBytes = buffer.ReadBytes(maxlength);
+                var bodyBytes = buffer.ReadBytes(maxLength);
                 
                 if (_logger.IsDebugEnabled)
                     _logger.Debug("read [{0}] body bytes",
@@ -150,7 +150,7 @@ namespace DotNetFreeSwitch.Codecs
                 while (bodyBytes.IsReadable())
                 {
                     var bodyLine = ReadLine(bodyBytes,
-                        maxlength);
+                        maxLength);
                     
                     if (_logger.IsDebugEnabled)
                         _logger.Debug("read body line [{0}]",

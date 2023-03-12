@@ -19,12 +19,12 @@ using DotNetFreeSwitch.Messages;
 
 namespace DotNetFreeSwitch.Events
 {
-    public class ChannelHangup : FsEvent
-    {
-        public ChannelHangup(Message message) : base(message)
-        {
-        }
+   public class ChannelHangup : Event
+   {
+      public ChannelHangup(Message message) : base(message)
+      {
+      }
 
-        public HangupCause Cause => EnumExtensions.Parse<HangupCause>(this["Hangup-Cause"]);
-    }
+      public HangupCause Cause => EnumExtensions.Parse<HangupCause>(this["Hangup-Cause"]);
+   }
 }

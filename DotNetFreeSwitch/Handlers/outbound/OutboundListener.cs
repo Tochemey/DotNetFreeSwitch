@@ -18,6 +18,10 @@ using System.Threading.Tasks;
 
 namespace DotNetFreeSwitch.Handlers.outbound
 {
+    /// <summary>
+    /// IOutboundListener is used when connecting to the FreeSwitch mod_event_socket
+    /// in in the inbound-mode
+    /// </summary>
     public interface IOutboundListener : IListener
     {
         /// <summary>

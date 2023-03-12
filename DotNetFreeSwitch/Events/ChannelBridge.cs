@@ -18,10 +18,10 @@ using DotNetFreeSwitch.Messages;
 
 namespace DotNetFreeSwitch.Events
 {
-    public class ChannelBridge : FsEvent
-    {
-        public ChannelBridge(Message message) : base(message)
-        {
-        }
-    }
+   public class ChannelBridge : Event
+   {
+      public ChannelBridge(Message message) : base(message)
+      {
+      }
+   }
 }

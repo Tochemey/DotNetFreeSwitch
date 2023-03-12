@@ -16,30 +16,30 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     GetVar helps retrieve a FreeSwitch Channel Variable using the api command.
-    /// </summary>
-    public sealed class GetVarCommand : BaseCommand
-    {
-        /// <summary>
-        ///     The variable name
-        /// </summary>
-        private readonly string _name;
+   /// <summary>
+   ///     GetVar helps retrieve a FreeSwitch Channel Variable using the api command.
+   /// </summary>
+   public sealed class GetVarCommand : BaseCommand
+   {
+      /// <summary>
+      ///     The variable name
+      /// </summary>
+      private readonly string _name;
 
-        /// <summary>
-        ///     FreeSwitch Channel Id
-        /// </summary>
-        private readonly string _uuid;
+      /// <summary>
+      ///     FreeSwitch Channel Id
+      /// </summary>
+      private readonly string _uuid;
 
-        public GetVarCommand(string uuid,
-            string name)
-        {
-            _uuid = uuid;
-            _name = name;
-        }
+      public GetVarCommand(string uuid,
+          string name)
+      {
+         _uuid = uuid;
+         _name = name;
+      }
 
-        protected override string Argument => $"{_uuid} {_name}";
+      protected override string Argument => $"{_uuid} {_name}";
 
-        public override string Command => "uuid_getvar";
-    }
+      public override string CommandName => "uuid_getvar";
+   }
 }

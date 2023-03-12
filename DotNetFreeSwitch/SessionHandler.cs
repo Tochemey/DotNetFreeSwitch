@@ -24,43 +24,43 @@ using DotNetty.Transport.Channels;
 
 namespace DotNetFreeSwitch
 {
-    public abstract class EslSessionHandler : ChannelHandlerAdapter
-    {
-        protected readonly Queue<CommandAsyncEvent> CommandAsyncEvents;
+   public abstract class SessionHandler : ChannelHandlerAdapter
+   {
+      protected readonly Queue<CommandAsyncEvent> CommandAsyncEvents;
 
-        protected EslSessionHandler() { CommandAsyncEvents = new Queue<CommandAsyncEvent>(); }
+      protected SessionHandler() { CommandAsyncEvents = new Queue<CommandAsyncEvent>(); }
 
-        internal async Task<ApiResponse> SendApiAsync(ApiCommand command,
-            IChannel context)
-        {
-            var asyncEvent = new CommandAsyncEvent(command);
-            CommandAsyncEvents.Enqueue(asyncEvent);
-            await context.WriteAndFlushAsync(command);
-            return await asyncEvent.Task as ApiResponse;
-        }
+      internal async Task<ApiResponse> SendApiAsync(ApiCommand command,
+          IChannel context)
+      {
+         var asyncEvent = new CommandAsyncEvent(command);
+         CommandAsyncEvents.Enqueue(asyncEvent);
+         await context.WriteAndFlushAsync(command);
+         return await asyncEvent.Task as ApiResponse;
+      }
 
-        internal async Task<Guid> SendBgApiAsync(BgApiCommand command,
-            IChannel context)
-        {
-            var asyncEvent = new CommandAsyncEvent(command);
-            var jobUuid = Guid.Empty;
-            CommandAsyncEvents.Enqueue(asyncEvent);
-            await context.WriteAndFlushAsync(command);
-            var reply = await asyncEvent.Task as CommandReply;
-            if (reply == null) return jobUuid;
-            if (reply.IsOk)
-                return Guid.TryParse(reply[Headers.JobUuid],
-                    out jobUuid) ? jobUuid : Guid.Empty;
-            return jobUuid;
-        }
+      internal async Task<Guid> SendBgApiAsync(BgApiCommand command,
+          IChannel context)
+      {
+         var asyncEvent = new CommandAsyncEvent(command);
+         var jobUuid = Guid.Empty;
+         CommandAsyncEvents.Enqueue(asyncEvent);
+         await context.WriteAndFlushAsync(command);
+         var reply = await asyncEvent.Task as CommandReply;
+         if (reply == null) return jobUuid;
+         if (reply.IsOk)
+            return Guid.TryParse(reply[Headers.JobUuid],
+                out jobUuid) ? jobUuid : Guid.Empty;
+         return jobUuid;
+      }
 
-        internal async Task<CommandReply> SendCommandAsync(BaseCommand command,
-            IChannel context)
-        {
-            var asyncEvent = new CommandAsyncEvent(command);
-            CommandAsyncEvents.Enqueue(asyncEvent);
-            await context.WriteAndFlushAsync(command);
-            return await asyncEvent.Task as CommandReply;
-        }
-    }
+      internal async Task<CommandReply> SendCommandAsync(BaseCommand command,
+          IChannel context)
+      {
+         var asyncEvent = new CommandAsyncEvent(command);
+         CommandAsyncEvents.Enqueue(asyncEvent);
+         await context.WriteAndFlushAsync(command);
+         return await asyncEvent.Task as CommandReply;
+      }
+   }
 }

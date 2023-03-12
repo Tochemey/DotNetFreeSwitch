@@ -20,47 +20,47 @@ using DotNetFreeSwitch.Messages;
 
 namespace DotNetFreeSwitch.Commands
 {
-    public abstract class BaseCommand : IEquatable<BaseCommand>
-    {
-        protected BaseCommand()
-        {
-            Sequence = GuidFactory.Create().ToString();
-        }
+   public abstract class BaseCommand : IEquatable<BaseCommand>
+   {
+      protected BaseCommand()
+      {
+         Sequence = GuidFactory.Create().ToString();
+      }
 
-        /// <summary>
-        ///     The command argument
-        /// </summary>
-        protected abstract string Argument { get; }
+      /// <summary>
+      ///     The command argument
+      /// </summary>
+      protected abstract string Argument { get; }
 
-        /// <summary>
-        ///     The command name
-        /// </summary>
-        public abstract string Command { get; }
+      /// <summary>
+      ///     The command name
+      /// </summary>
+      public abstract string CommandName { get; }
 
-        /// <summary>
-        ///     Command Reply Message. Some command needs reply
-        /// </summary>
-        public Message CommandReply { set; get; }
+      /// <summary>
+      ///     Command Reply Message. Some command needs reply
+      /// </summary>
+      public Message CommandReply { set; get; }
 
-        /// <summary>
-        ///     Additional Data to add to the command
-        /// </summary>
-        public object Optional { set; get; }
+      /// <summary>
+      ///     Additional Data to add to the command
+      /// </summary>
+      public object Optional { set; get; }
 
-        /// <summary>
-        ///     Command sequence number
-        /// </summary>
-        public string Sequence { get; }
+      /// <summary>
+      ///     Command sequence number
+      /// </summary>
+      public string Sequence { get; }
 
-        public bool Equals(BaseCommand other)
-        {
-            if (other == null) return false;
-            return ToString().Equals(other.ToString()) && Sequence == other.Sequence;
-        }
+      public bool Equals(BaseCommand other)
+      {
+         if (other == null) return false;
+         return ToString().Equals(other.ToString()) && Sequence == other.Sequence;
+      }
 
-        public override string ToString()
-        {
-            return $"{Command} {Argument}";
-        }
-    }
+      public override string ToString()
+      {
+         return $"{CommandName} {Argument}";
+      }
+   }
 }

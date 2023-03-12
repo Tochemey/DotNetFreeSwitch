@@ -1,3 +1,4 @@
+using System;
 /*
     Copyright [2016] [Arsene Tochemey GANDOTE]
 
@@ -18,27 +19,27 @@ using System.Linq;
 
 namespace DotNetFreeSwitch.Messages
 {
-    public sealed class ApiResponse
-    {
-        public ApiResponse(string command,
-            Message response)
-        {
-            Command = command;
-            var response1 = response;
-            ReplyText = response1 != null ? response1.BodyLines.First() : string.Empty;
-            IsOk = !string.IsNullOrEmpty(ReplyText) && ReplyText.StartsWith(HeadersValues.Ok);
-        }
+   public sealed class ApiResponse
+   {
+      public ApiResponse(string command,
+          Message response)
+      {
+         Command = command;
+         var reply = response;
+         ReplyText = reply != null ? reply.BodyLines.First() : string.Empty;
+         IsOk = !string.IsNullOrEmpty(ReplyText) && ReplyText.StartsWith(HeadersValues.Ok);
+      }
 
-        public string Command { get; }
+      public string Command { get; }
 
-        /// <summary>
-        ///     Actual reply text
-        /// </summary>
-        public string ReplyText { get; }
+      /// <summary>
+      ///     Actual reply text
+      /// </summary>
+      public string ReplyText { get; }
 
-        /// <summary>
-        ///     Check whether the command has been successful or not.
-        /// </summary>
-        public bool IsOk { get; }
-    }
+      /// <summary>
+      ///     Check whether the command has been successful or not.
+      /// </summary>
+      public bool IsOk { get; }
+   }
 }

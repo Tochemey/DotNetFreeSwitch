@@ -16,12 +16,12 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    /// <summary>
-    ///     Used to connect to FreeSwitch.
-    /// </summary>
-    public sealed class ConnectCommand : BaseCommand
-    {
-        protected override string Argument => string.Empty;
-        public override string Command => "connect";
-    }
+   /// <summary>
+   ///     Used to connect to FreeSwitch.
+   /// </summary>
+   public sealed class ConnectCommand : BaseCommand
+   {
+      protected override string Argument => string.Empty;
+      public override string CommandName => "connect";
+   }
 }

@@ -16,9 +16,9 @@
 
 namespace DotNetFreeSwitch.Commands
 {
-    public sealed class ExitCommand : BaseCommand
-    {
-        protected override string Argument => string.Empty;
-        public override string Command => "exit";
-    }
+   public sealed class ExitCommand : BaseCommand
+   {
+      protected override string Argument => string.Empty;
+      public override string CommandName => "exit";
+   }
 }
