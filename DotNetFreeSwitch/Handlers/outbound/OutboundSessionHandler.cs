@@ -96,5 +96,7 @@ namespace DotNetFreeSwitch.Handlers.outbound
         {
             // pass
         }
+
+        public override void ChannelReadComplete(IChannelHandlerContext context) => context.Flush();
     }
 }

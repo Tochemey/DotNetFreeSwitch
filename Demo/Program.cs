@@ -10,21 +10,20 @@ namespace Demo
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            const string address = "0.0.0.0";
+            const string address = "localhost";
             const string password = "ClueCon";
             const int port = 8021;
 
             var client = new OutboundSession(address,
                 port,
                 password);
-            client.ConnectAsync().ConfigureAwait(false);
-
-            // intentional waiting for the session to connect to freeswich
-            Thread.Sleep(1000);
+           await client.ConnectAsync();
 
             Console.WriteLine("Connected {0}", client.IsActive());
+
+            Thread.Sleep(3000);
 
             Console.WriteLine("Connected and Authenticated {0}",
                 client.IsSessionReady());
