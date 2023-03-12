@@ -41,7 +41,7 @@ namespace Test
         [Fact]
         public async void ConnectToFreeSwitchTest()
         {
-            var address = "192.168.74.128";
+            var address = "127.0.0.1";
             var password = "ClueCon";
             var port = 8021;
 
@@ -50,7 +50,7 @@ namespace Test
                 password);
             await client.ConnectAsync();
             Assert.True(client.IsActive());
-            Thread.Sleep(100); // this is due to the asynchronous pattern of the framework
+            Thread.Sleep(1000); // this is due to the asynchronous pattern of the framework
 
             Assert.True(client.IsSessionReady());
             Assert.True(client.IsSessionReady());

@@ -163,3 +163,5 @@ $RECYCLE.BIN/
 /.idea/.idea.ModFreeSwitch/riderModule.iml
 /.idea/.idea.ModFreeSwitch/.idea/vcs.xml
 .idea
+.vscode
+.vs

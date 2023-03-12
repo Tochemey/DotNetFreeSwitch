@@ -24,11 +24,11 @@ using DotNetty.Transport.Channels;
 
 namespace DotNetFreeSwitch
 {
-    public abstract class EslSessionHandler : ChannelHandlerAdapter
+    public abstract class SessionHandler : SimpleChannelInboundHandler<Message>
     {
         protected readonly Queue<CommandAsyncEvent> CommandAsyncEvents;
 
-        protected EslSessionHandler() { CommandAsyncEvents = new Queue<CommandAsyncEvent>(); }
+        protected SessionHandler() { CommandAsyncEvents = new Queue<CommandAsyncEvent>(); }
 
         internal async Task<ApiResponse> SendApiAsync(ApiCommand command,
             IChannel context)

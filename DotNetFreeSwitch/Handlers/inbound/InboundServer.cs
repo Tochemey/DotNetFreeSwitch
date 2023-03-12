@@ -15,6 +15,7 @@
 */
 
 using System.Threading.Tasks;
+using DotNetty.Codecs;
 using DotNetty.Handlers.Logging;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
@@ -81,7 +82,18 @@ namespace DotNetFreeSwitch.Handlers.inbound
             _bootstrap.Option(ChannelOption.SoBacklog,
                 Backlog);
             _bootstrap.Handler(new LoggingHandler(LogLevel.INFO));
-            _bootstrap.ChildHandler(new InboundSessionInitializer(inboundSession));
+            _bootstrap.ChildHandler(new ActionChannelInitializer<ISocketChannel>(channel => {
+            var pipeline = channel.Pipeline;
+            pipeline.AddLast("FrameDecoder",
+                new Codecs.FrameDecoder(true));
+            pipeline.AddLast("FrameEncoder",
+                new Codecs.FrameEncoder());
+            pipeline.AddLast("StringEncoder",
+                new StringEncoder());
+            pipeline.AddLast("DebugLogging",
+                new LoggingHandler(LogLevel.INFO));
+            pipeline.AddLast(new InboundSessionHandler(inboundSession));
+            }));
             _bootstrap.ChildOption(ChannelOption.SoLinger,
                 0);
             _bootstrap.ChildOption(ChannelOption.SoKeepalive,

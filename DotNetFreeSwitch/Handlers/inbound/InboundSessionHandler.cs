@@ -23,7 +23,7 @@ using NLog;
 
 namespace DotNetFreeSwitch.Handlers.inbound
 {
-    public class InboundSessionHandler : EslSessionHandler
+    public class InboundSessionHandler : SessionHandler
     {
         private readonly IInboundListener _inboundListener;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -38,7 +38,7 @@ namespace DotNetFreeSwitch.Handlers.inbound
         {
             if (!context.Channel.Open) return;
             _logger.Error(exception,
-                "Exception occured.");
+                "Exception occurred.");
             await _inboundListener.OnError(exception);
         }
 
@@ -57,8 +57,8 @@ namespace DotNetFreeSwitch.Handlers.inbound
                 channel);
         }
 
-        public override async void ChannelRead(IChannelHandlerContext context,
-            object message)
+        protected override void ChannelRead0(IChannelHandlerContext context,
+            Message message)
         {
             switch (message)
             {
@@ -79,11 +79,11 @@ namespace DotNetFreeSwitch.Handlers.inbound
                             var channel = context.Channel;
                             var address = channel.RemoteAddress;
 
-                            await _inboundListener.OnDisconnectNotice(msg,
-                                address);
+                            _inboundListener.OnDisconnectNotice(msg,
+                                address).ConfigureAwait(false);
                             break;
                         case HeadersValues.TextRudeRejection:
-                            await _inboundListener.OnRudeRejection();
+                             _inboundListener.OnRudeRejection().ConfigureAwait(false);
                             break;
                         default:
                             // Unexpected freeSwitch message

@@ -24,7 +24,7 @@ namespace DotNetFreeSwitch.Handlers.outbound
     /// <summary>
     ///     OutboundSessionHandler. This class will handle all request and responses that will go to freeSwitch.
     /// </summary>
-    public class OutboundSessionHandler : EslSessionHandler
+    public class OutboundSessionHandler : SessionHandler
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -39,55 +39,62 @@ namespace DotNetFreeSwitch.Handlers.outbound
             Exception exception)
         {
             _logger.Error(exception,
-                "Exception occured.");
+                "Exception occurred.");
             await _outboundListener.OnError(exception);
         }
 
-        public override async void ChannelRead(IChannelHandlerContext context,
-            object message)
+        protected override void ChannelRead0(IChannelHandlerContext context,
+            Message message)
         {
             switch (message)
             {
                 case Message msg when !string.IsNullOrEmpty(msg?.ContentType()):
-                    switch (msg.ContentType())
+                    switch (message.ContentType())
                     {
                         case HeadersValues.AuthRequest:
-                            await _outboundListener.OnAuthentication();
+                            _outboundListener.OnAuthentication().ConfigureAwait(false);
                             break;
                         case HeadersValues.CommandReply:
                         case HeadersValues.ApiResponse:
                             var commandAsyncEvent = CommandAsyncEvents.Dequeue();
                             var apiResponse = new ApiResponse(commandAsyncEvent.Command.Command,
-                                msg);
+                                message);
                             commandAsyncEvent.Complete(apiResponse);
                             break;
                         case HeadersValues.TextEventPlain:
-                            _outboundListener.OnEventReceived(msg);
+                            _outboundListener.OnEventReceived(message);
                             break;
                         case HeadersValues.TextDisconnectNotice:
                             var channel = context.Channel;
                             var address = channel.RemoteAddress;
 
-                            await _outboundListener.OnDisconnectNotice(msg,
-                                address);
+                            _outboundListener.OnDisconnectNotice(message,
+                               address).ConfigureAwait(false);
                             break;
                         case HeadersValues.TextRudeRejection:
-                            await _outboundListener.OnRudeRejection();
+                            _outboundListener.OnRudeRejection().ConfigureAwait(false);
                             break;
                         default:
+                            Console.WriteLine(message.ContentType());
                             // Unexpected freeSwitch message
                             _logger.Warn("Unexpected message content type [{0}]",
-                                msg.ContentType());
+                                message.ContentType());
                             break;
                     }
-
                     break;
                 default:
                     // Unexpected freeSwitch message
                     _logger.Warn("Unexpected message [{0}]",
                         message);
                     return;
+
             }
+
+        }
+
+        public override void ChannelRead(IChannelHandlerContext ctx, object msg)
+        {
+            // pass
         }
     }
 }
