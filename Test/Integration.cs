@@ -123,7 +123,7 @@ namespace Test
          var response = await client.SendApiAsync(new ApiCommand(commandString));
 
          Assert.Contains("example",
-             response.ReplyText);
+             response.Response);
       }
 
       [Fact]

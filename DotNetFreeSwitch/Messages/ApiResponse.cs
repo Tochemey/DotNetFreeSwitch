@@ -16,18 +16,18 @@ using System;
 */
 
 using System.Linq;
+using System.Text;
 
 namespace DotNetFreeSwitch.Messages
 {
    public sealed class ApiResponse
    {
+      private Message _raw;
       public ApiResponse(string command,
           Message response)
       {
          Command = command;
-         var reply = response;
-         ReplyText = reply != null ? reply.BodyLines.First() : string.Empty;
-         IsOk = !string.IsNullOrEmpty(ReplyText) && ReplyText.StartsWith(HeadersValues.Ok);
+         _raw = response;
       }
 
       public string Command { get; }
@@ -35,11 +35,18 @@ namespace DotNetFreeSwitch.Messages
       /// <summary>
       ///     Actual reply text
       /// </summary>
-      public string ReplyText { get; }
+      public string Response => render();
 
       /// <summary>
-      ///     Check whether the command has been successful or not.
+      /// render transform the api response into a readable text
       /// </summary>
-      public bool IsOk { get; }
+      /// <returns>the readable text</returns>
+      private string render()
+      {
+         var sb = new StringBuilder();
+         foreach (var str in _raw.BodyLines) sb.AppendLine(str);
+         sb.AppendLine();
+         return sb.ToString();
+      }
    }
 }

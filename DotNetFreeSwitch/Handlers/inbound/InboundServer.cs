@@ -25,64 +25,98 @@ using LogLevel = DotNetty.Handlers.Logging.LogLevel;
 
 namespace DotNetFreeSwitch.Handlers.inbound
 {
-    public class InboundServer
-    {
-        private readonly ServerBootstrap _bootstrap;
-        private readonly MultithreadEventLoopGroup _bossEventLoopGroup;
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly MultithreadEventLoopGroup _workerEventLoopGroup;
-        private readonly InboundSession inboundSession;
-        private IChannel _channel;
+   public class InboundServer
+   {
+      private readonly ServerBootstrap _bootstrap;
+      private readonly MultithreadEventLoopGroup _bossEventLoopGroup;
+      private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+      private readonly MultithreadEventLoopGroup _workerEventLoopGroup;
+      private readonly InboundSession inboundSession;
+      private IChannel _channel;
 
-        public InboundServer(int port,
-            int backlog,
-            InboundSession inboundSession)
-        {
-            Port = port;
-            Backlog = backlog;
-            this.inboundSession = inboundSession;
-            _bootstrap = new ServerBootstrap();
-            _bossEventLoopGroup = new MultithreadEventLoopGroup(1);
-            _workerEventLoopGroup = new MultithreadEventLoopGroup();
-        }
+      /// <summary>
+      /// Creates an instance of the InboundServer
+      /// </summary>
+      /// <param name="port">the binding port</param>
+      /// <param name="backlog">the number of incoming connections to handle at a go</param>
+      /// <param name="inboundSession">the incoming session handler</param>
+      public InboundServer(int port,
+          int backlog,
+          InboundSession inboundSession)
+      {
+         Port = port;
+         Backlog = backlog;
+         this.inboundSession = inboundSession;
+         _bootstrap = new ServerBootstrap();
+         _bossEventLoopGroup = new MultithreadEventLoopGroup(1);
+         _workerEventLoopGroup = new MultithreadEventLoopGroup();
+      }
 
-        public InboundServer(int port,
-            InboundSession inboundSession) : this(port,
-            100,
-            inboundSession)
-        {
-        }
+      /// <summary>
+      /// Creates an instance of the InboundServer
+      /// </summary>
+      /// <param name="port">the binding port</param>
+      /// <param name="inboundSession">the incoming session handler</param>
+      /// <returns></returns>
+      public InboundServer(int port,
+          InboundSession inboundSession) : this(port,
+          100,
+          inboundSession)
+      {
+      }
 
-        public int Backlog { get; }
-        public int Port { get; }
+      public int Backlog { get; }
+      public int Port { get; }
 
-        public async Task StartAsync()
-        {
-            Init();
-            _channel = await _bootstrap.BindAsync(Port);
-        }
+      /// <summary>
+      /// Starts the tcp server
+      /// </summary>
+      /// <returns></returns>
+      public async Task StartAsync()
+      {
+         Init();
+         _channel = await _bootstrap.BindAsync(Port);
+      }
 
-        public async Task StopAsync()
-        {
-            if (_channel != null) await _channel.CloseAsync();
-            if (_bossEventLoopGroup != null && _workerEventLoopGroup != null)
-            {
-                await _bossEventLoopGroup.ShutdownGracefullyAsync();
-                await _workerEventLoopGroup.ShutdownGracefullyAsync();
-            }
-        }
+      /// <summary>
+      /// Stops the tcp server
+      /// </summary>
+      /// <returns></returns>
+      public async Task StopAsync()
+      {
+         if (_channel != null) await _channel.CloseAsync();
+         if (_bossEventLoopGroup != null && _workerEventLoopGroup != null)
+         {
+            await _bossEventLoopGroup.ShutdownGracefullyAsync();
+            await _workerEventLoopGroup.ShutdownGracefullyAsync();
+         }
+      }
 
-        protected void Init()
-        {
-            _bootstrap.Group(_bossEventLoopGroup,
-                _workerEventLoopGroup);
-            _bootstrap.Channel<TcpServerSocketChannel>();
-            _bootstrap.Option(ChannelOption.SoLinger,
-                0);
-            _bootstrap.Option(ChannelOption.SoBacklog,
-                Backlog);
-            _bootstrap.Handler(new LoggingHandler(LogLevel.INFO));
-            _bootstrap.ChildHandler(new ActionChannelInitializer<ISocketChannel>(channel => {
+
+      /// <summary>
+      /// Returns true when the server has started and false on the contrary
+      /// </summary>
+      /// <returns></returns>
+      public bool Started()
+      {
+         return _channel != null && _channel.Active;
+      }
+
+      /// <summary>
+      /// Initialize the tcp server
+      /// </summary>
+      protected void Init()
+      {
+         _bootstrap.Group(_bossEventLoopGroup,
+             _workerEventLoopGroup);
+         _bootstrap.Channel<TcpServerSocketChannel>();
+         _bootstrap.Option(ChannelOption.SoLinger,
+             0);
+         _bootstrap.Option(ChannelOption.SoBacklog,
+             Backlog);
+         _bootstrap.Handler(new LoggingHandler(LogLevel.INFO));
+         _bootstrap.ChildHandler(new ActionChannelInitializer<ISocketChannel>(channel =>
+         {
             var pipeline = channel.Pipeline;
             pipeline.AddLast("FrameDecoder",
                 new Codecs.FrameDecoder(true));
@@ -93,15 +127,15 @@ namespace DotNetFreeSwitch.Handlers.inbound
             pipeline.AddLast("DebugLogging",
                 new LoggingHandler(LogLevel.INFO));
             pipeline.AddLast(new InboundSessionHandler(inboundSession));
-            }));
-            _bootstrap.ChildOption(ChannelOption.SoLinger,
-                0);
-            _bootstrap.ChildOption(ChannelOption.SoKeepalive,
-                true);
-            _bootstrap.ChildOption(ChannelOption.TcpNodelay,
-                true);
-            _bootstrap.ChildOption(ChannelOption.SoReuseaddr,
-                true);
-        }
-    }
+         }));
+         _bootstrap.ChildOption(ChannelOption.SoLinger,
+             0);
+         _bootstrap.ChildOption(ChannelOption.SoKeepalive,
+             true);
+         _bootstrap.ChildOption(ChannelOption.TcpNodelay,
+             true);
+         _bootstrap.ChildOption(ChannelOption.SoReuseaddr,
+             true);
+      }
+   }
 }
