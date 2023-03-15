@@ -9,14 +9,14 @@ DotNetFreeSwitch
 ## **Introduction**
 
 DotNetFreeSwitch is a socket library that helps interact with the FreeSwitch via its [mod_event_socket](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket). 
-It has been written to run both on dotnet core 3.1 and 5.0 as well. The library is written using [DotNetty](https://github.com/Azure/DotNetty).
+It has been written to run both on .Net Core 3.1 and .Net 6.0 as well. The library is written using [DotNetty](https://github.com/Azure/DotNetty).
 
 ## **Features**
 
 The library in its current state can be used to interact with FreeSwitch easily in:
 * Inbound mode [Event Socket Inbound](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket#mod_event_socket-Inbound)
 * Outbound mode [Event Socket Outbound](https://wiki.freeswitch.org/wiki/Event_Socket_Outbound)
-* One good thing it has is that you can implement your own FreeSwitch message encoder and decoder if you do not want to use the built-in ones
+* One good thing it has is that you can implement your own FreeSwitch message encoder and decoder if you do not want to use the built-in ones.
 
 
 ## **Installation**
