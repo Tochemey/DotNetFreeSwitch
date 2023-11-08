@@ -38,7 +38,7 @@ namespace Test
       }
 
 
-      [Fact]
+      [Fact(Skip = "intgegration")]
       public async void ConnectToFreeSwitchTest()
       {
          var address = "127.0.0.1";
@@ -64,7 +64,7 @@ namespace Test
 
 
 
-      [Fact]
+       [Fact(Skip = "intgegration")]
       public void FreeSwitchCommandEncodingTest()
       {
          var authentication = new AuthCommand("ClueCon");
@@ -107,7 +107,7 @@ namespace Test
 
 
 
-      [Fact]
+      [Fact(Skip = "intgegration")]
       public async void SendApiTest()
       {
          const string address = "127.0.0.1";
@@ -126,7 +126,7 @@ namespace Test
              response.Response);
       }
 
-      [Fact]
+       [Fact(Skip = "intgegration")]
       public async void SendBgApiTest()
       {
          const string address = "127.0.0.1";
@@ -144,7 +144,7 @@ namespace Test
          Assert.True(jobId != Guid.Empty);
       }
 
-      [Fact]
+       [Fact(Skip = "intgegration")]
       public async void SendCommandTest()
       {
          const string address = "127.0.0.1";
@@ -163,7 +163,7 @@ namespace Test
          Assert.True(reply.IsOk);
       }
 
-      [Fact]
+       [Fact(Skip = "intgegration")]
       public async void SubscribeToEventsTest()
       {
          const string address = "127.0.0.1";

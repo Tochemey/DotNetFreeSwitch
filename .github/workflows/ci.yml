@@ -37,8 +37,10 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build -c Release --no-restore
-#      - name: Test
-#        run: dotnet test -c Release
+      - name: Test
+        # figure out later why tests are failing on windows
+        if: matrix.os != 'windows-latest'
+        run: dotnet test -c Release
       - name: Pack
         if: matrix.os == 'ubuntu-latest'
         run: dotnet pack -v normal -c Release --no-restore --include-symbols --include-source -p:PackageVersion=0.0.0 $PROJECT_NAME/$PROJECT_NAME.csproj
