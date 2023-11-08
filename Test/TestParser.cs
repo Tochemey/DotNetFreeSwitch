@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Test
 {
-   public class Parser : IDisposable
+   public class TestParser : IDisposable
    {
       [Fact]
       public void BackgroundJobEventParserTest()
