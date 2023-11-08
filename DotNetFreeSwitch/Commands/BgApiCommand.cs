@@ -18,36 +18,36 @@ using System;
 
 namespace DotNetFreeSwitch.Commands
 {
-   /// <summary>
-   ///     BgApi Command. It helps to execute other command in a background job on FreeSwitch
-   /// </summary>
-   public sealed class BgApiCommand : BaseCommand
-   {
-      public BgApiCommand(string commandName,
-          string commandArgs)
-      {
-         Command = commandName;
-         CommandArgs = commandArgs;
-      }
+    /// <summary>
+    ///     BgApi Command. It helps to execute other command in a background job on FreeSwitch
+    /// </summary>
+    public sealed class BgApiCommand : BaseCommand
+    {
+        public BgApiCommand(string commandName,
+            string commandArgs)
+        {
+            Command = commandName;
+            CommandArgs = commandArgs;
+        }
 
-      /// <summary>
-      ///     The BgApi command argument
-      /// </summary>
-      protected override string Argument => $"{CommandName} {CommandArgs}";
+        /// <summary>
+        ///     The BgApi command argument
+        /// </summary>
+        protected override string Argument => $"{Command} {CommandArgs}";
 
-      /// <summary>
-      ///     The BgApi command
-      /// </summary>
-      public override string CommandName => "bgapi";
+        /// <summary>
+        ///     The BgApi command
+        /// </summary>
+        public override string CommandName => "bgapi";
 
-      public string CommandArgs { get; }
+        public string CommandArgs { get; }
 
-      /// <summary>
-      ///     Each command send by BgApi will have a trackable Id that will helps identify which one
-      ///     has sent a response.
-      /// </summary>
-      public Guid CommandId { get; set; }
+        /// <summary>
+        ///     Each command send by BgApi will have a trackable Id that will helps identify which one
+        ///     has sent a response.
+        /// </summary>
+        public Guid CommandId { get; set; }
 
-      public string Command { get; }
-   }
+        public string Command { get; }
+    }
 }
