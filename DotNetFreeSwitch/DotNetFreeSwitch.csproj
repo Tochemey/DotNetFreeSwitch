@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <RootNamespace>DotNetFreeSwitch</RootNamespace>
-        <TargetFrameworks>net6.0;netcoreapp3.1</TargetFrameworks>
+        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <AssemblyName>DotNetFreeSwitch</AssemblyName>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageVersion>0.0.1</PackageVersion>
