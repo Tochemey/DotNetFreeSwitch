@@ -1,35 +1,33 @@
-DotNetFreeSwitch
-========================================
+# DotNetFreeSwitch
 
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/Tochemey/DotNetFreeSwitch/ci.yml?branch=main&style=flat-square)](https://github.com/Tochemey/ModFreeSwitch/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 [![Nuget](https://img.shields.io/nuget/v/DotNetFreeSwitch?style=flat-square)](https://www.nuget.org/packages/DotNetFreeSwitch/)
 
+## Introduction
 
-## **Introduction**
-
-DotNetFreeSwitch is a socket library that helps interact with the FreeSwitch via its [mod_event_socket](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket). 
+DotNetFreeSwitch is a socket library that helps interact with the FreeSwitch via its [mod_event_socket](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket).
 It has been written to run both on .Net7 and .Net6 as well. The library is written using [DotNetty](https://github.com/Azure/DotNetty).
 
-## **Features**
+## Features
 
 The library in its current state can be used to interact with FreeSwitch easily in:
+
 * Inbound mode [Event Socket Inbound](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket#mod_event_socket-Inbound)
 * Outbound mode [Event Socket Outbound](https://wiki.freeswitch.org/wiki/Event_Socket_Outbound)
 * One good thing it has is that you can implement your own FreeSwitch message encoder and decoder if you do not want to use the built-in ones.
 
-
-## **Installation**
+## Installation
 
 ```
- PM> Install-Package DotNetFreeSwitch
+ dotnet add DotNetFreeSwitch
 ```
 
-## **Example**
+## Example
 
 kindly check the Demo project in this repo.
 
-## Contribution policy ##
+## Contribution policy
 
 Contributions via GitHub pull requests are gladly accepted from their original author. Along with
 any pull requests, please state that the contribution is your original work and that you license
