@@ -2,10 +2,10 @@
 
     <PropertyGroup>
         <RootNamespace>DotNetFreeSwitch</RootNamespace>
-        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+        <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
         <AssemblyName>DotNetFreeSwitch</AssemblyName>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>0.0.1</PackageVersion>
+        <PackageVersion>2.1.0</PackageVersion>
         <Copyright>Tochemey 2016</Copyright>
         <PackageProjectUrl>https://github.com/Tochemey/DotNetFreeSwitch</PackageProjectUrl>
         <PackageLicenseUrl>https://opensource.org/licenses/Apache-2.0</PackageLicenseUrl>
