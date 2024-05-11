@@ -19,8 +19,8 @@ The library in its current state can be used to interact with FreeSwitch easily 
 
 ## Installation
 
-```
- dotnet add DotNetFreeSwitch
+```bash
+ dotnet add package DotNetFreeSwitch
 ```
 
 ## Example
