@@ -1,5 +1,10 @@
 # DotNetFreeSwitch
 
+[![Stability: Maintenance](https://masterminds.github.io/stability/maintenance.svg)](https://masterminds.github.io/stability/maintenance.html)
+
+_DotNetFreeSwitch up to the latest release is considered feature complete and mature. 
+No future feature development is planned, though bugs and security issues are fixed._
+
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/Tochemey/DotNetFreeSwitch/ci.yml?branch=main&style=flat-square)](https://github.com/Tochemey/ModFreeSwitch/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 [![Nuget](https://img.shields.io/nuget/v/DotNetFreeSwitch?style=flat-square)](https://www.nuget.org/packages/DotNetFreeSwitch/)
